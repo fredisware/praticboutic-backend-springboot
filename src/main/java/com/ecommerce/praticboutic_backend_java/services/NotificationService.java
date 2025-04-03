@@ -1,0 +1,201 @@
+package com.ecommerce.praticboutic_backend_java.services;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Subscription;
+import com.stripe.model.SubscriptionItem;
+import com.stripe.model.UsageRecord;
+
+import com.stripe.net.RequestOptions;
+import com.stripe.param.UsageRecordCreateOnSubscriptionItemParams;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.firebase.messaging.FirebaseMessaging;
+
+@Service
+public class NotificationService {
+
+    @Value("${stripe.secret.key}")
+    private String stripeApiKey;
+    
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
+
+
+    /**
+     * Envoie une notification push à un appareil spécifique en utilisant Firebase Cloud Messaging API v1
+     *
+     * @param deviceId L'identifiant unique de l'appareil destinataire
+     * @param title Titre de la notification
+     * @param body Corps du message de la notification
+     * @param data Données supplémentaires (facultatif)
+     * @return L'ID du message envoyé ou null en cas d'échec
+     */
+    public String sendPushNotification(String deviceId, String title, String body, Map<String, String> data) {
+        try {
+            // Récupérer le token FCM associé au deviceId depuis votre base de données
+            String token = getTokenFromDeviceId(deviceId);
+
+            if (token == null || token.isEmpty()) {
+                logger.error("Impossible d'envoyer la notification: aucun token FCM trouvé pour le deviceId: {}", deviceId);
+                return null;
+            }
+
+            // Créer l'objet Notification avec titre et corps
+            Notification notification = Notification.builder()
+                    .setTitle(title)
+                    .setBody(body)
+                    .build();
+
+            // Construire le message avec les données et la notification
+            Message.Builder messageBuilder = Message.builder()
+                    .setToken(token)
+                    .setNotification(notification);
+
+            // Ajouter les données si elles sont présentes
+            if (data != null && !data.isEmpty()) {
+                messageBuilder.putAllData(data);
+            }
+
+            // Envoyer le message et récupérer l'ID du message
+            String messageId = FirebaseMessaging.getInstance().send(messageBuilder.build());
+            logger.info("Notification envoyée avec succès à deviceId: {}, messageId: {}", deviceId, messageId);
+            return messageId;
+
+        } catch (FirebaseMessagingException e) {
+            logger.error("Erreur lors de l'envoi de notification à deviceId: {}", deviceId, e);
+            // Gérer les erreurs spécifiques comme token invalide, quota dépassé, etc.
+            handleFCMError(deviceId, e);
+            return null;
+        } catch (FirebaseAuthException e) {
+            logger.error("Impossible d'envoyer la notification: token FCM invalide pour le deviceId: {}", deviceId);
+            return null;
+        }
+
+
+    }
+
+    /**
+     * Récupère le token FCM associé à un deviceId particulier
+     *
+     * @param deviceId L'identifiant de l'appareil
+     * @return Le token FCM associé ou null si non trouvé
+     */
+    private String getTokenFromDeviceId(String deviceId) throws FirebaseAuthException {
+        FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(deviceId);
+        return decodedToken.getUid();
+    }
+
+    /**
+     * Gère les différentes erreurs FCM et prend les mesures appropriées
+     */
+    private void handleFCMError(String deviceId, FirebaseMessagingException e) {
+        switch (e.getMessagingErrorCode()) {
+            case INVALID_ARGUMENT:
+                // Message mal formé
+                logger.error("Message mal formé pour deviceId: {}", deviceId);
+                break;
+            case UNREGISTERED:
+                // Token n'est plus valide, il faut le supprimer
+                logger.warn("Token FCM expiré pour deviceId: {}, suppression du token", deviceId);
+                removeInvalidToken(deviceId);
+                break;
+            case SENDER_ID_MISMATCH:
+                logger.error("Problème de configuration FCM: sender ID ne correspond pas");
+                break;
+            case QUOTA_EXCEEDED:
+                logger.error("Quota FCM dépassé, implémentez une logique de retry avec backoff");
+                // Implémentation d'une stratégie de retry possible ici
+                break;
+            default:
+                logger.error("Erreur FCM non spécifique: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * Supprime un token invalide de la base de données
+     */
+    private void removeInvalidToken(String deviceId) {
+        // Implémentez la logique pour marquer le token comme invalide ou le supprimer
+        // Par exemple:
+        // deviceRepository.removeTokenForDeviceId(deviceId);
+    }
+
+    
+    public void sendSms(String phoneNumber, String content, String sender, String token) {
+        Map<String, Object> recipient = new HashMap<>();
+        recipient.put("value", phoneNumber);
+        
+        Map<String, Object> recipientsList = new HashMap<>();
+        recipientsList.put("gsm", new Object[]{recipient});
+        
+        Map<String, Object> messageContent = new HashMap<>();
+        messageContent.put("text", content);
+        messageContent.put("sender", sender);
+        
+        Map<String, Object> smsData = new HashMap<>();
+        smsData.put("message", messageContent);
+        smsData.put("recipients", recipientsList);
+        
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("sms", smsData);
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("Accept", "application/json");
+        headers.set("Authorization", "Bearer " + token);
+        
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
+        
+        restTemplate.postForObject("https://api.smsfactor.com/send", request, String.class);
+    }
+    
+    public void reportStripeUsage(String subscriptionId, int usageQuantity, String idempotencyKey) throws StripeException {
+        Stripe.apiKey = stripeApiKey;
+        
+        Subscription subscription = Subscription.retrieve(subscriptionId);
+        
+        for (SubscriptionItem item : subscription.getItems().getData()) {
+            String usageType = item.getPlan().getUsageType();
+            if ("metered".equals(usageType)) {
+
+                SubscriptionItem subscriptionItem = SubscriptionItem.retrieve(subscriptionId);
+
+                UsageRecordCreateOnSubscriptionItemParams params =
+                        UsageRecordCreateOnSubscriptionItemParams.builder()
+                                .setQuantity((long) usageQuantity)
+                                .setTimestamp(Instant.now().getEpochSecond())
+                                .setAction(UsageRecordCreateOnSubscriptionItemParams.Action.INCREMENT)
+                                .build();
+
+                RequestOptions options =
+                        RequestOptions.builder()
+                                .setIdempotencyKey(idempotencyKey)
+                                .build();
+
+                UsageRecord.createOnSubscriptionItem(subscriptionItem.getId(), params, options);
+                break;
+            }
+        }
+    }
+}
+

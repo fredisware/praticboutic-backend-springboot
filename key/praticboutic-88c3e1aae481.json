@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "praticboutic",
+  "private_key_id": "88c3e1aae481c99e4509d0261867b02dc0dcf0d0",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC7jSqvatTrqbE6\n1ofQytaCvY71ZkXmdy+lLMbs5IgXVu+Byh2UpgCAkMQjmq6/qAA9PpkWcWDd64yj\ntcv8saQd7+M3zmtD3lBuZMOVrnu8SHb6eklqyo0HZBGiRqx0mfv6Kby+wQNM9na4\naOvoEOHVvXcOPertXpMR9tYjoKy7rQd+itQS3VWMz+9v2JA4AJ0TDSM2wJRH1eZf\nmwFMJ0L+e3O3RzEDDx4HKN/O+hvY5cBPQuSMJeDi9y8QhvNn6tyBZ6jFKPO7ZVvZ\nqA+YJA08g+8FfYXAxRaBE2Z0v8OdAgwjc2u9AxjCHLyVt9UMkOZ0jwOMXW3MNtFA\nfK+h3pt7AgMBAAECggEAFkNaG0uXrcfNcXoQ0jCZyRg+VZQH3SUtwzIvBOTV4Mth\nj+sRmtkfuyM0HTPZ5YdIS/zXyEm6IW26Gp7UcZEWtbUJqFC4++vyaUBN1UFKj92c\nPfxxJZuYpRV0YGp6QzcaKaZ1sMERpruk+Rv/UONcI3ajoM2pyvaMh7fg0IbcqkRa\nSF9B7MOKxc1vMvGup9P3cfBwsxFOpEdbHIbMEj6SZH+XdUiRddGReDJHTNd++vd+\n1t/Pc8mocXPJu6mRgv3JauRoBMfGynTVB/v29kkJa+5oubog195rQew8Mhqh+rxj\nlqh3jctpMUx7r7q85OIk/rPnkY/KOdCpyZqPxkUwrQKBgQDlyLc7KLQb0XWthmlN\nD1bEMpbIHqJb40bZwbQrJvzXxsBWAfNahNWlx347SPDmvxgODvb24gMbNybKQPSo\nyFIidxolPy3dvkoO/Vgqw2tKOYEhsRcOUQs7dY03UOMCodZxixqSxX9sBN75/VWh\n8Avi1zJ7sexgFcWboMp7tA979wKBgQDQ8vdoJVQzazebObcUHjHs0lDraFhX9tjQ\nXjJfDapXG/U7MnSa72QGg24tGaFsssn3vRMz0a+4wGPHNFKgjt65EEf9AoYqPDwT\ndds1GW573i1YfSkPTWU29Z/ySKyoUlhlZj6MQIUKc5K5+6qft4sOeqGklQuf7nQe\nTOg1DaXTnQKBgCYGQfQDN1LHJZ8SeAhtemE7MeJp11o3UPkl6ceeSwb198wDxJ59\nDtHBIm1zE5JLmxJwfYO7QOJXDQ85EoN/qr/TT7tMKi3gmGbEm7tv3ShKPckyges3\nlBFB0Z2OwBImb9MYPsx87CoW4EMkHfCPRZhDHjKD7ea0k5++SuOPl2RfAoGAPEYq\nOj+yZ1bBZqSifEotiqwsrYufGFjbuFfD3gmaHqCxAA+Q9XSi/QIC0T24hBubCTzg\ngi01rGzLG5arUyeDdg0NRx3oR9yyU8bGoi2g4lh36jPImWJxFQaLyh9Otwtx9mYl\nGt4twpMOO1ouoP4YPegAIvLftJXbpzX2Mf+q2z0CgYBWkosoxyj6GfVNu1+Wcnft\nGzDSVHWouNPCZD23kBvmFM3zeEO7NvYFCoEJmVLWwJYjIGk2PruLWWTmrd9TvnYX\nb8EfrvddAE4cALxc8niDarfFqksYf9PN9Gj7ky/3TPqGztLxOfPMZWn7c1G93Jpn\nLSwe1eNpM5q0ikAQYdQRWg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "praticgoogle@praticboutic.iam.gserviceaccount.com",
+  "client_id": "108494155876086593370",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/praticgoogle%40praticboutic.iam.gserviceaccount.com"
+}
