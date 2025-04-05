@@ -3,9 +3,13 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.BaseEntity;
 import com.ecommerce.praticboutic_backend_java.DatabaseLink;
 import jakarta.persistence.*;
+import org.hibernate.SessionFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "article")
@@ -167,4 +171,20 @@ public class Article extends BaseEntity {
         return links;
     }
 
+    public Map<String, String> getDisplayData()
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("artid" , getArtId().toString());
+        map.put("nom" , getNom());
+        map.put("prix" , getPrix().toString());
+        map.put("description" , getDescription());
+        map.put("visible" , getVisible() ? "1" : "0");
+        map.put("categorie", getCategorie().getNom());
+        map.put("unite", getUnite());
+        return map;
+    }
+
+    public static ArrayList<?> displayData(SessionFactory sessionFactory, EntityManager entityManager, String table, Integer bouticid, Integer limit, Integer offset, String selcol, Integer selid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        return BaseEntity.displayData(sessionFactory, entityManager, table, bouticid, limit, offset, selcol, selid);
+    }
 }

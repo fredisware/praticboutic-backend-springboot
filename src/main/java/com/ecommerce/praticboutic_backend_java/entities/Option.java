@@ -1,19 +1,26 @@
 package com.ecommerce.praticboutic_backend_java.entities;
 
+import com.ecommerce.praticboutic_backend_java.BaseEntity;
 import jakarta.persistence.*;
+import org.hibernate.SessionFactory;
+
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Entité représentant une option dans l'application
  */
 @Entity
-@Table(name = "`option`") // Le mot "option" étant un mot réservé en SQL, on utilise des backticks
+@Table(name = "\"option\"") // Le mot "option" étant un mot réservé en SQL, on utilise des backticks
 public class Option implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "optid")
-    private Integer id;
+    private Integer optid;
 
     @Column(name = "customid", nullable = false)
     private Integer customId;
@@ -28,7 +35,12 @@ public class Option implements Serializable {
     private Integer grpoptid;
 
     @Column(name = "visible", nullable = false)
-    private Integer visible = 1;
+    private Boolean visible = true;
+
+    // Relation avec Categorie (si vous souhaitez conserver la relation JPA)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "grpoptid", insertable = false, updatable = false) // Utilisez insertable=false, updatable=false pour éviter les conflits
+    private GroupeOpt groupeopt;
 
     // Constructeurs
     public Option() {
@@ -43,16 +55,15 @@ public class Option implements Serializable {
         this.customId = customId;
         this.nom = nom;
         this.surcout = surcout;
-        this.grpoptid = grpoptid;
     }
 
     // Getters et setters
-    public Integer getId() {
-        return id;
+    public Integer getOptId() {
+        return optid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setOptId(Integer id) {
+        this.optid = id;
     }
 
     public Integer getCustomId() {
@@ -83,16 +94,24 @@ public class Option implements Serializable {
         return grpoptid;
     }
 
-    public void setGroupeOptionId(Integer groupeOptionId) {
+    public void setGroupeOptionId(Boolean groupeOptionId) {
         this.grpoptid = grpoptid;
     }
 
-    public Integer getVisible() {
+    public Boolean getVisible() {
         return visible;
     }
 
-    public void setVisible(Integer visible) {
+    public void setVisible(Boolean visible) {
         this.visible = visible;
+    }
+
+    public GroupeOpt getGroupeOption() {
+        return groupeopt;
+    }
+
+    public void setGroupeOption(GroupeOpt groupeopt) {
+        this.groupeopt= groupeopt;
     }
 
     /**
@@ -101,21 +120,13 @@ public class Option implements Serializable {
      */
     @Transient
     public boolean isVisible() {
-        return visible == 1;
-    }
-
-    /**
-     * Définit la visibilité de l'option
-     * @param visible true pour rendre l'option visible, false pour la masquer
-     */
-    public void setVisibility(boolean visible) {
-        this.visible = visible ? 1 : 0;
+        return visible;
     }
 
     @Override
     public String toString() {
         return "Option{" +
-                "id=" + id +
+                "opid=" + optid +
                 ", customId=" + customId +
                 ", nom='" + nom + '\'' +
                 ", surcout=" + surcout +
@@ -123,4 +134,20 @@ public class Option implements Serializable {
                 ", visible=" + visible +
                 '}';
     }
+
+    public Map<String, String> getDisplayData()
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("opptid" , getOptId().toString());
+        map.put("nom" , getNom());
+        map.put("surcout" , getSurcout().toString());
+        map.put("groupeption" , getGroupeOption().getNom());
+        map.put("visible" , getVisible() ? "1" : "0");
+        return map;
+    }
+
+    public static ArrayList<?> displayData(SessionFactory sessionFactory, EntityManager entityManager, String table, Integer bouticid, Integer limit, Integer offset, String selcol, Integer selid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        return BaseEntity.displayData(sessionFactory, entityManager, table, bouticid, limit, offset, selcol, selid);
+    }
+
 }

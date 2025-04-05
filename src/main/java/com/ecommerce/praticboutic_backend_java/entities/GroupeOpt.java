@@ -2,6 +2,12 @@ package com.ecommerce.praticboutic_backend_java.entities;
 
 import com.ecommerce.praticboutic_backend_java.BaseEntity;
 import jakarta.persistence.*;
+import org.hibernate.SessionFactory;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "groupeopt")
@@ -12,9 +18,6 @@ public class GroupeOpt extends BaseEntity {
     @Column(name = "grpoptid")
     private Integer grpoptid;
 
-    @Column(name = "artid")
-    private Integer artid;
-
     @Column(name = "customid", nullable = false)
     private Integer customId;
 
@@ -22,13 +25,10 @@ public class GroupeOpt extends BaseEntity {
     private String nom;
 
     @Column(name = "visible", nullable = false, columnDefinition = "int DEFAULT 1")
-    private Integer visible = 1;
+    private Boolean visible = true;
 
     @Column(name = "multiple", nullable = false, columnDefinition = "int DEFAULT 0")
-    private Integer multiple = 0;
-
-    @Column(name = "obligatoire")
-    private boolean obligatoire;
+    private Boolean multiple = false;
 
     /**
      * Retourne l'identifiant du groupe d'options
@@ -65,38 +65,35 @@ public class GroupeOpt extends BaseEntity {
         this.nom = nom;
     }
 
-    public Integer getVisible() {
+    public Boolean getVisible() {
         return visible;
     }
 
-    public void setVisible(Integer visible) {
+    public void setVisible(Boolean visible) {
         this.visible = visible;
     }
 
-    public Integer getMultiple() {
+    public Boolean getMultiple() {
         return multiple;
     }
 
-    public void setMultiple(Integer multiple) {
+    public void setMultiple(Boolean multiple) {
         this.multiple = multiple;
     }
 
-    /**
-     * Méthode utilitaire pour vérifier si ce groupe d'options permet des sélections multiples
-     * @return true si des sélections multiples sont autorisées, false sinon
-     */
-    public boolean isMultipleSelectionAllowed() {
-        return multiple != null && multiple == 1;
+    public Map<String, String> getDisplayData()
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("grpopptid" , getGrpoptid().toString());
+        map.put("nom" , getNom());
+        map.put("visible" , getVisible() ? "1" : "0");
+        map.put("multiple" , getMultiple() ? "1" : "0");
+        return map;
     }
 
-    /**
-     * Méthode utilitaire pour vérifier si ce groupe d'options est visible
-     * @return true si le groupe est visible, false sinon
-     */
-    public boolean isVisible() {
-        return visible != null && visible == 1;
+    public static ArrayList<?> displayData(SessionFactory sessionFactory, EntityManager entityManager, String table, Integer bouticid, Integer limit, Integer offset, String selcol, Integer selid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        return BaseEntity.displayData(sessionFactory, entityManager, table, bouticid, limit, offset, selcol, selid);
     }
-
 
 
 }

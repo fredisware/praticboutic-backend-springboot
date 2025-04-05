@@ -1,6 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
-
+import org.hibernate.Session;
 import com.ecommerce.praticboutic_backend_java.*;
 import com.ecommerce.praticboutic_backend_java.configurations.StripeConfig;
 import com.ecommerce.praticboutic_backend_java.entities.*;
@@ -8,6 +8,7 @@ import com.ecommerce.praticboutic_backend_java.repositories.*;
 import com.ecommerce.praticboutic_backend_java.requests.*;
 
 import java.util.*;
+import java.util.Locale;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.lang.reflect.Field;
@@ -21,8 +22,10 @@ import com.stripe.model.Subscription;
 import com.stripe.param.SubscriptionUpdateParams;
 import jakarta.servlet.http.HttpSession;
 
+import org.hibernate.SessionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import static com.ecommerce.praticboutic_backend_java.BaseEntity.capitalize;
 import static com.ecommerce.praticboutic_backend_java.BaseEntity.loadEntityClass;
+
+import org.hibernate.cfg.Configuration;
 
 @RestController
 @RequestMapping("/api")
@@ -68,6 +73,8 @@ public class DatabaseController {
 
     @Autowired
     private StatutCmdRepository statutCmdRepository;
+
+    private static SessionFactory sessionFactory = null;
 
     public DatabaseController(StripeConfig stripeConfig) {
         this.stripeConfig = stripeConfig;
@@ -137,119 +144,27 @@ public class DatabaseController {
                 throw new IllegalArgumentException("Le nom de la table est vide.");
             }
 
-            Class<?> entityClass = loadEntityClass(tableName);
+            Class[] cArg = new Class[8];
+            cArg[0] = SessionFactory.class;
+            cArg[1] = EntityManager.class; cArg[2] = String.class; cArg[3] = Integer.class;
+            cArg[4] = Integer.class; cArg[5] = Integer.class; cArg[6] = String.class;
+            cArg[7] = Integer.class;
 
-            // Récupérer les métadonnées à partir des entités Hibernate
-            EntityType<?> entityType = entityManager.getMetamodel().entity(entityClass);
-            String primaryKey = BaseEntity.getPrimaryKeyName(entityManager, tableName);
-
-            // Liste des champs (colonnes)
-            List<DatabaseField> fields = new ArrayList<>();
-            List<Lien> liens = new ArrayList<>(); // Ensure 'Lien' is imported or defined.
-
-            // Préparation des colonnes et tri
-            List<String> orderByClauses = new ArrayList<>();
-            StringBuilder colonnes = new StringBuilder();
-            Integer no = 0;
-            // Parcourir les attributs de l'entité
-            ArrayList<Attribute<?, ?>> Liens = new ArrayList<>(List.of());
-
-            for (Attribute<?, ?> attribute : entityType.getAttributes()) {
-                if ((attribute instanceof SingularAttribute<?, ?> singularAttribute)  && !(attribute.isAssociation())) {
-                    String champSQL = "T1." + singularAttribute.getName();
-                    colonnes.append(champSQL).append(", ");
-                    DatabaseField field = new DatabaseField(singularAttribute.getName(), "column", 0, "A");
-                    if (field.getOrder() > 0) {
-                        String tri = champSQL + (field.getOrderDirection().equalsIgnoreCase("A") ? " ASC" : " DESC");
-                        orderByClauses.add(tri);
-                    }
-                } else if (attribute.isAssociation()) {
-                    Liens.add(attribute);
-                    String lienSQL = "T" + (Liens.size() + 1) + "." + BaseEntity.getPrimaryKeyName(entityManager, Liens.get(Liens.size() - 1).getName());
-                    colonnes.append(lienSQL).append(", ");
-
-                }
-            }
-
-            // Supprimer la virgule finale
-            if (!colonnes.isEmpty()) {
-                colonnes.setLength(colonnes.length() - 2);
-            }
-
-            // Construction de la requête de base
-            StringBuilder queryBuilder = new StringBuilder("SELECT ");
-            queryBuilder.append(colonnes).append(" FROM ").append(tableName).append(" T1 ");
-            StringBuilder joins = new StringBuilder();
-            for (Attribute<?, ?> Lien : Liens) {
-                String joinType = switch (Lien.getPersistentAttributeType().toString()) {
-                    case "MANY_TO_ONE" -> "INNER JOIN ";
-                    case "ONE_TO_MANY" -> "LEFT JOIN ";
-                    case "ONE_TO_ONE" -> "RIGHT JOIN ";
-                    default -> "";
-                };
-
-                Class<?> entity;
                 try {
-                    entity = Class.forName("com.ecommerce.praticboutic_backend_java.entities.Categorie");
-                } catch (ClassNotFoundException ex) {
-                    throw new ClassNotFoundException("L'entité spécifiée n'existe pas : ");
+                    sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+                } catch (Throwable ex) {
+                    throw new ExceptionInInitializerError(ex);
                 }
 
-                String dsttbl  = Liens.get(Liens.size() - 1).getName().toString();
-                String dsttblpk = BaseEntity.getPrimaryKeyName(entityManager, dsttbl);
-                    if (!joinType.isEmpty()) {
-                    joins.append(joinType)
-                            .append(dsttbl)
-                            .append(" T")
-                            .append(Liens.size() + 1) // T2, T3, etc.
-                            .append(" ON T1.")
-                            .append(dsttblpk)
-                            .append(" = T")
-                            .append(1)
-                            .append(".")
-                            .append(dsttblpk)
-                            .append(" ");
+            Class<?> entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, tableName);
+            Method method = entityClass.getDeclaredMethod("displayData", cArg);
+            Object entityInstance = entityClass.getDeclaredConstructor().newInstance();
+            ArrayList<?> data = (ArrayList<?>)method.invoke( entityInstance, sessionFactory, entityManager, tableName, bouticid, limit, offset, selcol, selid);
 
-                }
-                queryBuilder.append(joins);
-
-                // Requête WHERE
-                StringBuilder whereClause = new StringBuilder();
-                whereClause.append(" WHERE T1.customid = ").append(bouticid);
-                if (selcol != null && !selcol.isEmpty() && selid != null) {
-                    whereClause.append(" AND T1.").append(selcol).append(" = :selid");
-                }
-                queryBuilder.append(whereClause);
-
-                // Requête ORDER BY
-                if (!orderByClauses.isEmpty()) {
-                    queryBuilder.append(" ORDER BY ")
-                            .append(String.join(", ", orderByClauses))
-                            .append(", T1.")
-                            .append(primaryKey);
-                }
-
-                // Ajout des limites
-                queryBuilder.append(" LIMIT :limit OFFSET :offset");
-                // Debugging: imprimer la requête générée
-                System.out.println("Generated Query: " + queryBuilder);
-                List<?> resultList = List.of();
-                // Paramètres
-                Query query = entityManager.createNativeQuery(queryBuilder.toString());
-                query.setParameter("limit", limit);
-                query.setParameter("offset", offset);
-                if (selcol != null && !selcol.isEmpty() && selid != null) {
-                    queryBuilder.append(" selid = ").append(selid);
-                }
-
-                resultList = query.getResultList();
-
-                // Construction de la réponse
-                response.put("data", resultList);
-                response.put("count", resultList.size());
-                //response.put("links", liens);
-                response.put("status", "success");
-            }
+            // Construction de la réponse
+            response.put("data", data);
+            response.put("count", data.size());
+            response.put("status", "success");
         }
         catch(Exception e2)
         {
@@ -279,7 +194,7 @@ public class DatabaseController {
             return response;
         }
 
-        strClePrimaire = BaseEntity.getPrimaryKeyName(entityManager, tableName);
+        strClePrimaire = BaseEntity.getPrimaryKeyName(sessionFactory, entityManager, tableName);
 
         if (strClePrimaire == null) {
             throw new IllegalArgumentException("Aucune clé primaire trouvée pour cette table");

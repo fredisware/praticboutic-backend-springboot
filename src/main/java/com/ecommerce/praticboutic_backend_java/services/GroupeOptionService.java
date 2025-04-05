@@ -22,26 +22,6 @@ public class GroupeOptionService {
     @Autowired
     private GroupeOptionRepository groupeOptionRepository;
 
-    /**
-     * Récupère les groupes d'options pour un article donné
-     * 
-     * @param artId L'identifiant de l'article
-     * @return Liste des groupes d'options sous forme de tableaux d'objets
-     */
-    public List<List<Object>> getGroupesOptionsByArticle(Integer artId) {
-        List<GroupeOpt> groupesOptions = groupeOptionRepository.findByArtid(artId);
-        List<List<Object>> result = new ArrayList<>();
-        
-        for (GroupeOpt groupeOption : groupesOptions) {
-            List<Object> groupeArray = Arrays.asList(
-                groupeOption.getGrpoptid(),
-                groupeOption.getNom()
-            );
-            result.add(groupeArray);
-        }
-        
-        return result;
-    }
 
     /**
      * Trouve un groupe d'options par son identifiant
@@ -72,16 +52,7 @@ public class GroupeOptionService {
         groupeOptionRepository.deleteById(grpOptId);
     }
     
-    /**
-     * Récupère tous les groupes d'options pour un article
-     * 
-     * @param artId L'identifiant de l'article
-     * @return Liste des groupes d'options
-     */
-    public List<GroupeOpt> getAllGroupesOptionsByArticle(Integer artId) {
-        return groupeOptionRepository.findByArtid(artId);
-    }
-    
+
     public List<?> getGroupesOptions(Integer bouticid, Integer artid) {
         return null;
     }

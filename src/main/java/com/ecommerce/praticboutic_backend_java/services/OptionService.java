@@ -35,7 +35,7 @@ public class OptionService {
         
         for (Option option : options) {
             List<Object> optionArray = Arrays.asList(
-                option.getId(),
+                option.getOptId(),
                 option.getGroupeOptionId(),
                 option.getNom(),
                 option.getSurcout()

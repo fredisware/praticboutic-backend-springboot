@@ -1,15 +1,21 @@
 package com.ecommerce.praticboutic_backend_java;
 
-import com.ecommerce.praticboutic_backend_java.entities.Client;
-import com.ecommerce.praticboutic_backend_java.entities.Article;
-import com.ecommerce.praticboutic_backend_java.entities.*;
 import jakarta.persistence.*;
 import jakarta.persistence.metamodel.Attribute;
 import jakarta.persistence.metamodel.EntityType;
 import jakarta.persistence.metamodel.SingularAttribute;
+import org.hibernate.SessionFactory;
+import org.hibernate.persister.entity.EntityPersister;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
-import java.util.Set;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.lang.Class;
+import java.util.Locale;
+import java.util.Set;
+
 
 @MappedSuperclass
 //@Access(AccessType.FIELD)
@@ -22,9 +28,9 @@ public abstract class BaseEntity {
         return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 
-    public static String getPrimaryKeyName(EntityManager entityManager, String tableName) throws ClassNotFoundException {
+    public static String getPrimaryKeyName(SessionFactory sessionFactory, EntityManager entityManager, String tableName) throws ClassNotFoundException {
         // Récupérer le type d'entité à partir du EntityManager et du nom de la table
-        EntityType<?> entityType = entityManager.getMetamodel().entity(loadEntityClass(tableName));
+        EntityType<?> entityType = entityManager.getMetamodel().entity(getEntityClassFromTableName(sessionFactory, tableName));
 
         // Parcourir les attributs de l'entité
         for (Attribute<?, ?> attribute : entityType.getAttributes()) {
@@ -50,5 +56,52 @@ public abstract class BaseEntity {
         }
     }
 
+    public static ArrayList<?> displayData(SessionFactory sessionFactory, EntityManager entityManager, String table, Integer bouticid, Integer limit, Integer offset, String selcol, Integer selid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        ArrayList<Object> data = new ArrayList<>();
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT ").append(getPrimaryKeyName(sessionFactory, entityManager, table))
+                .append(" FROM `").append(table)
+                .append("` WHERE customid = ").append(bouticid)
+                .append(" LIMIT ").append(limit).append(" OFFSET ").append(offset);
+
+        if (selcol != null && !selcol.isEmpty() && selid != null) {
+            queryBuilder.append(" WHERE ").append(selcol).append(" = ").append(selid);
+        }
+        Query query = entityManager.createNativeQuery(queryBuilder.toString());
+        List<?> pkList;
+        pkList = query.getResultList();
+        for(  Object pk : pkList)
+        {
+            Class<?> entityClass = getEntityClassFromTableName(sessionFactory, table);
+            Object entityInstance = entityClass.getDeclaredConstructor().newInstance();
+            entityInstance = entityManager.find(entityClass, pk);
+            ///Object entityInstance = entity.getDeclaredConstructor().newInstance();
+            //entityManager.detach(entityInstance);
+
+            Method method = entityClass.getDeclaredMethod("getDisplayData");
+            Object ret = method.invoke(entityInstance);
+
+            data.add(ret);
+        }
+        return data;
+    }
+
+
+    public static Class<?> getEntityClassFromTableName(SessionFactory sessionFactory, String tableName) throws ClassNotFoundException {
+        // Parcourez toutes les entités gérées par Hibernate
+        Set<EntityType<?>> entities = sessionFactory.getMetamodel().getEntities();
+        for (EntityType<?> entity : entities) {
+            // Vérifiez si le nom de la table correspond
+            if (entity.getName().equalsIgnoreCase(tableName)) {
+                // Retourne la classe de l'entité
+                try {
+                    return Class.forName("com.ecommerce.praticboutic_backend_java.entities." + entity.getName());
+                } catch (ClassNotFoundException ex) {
+                    throw new ClassNotFoundException("L'entité spécifiée n'existe pas : " + capitalize(tableName));
+                }
+            }
+        }
+        throw new IllegalArgumentException("Aucune entité trouvée pour la table : " + tableName);
+    }
 
 }
