@@ -22,9 +22,5 @@ import static org.apache.catalina.webresources.TomcatURLStreamHandlerFactory.dis
             return new BCryptPasswordEncoder();
         }
 
-        @PostMapping("/login")
-        public String login(@ModelAttribute User user) {
-            return "login";
-    }
 }
 

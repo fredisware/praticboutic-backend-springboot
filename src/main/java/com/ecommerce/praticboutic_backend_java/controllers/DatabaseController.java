@@ -1,5 +1,11 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonReader;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
+import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import com.ecommerce.praticboutic_backend_java.*;
 import com.ecommerce.praticboutic_backend_java.configurations.StripeConfig;
@@ -7,7 +13,11 @@ import com.ecommerce.praticboutic_backend_java.entities.*;
 import com.ecommerce.praticboutic_backend_java.repositories.*;
 import com.ecommerce.praticboutic_backend_java.requests.*;
 
+import java.io.File;
+import java.io.StringReader;
+import java.sql.*;
 import java.util.*;
+import java.util.Date;
 import java.util.Locale;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -15,36 +25,36 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.stream.Collectors;
+import java.io.FileReader;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.persistence.*;
+import jakarta.json.Json;
 
 import com.stripe.Stripe;
 import com.stripe.model.Subscription;
 import com.stripe.param.SubscriptionUpdateParams;
-import jakarta.servlet.http.HttpSession;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
+import org.hibernate.jdbc.Work;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.persistence.*;
-import jakarta.persistence.metamodel.*;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.commons.lang3.StringUtils;
-
-import static com.ecommerce.praticboutic_backend_java.BaseEntity.capitalize;
-import static com.ecommerce.praticboutic_backend_java.BaseEntity.loadEntityClass;
-
-import org.hibernate.cfg.Configuration;
+import org.thymeleaf.spring6.expression.Fields;
 
 @RestController
 @RequestMapping("/api")
@@ -54,10 +64,13 @@ public class DatabaseController {
 
     private final StripeConfig stripeConfig;
 
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private static SessionFactory sessionFactory = null;
+
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -74,93 +87,91 @@ public class DatabaseController {
     @Autowired
     private StatutCmdRepository statutCmdRepository;
 
-    private static SessionFactory sessionFactory = null;
-
     public DatabaseController(StripeConfig stripeConfig) {
         this.stripeConfig = stripeConfig;
     }
 
-
-    @PostMapping("/count-elements")
+    @GetMapping("/count-elements")
     public Map<String, Object> countElementsInTable(@RequestBody VueTableRequest input) {
         Map<String, Object> response = new HashMap<>();
-
         try {
+            String strTable = input.getTable(); Integer iBouticid = input.getBouticid();
+            String strSelcol = input.getSelcol(); Integer iSelid = input.getSelid();
+            Integer iLimit = input.getLimit(); Integer iOffset = input.getOffset();
             // Vérification si le nom de la table est fourni
-            if (input.getTable() == null || input.getTable().isEmpty()) {
+            if (strTable == null || strTable.isEmpty()) {
                 response.put("error", "Le nom de la table est vide.");
                 return response;
             }
+            Class<?> entityClass;
+            try {
+                sessionFactory = entityManager.getEntityManagerFactory()
+                        .unwrap(SessionFactory.class);
+                entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
 
-            Class<?> entityClass = loadEntityClass(input.getTable());
-
+            } catch (Throwable ex) {
+                throw new ExceptionInInitializerError(ex);
+            }
             // Création de la requête avec le EntityManager
             StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(*) FROM ");
-            queryBuilder.append(input.getTable());
+            queryBuilder.append(strTable);
             queryBuilder.append(" e WHERE e.customid = :bouticid");
-
             // Ajout de conditions supplémentaires
-            if (input.getSelcol() != null && !input.getSelcol().isEmpty() && input.getSelid() != null && input.getSelid() > 0) {
-                queryBuilder.append(" AND e.").append(input.getSelcol()).append(" = :selid");
-            }
-
+            boolean bSel = (strSelcol != null && !strSelcol.isEmpty() && iSelid != null && iSelid > 0);
+            if (bSel) queryBuilder.append(" AND e.").append(strSelcol).append(" = :selid");
             // Création de la requête dynamique
             Query query = entityManager.createNativeQuery(queryBuilder.toString());
-
             // Paramètres de la requête
-            query.setParameter("bouticid", input.getBouticid());
-
-            if (input.getSelcol() != null && !input.getSelcol().isEmpty() && input.getSelid() != null && input.getSelid() > 0) {
-                query.setParameter("selid", input.getSelid());
-            }
-
+            query.setParameter("bouticid", iBouticid);
+            if (bSel) query.setParameter("selid", iSelid);
             // Exécution de la requête
             Long count = (Long) query.getSingleResult();
-
             response.put("count", count);
-            response.put("entity", input.getTable());
+            response.put("entity", strTable);
         } catch (Exception e) {
             response.put("error", "Erreur lors de l'exécution : " + e.getMessage());
         }
-
         return response;
     }
 
-    @PostMapping("/vue-table")
+    @GetMapping("/vue-table")
     public Map<String, Object> vueTable(@RequestBody VueTableRequest input) {
         Map<String, Object> response = new HashMap<>();
-
         try {
             // Variables d'entrée
-            String tableName = input.getTable();
-            Integer bouticid = input.getBouticid();
-            String selcol = input.getSelcol();
-            Integer selid = input.getSelid();
-            Integer limit = input.getLimit();
-            Integer offset = input.getOffset();
-
+            String strTable = input.getTable(); Integer iBouticid = input.getBouticid();
+            String strSelcol = input.getSelcol(); Integer iSelid = input.getSelid();
+            Integer iLimit = input.getLimit(); Integer iOffset = input.getOffset();
             // Validation des données d'entrée
-            if (tableName == null || tableName.isEmpty()) {
+            if (strTable == null || strTable.isEmpty()) {
                 throw new IllegalArgumentException("Le nom de la table est vide.");
             }
+            Class<?> entityClass;
+            try {
+                sessionFactory = entityManager.getEntityManagerFactory()
+                        .unwrap(SessionFactory.class);
+                entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
 
-            Class[] cArg = new Class[8];
-            cArg[0] = SessionFactory.class;
-            cArg[1] = EntityManager.class; cArg[2] = String.class; cArg[3] = Integer.class;
-            cArg[4] = Integer.class; cArg[5] = Integer.class; cArg[6] = String.class;
-            cArg[7] = Integer.class;
+            } catch (Throwable ex) {
+                throw new ExceptionInInitializerError(ex);
+            }
+            ArrayList<Object> data = new ArrayList<>();
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.append("SELECT ").append(BaseEntity.getPrimaryKeyName(sessionFactory, entityManager, strTable))
+                    .append(" FROM `").append(strTable)
+                    .append("` WHERE customid = ").append(iBouticid)
+                    .append(" LIMIT ").append(iLimit).append(" OFFSET ").append(iOffset);
 
-                try {
-                    sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-                } catch (Throwable ex) {
-                    throw new ExceptionInInitializerError(ex);
-                }
-
-            Class<?> entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, tableName);
-            Method method = entityClass.getDeclaredMethod("displayData", cArg);
-            Object entityInstance = entityClass.getDeclaredConstructor().newInstance();
-            ArrayList<?> data = (ArrayList<?>)method.invoke( entityInstance, sessionFactory, entityManager, tableName, bouticid, limit, offset, selcol, selid);
-
+            if (strSelcol != null && !strSelcol.isEmpty() && iSelid != null) {
+                queryBuilder.append(" WHERE ").append(strSelcol).append(" = ").append(iSelid);
+            }
+            Query query = entityManager.createNativeQuery(queryBuilder.toString());
+            for(Object primaryKey : query.getResultList())
+            {
+                Object entityInstance = entityManager.find(entityClass, primaryKey);
+                Object ret = entityClass.getDeclaredMethod("getDisplayData").invoke(entityInstance);
+                data.add(ret);
+            }
             // Construction de la réponse
             response.put("data", data);
             response.put("count", data.size());
@@ -170,51 +181,53 @@ public class DatabaseController {
         {
             response.put("error", "Erreur lors de l'exécution : " + e2.getMessage());
         }
-
         return response;
     }
 
-    @PostMapping("/remplirOption")
-    public Map<String, Object> remplirOption(@RequestBody RemplirOptionTableRequest input) throws ClassNotFoundException {
+    @GetMapping("/fill-option")
+    public Map<String, Object> remplirOption(@RequestBody RemplirOptionTableRequest input)
+    {
         Map<String, Object> response = new HashMap<>();
+        try {
+            String strClePrimaire = null;
+            // Variables d'entrée
+            String tableName = input.getTable(); Long idBoutic = input.getBouticid(); String strColonne = input.getColonne();
+            // Validation des données d'entrée
+            if (tableName == null || tableName.isEmpty()) {
+                response.put("error", "Le nom de la table est vide.");
+                return response;
+            }
+            Class<?> entityClass;
+            try {
+                sessionFactory = entityManager.getEntityManagerFactory()
+                        .unwrap(SessionFactory.class);
+                entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
 
-        String strClePrimaire = null;
-
-        // Variables d'entrée
-        String tableName = input.getTable();
-        Long idBoutic = input.getBouticid();
-        String strColSel = input.getSelcol();
-        Long idSel = input.getSelid();
-        Integer iLimit = input.getLimit();
-        Integer iOffset = input.getOffset();
-
-        // Validation des données d'entrée
-        if (tableName == null || tableName.isEmpty()) {
-            response.put("error", "Le nom de la table est vide.");
-            return response;
+            } catch (Throwable ex) {
+                throw new ExceptionInInitializerError(ex);
+            }
+            strClePrimaire = BaseEntity.getPrimaryKeyName(sessionFactory, entityManager, tableName);
+            if (strClePrimaire == null) {
+                throw new IllegalArgumentException("Aucune clé primaire trouvée pour cette table");
+            }
+            // Création de la requête SQL
+            StringBuilder sbQueryRemplirOption = new StringBuilder("SELECT ")
+                    .append(strClePrimaire).append(", ")
+                    .append(input.getColonne())
+                    .append(" FROM `").append(tableName).append("`")
+                    .append(" WHERE customid = ").append(idBoutic)
+                    .append(" OR ").append(strClePrimaire).append(" = 0");
+            if ("statutcmd".equals(tableName)) {
+                sbQueryRemplirOption.append(" AND actif = 1");
+            }
+            Query queryRemplirOption = entityManager.createNativeQuery(sbQueryRemplirOption.toString(), Object[].class);
+            List<?> results = queryRemplirOption.getResultList();
+            response.put("results", results);
         }
-
-        strClePrimaire = BaseEntity.getPrimaryKeyName(sessionFactory, entityManager, tableName);
-
-        if (strClePrimaire == null) {
-            throw new IllegalArgumentException("Aucune clé primaire trouvée pour cette table");
+        catch(Exception e2)
+        {
+            response.put("error", "Erreur lors de l'exécution : " + e2.getMessage());
         }
-
-        // Création de la requête SQL
-        StringBuilder query = new StringBuilder("SELECT ")
-                .append(strClePrimaire).append(", ")
-                .append(input.getSelcol())
-                .append(" FROM `").append(tableName).append("`")
-                .append(" WHERE customid = ").append(idBoutic)
-                .append(" OR ").append(strClePrimaire).append(" = 0");
-
-        if ("statutcmd".equals(tableName)) {
-            query.append(" AND actif = 1");
-        }
-
-        TypedQuery<Object[]> typedQuery = entityManager.createQuery(query.toString(), Object[].class);
-        List<Object[]> results = typedQuery.getResultList();
-        response.put("results", results);
 
         return response;
     }
@@ -225,7 +238,8 @@ public class DatabaseController {
      * @param input La requête contenant les informations d'insertion
      * @return Une Map contenant le résultat de l'opération
      */
-    @PostMapping("/insert-row")
+    @PutMapping("/insert-row")
+    @Transactional
     public Map<String, Object> insertRow(@RequestBody InsertRowRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -235,12 +249,10 @@ public class DatabaseController {
                 response.put("error", "Le nom de la table est requis");
                 return response;
             }
-
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
                 return response;
             }
-
             if (input.getRow() == null || input.getRow().isEmpty()) {
                 response.put("error", "Les données à insérer sont requises");
                 return response;
@@ -249,116 +261,81 @@ public class DatabaseController {
             // Construction dynamique de la classe d'entité
             Class<?> entityClass;
             try {
-                String entityName = "com.ecommerce.praticboutic_backend_java.entities." + input.getTable();
-                entityClass = Class.forName(entityName);
+                sessionFactory = entityManager.getEntityManagerFactory()
+                        .unwrap(SessionFactory.class);
+                entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
             } catch (ClassNotFoundException ex) {
                 response.put("error", "L'entité spécifiée n'existe pas : " + input.getTable());
                 return response;
             }
 
-            // Création d'une nouvelle instance de l'entité
-            Object entity;
-            try {
-                entity = entityClass.getDeclaredConstructor().newInstance();
-
-                // Définir customid/bouticid
-                Method setCustomIdMethod = entityClass.getMethod("setCustomid", Long.class);
-                setCustomIdMethod.invoke(entity, input.getBouticid());
-
-                // Parcourir les champs à insérer
-                for (ColumnData column : input.getRow()) {
-                    // Vérifier les contraintes d'unicité pour les champs de type "ref", "codepromo" ou "email"
-                    if ("ref".equals(column.getType()) || "codepromo".equals(column.getType())) {
+            // Vérifier les contraintes d'unicité
+            for (ColumnData column : input.getRow()) {
+                try {
+                    Field field = entityClass.getDeclaredField(column.getNom());
+                    Column columnAnnotation = field.getAnnotation(Column.class);
+                    if (columnAnnotation != null && columnAnnotation.unique()) {
                         String jpql = "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e " +
                                 "WHERE e.customid = :customid AND e." + column.getNom() + " = :valeur";
-
                         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
                         query.setParameter("customid", input.getBouticid());
                         query.setParameter("valeur", column.getValeur());
-
                         if (query.getSingleResult() > 0) {
                             throw new IllegalArgumentException("Impossible d'avoir plusieurs fois la valeur '" +
                                     column.getValeur() + "' dans la colonne '" +
                                     column.getDesc() + "'");
                         }
                     }
-
-                    if ("email".equals(column.getType())) {
-                        String jpql = "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e " +
-                                "WHERE e." + column.getNom() + " = :valeur";
-
-                        TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
-                        query.setParameter("valeur", column.getValeur());
-
-                        if (query.getSingleResult() > 0) {
-                            throw new IllegalArgumentException("Le courriel '" + column.getValeur() +
-                                    "' existe déjà dans la base de données");
-                        }
-                    }
-
-                    // Définir la valeur de la colonne sur l'entité
-                    String setterName = "set" + column.getNom().substring(0, 1).toUpperCase() +
-                            column.getNom().substring(1);
-
-                    // Trouver la méthode appropriée
-                    Method[] methods = entityClass.getMethods();
-                    Method setterMethod = null;
-
-                    for (Method method : methods) {
-                        if (method.getName().equals(setterName) && method.getParameterCount() == 1) {
-                            setterMethod = method;
-                            break;
-                        }
-                    }
-
-                    if (setterMethod == null) {
-                        throw new NoSuchMethodException("Méthode " + setterName + " non trouvée");
-                    }
-
-                    // Convertir et assigner la valeur selon le type
-                    Class<?> paramType = setterMethod.getParameterTypes()[0];
-                    Object value = column.getValeur();
-
-                    // Traiter les cas spéciaux comme les mots de passe
-                    if ("pass".equals(column.getType())) {
-                        // Utiliser BCrypt pour hacher le mot de passe
-                        value = new BCryptPasswordEncoder().encode(column.getValeur());
-                    }
-
-                    // Convertir la valeur au type approprié
-                    if (paramType == Long.class || paramType == long.class) {
-                        value = Long.parseLong(column.getValeur().toString());
-                    } else if (paramType == Integer.class || paramType == int.class) {
-                        value = Integer.parseInt(column.getValeur().toString());
-                    } else if (paramType == Double.class || paramType == double.class) {
-                        value = Double.parseDouble(column.getValeur().toString());
-                    } else if (paramType == Boolean.class || paramType == boolean.class) {
-                        value = Boolean.parseBoolean(column.getValeur().toString());
-                    } else if (paramType == Date.class) {
-                        // Adapter selon votre format de date
-                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                        value = format.parse(column.getValeur().toString());
-                    }
-
-                    // Appliquer la valeur
-                    setterMethod.invoke(entity, value);
+                } catch (NoSuchFieldException e) {
+                    // Ignorer les champs qui n'existent pas dans l'entité
+                    continue;
                 }
-
-                // Persister l'entité
-                entityManager.persist(entity);
-
-                // Récupérer l'ID généré
-                Method getIdMethod = entityClass.getMethod("getId");
-                Object id = getIdMethod.invoke(entity);
-
-                // Répondre avec l'ID inséré
-                response.put("id", id);
-                response.put("success", true);
-
-            } catch (Exception e) {
-                response.put("error", e.getMessage());
-                e.printStackTrace();
             }
+
+            // Préparation des données pour l'insertion
+            Map<String, Object> columnValues = new HashMap<>();
+            columnValues.put("customid", input.getBouticid());
+
+            for (ColumnData column : input.getRow()) {
+                Object value = column.getValeur();
+                if ("pass".equals(column.getType())) {
+                    value = new BCryptPasswordEncoder().encode(column.getValeur());
+                }
+                columnValues.put(column.getNom(), value);
+            }
+
+            // Utiliser une requête native pour l'insertion
+            StringBuilder columns = new StringBuilder("customid");
+            StringBuilder placeholders = new StringBuilder("?");
+            List<Object> values = new ArrayList<>();
+            values.add(input.getBouticid());
+
+            for (ColumnData column : input.getRow()) {
+                columns.append(", ").append(column.getNom());
+                placeholders.append(", ?");
+
+                Object value = column.getValeur();
+                if ("pass".equals(column.getType())) {
+                    value = new BCryptPasswordEncoder().encode(column.getValeur());
+                }
+                values.add(value);
+            }
+
+            String insertSql = "INSERT INTO " + input.getTable() + " (" + columns + ") VALUES (" + placeholders + ")";
+
+            Query insertQuery = entityManager.createNativeQuery(insertSql);
+            for (int i = 0; i < values.size(); i++) {
+                insertQuery.setParameter(i + 1, values.get(i));
+            }
+
+            int result = insertQuery.executeUpdate();
+
+            // Récupérer l'ID généré
+            Query idQuery = entityManager.createNativeQuery("SELECT LAST_INSERT_ID()");
+            Long lastId = ((Number) idQuery.getSingleResult()).longValue();
+
+            response.put("id", lastId);
+            response.put("success", result > 0);
 
         } catch (Exception e) {
             response.put("error", e.getMessage());
@@ -374,7 +351,8 @@ public class DatabaseController {
      * @param input La requête contenant les informations de mise à jour
      * @return Une Map contenant le résultat de l'opération
      */
-    @PostMapping("/update-row")
+    @PatchMapping("/update-row")
+    @Transactional
     public Map<String, Object> updateRow(@RequestBody UpdateRowRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -384,22 +362,18 @@ public class DatabaseController {
                 response.put("error", "Le nom de la table est requis");
                 return response;
             }
-
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
                 return response;
             }
-
             if (input.getRow() == null || input.getRow().isEmpty()) {
                 response.put("error", "Les données à mettre à jour sont requises");
                 return response;
             }
-
             if (input.getIdtoup() == null) {
                 response.put("error", "L'ID de l'élément à mettre à jour est requis");
                 return response;
             }
-
             if (input.getColonne() == null || input.getColonne().isEmpty()) {
                 response.put("error", "Le nom de la colonne d'ID est requis");
                 return response;
@@ -408,122 +382,70 @@ public class DatabaseController {
             // Construction dynamique de la classe d'entité
             Class<?> entityClass;
             try {
-                String entityName = "com.ecommerce.praticboutic_backend_java.entities." + input.getTable();
-                entityClass = Class.forName(entityName);
+                sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
+                entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
             } catch (ClassNotFoundException ex) {
                 response.put("error", "L'entité spécifiée n'existe pas : " + input.getTable());
                 return response;
             }
 
-            // Récupérer l'entité à mettre à jour
-            String jpqlFind = "SELECT e FROM " + entityClass.getSimpleName() + " e " +
-                    "WHERE e." + input.getColonne() + " = :id AND e.customid = :customid";
-
-            Query queryFind = entityManager.createQuery(jpqlFind);
-            queryFind.setParameter("id", input.getIdtoup());
-            queryFind.setParameter("customid", input.getBouticid());
-
-            Object entity;
-            try {
-                entity = queryFind.getSingleResult();
-            } catch (Exception e) {
-                response.put("error", "Entité non trouvée avec ID: " + input.getIdtoup());
-                return response;
-            }
-
-            // Parcourir les champs à mettre à jour
+            // Vérifier les contraintes d'unicité
             for (ColumnData column : input.getRow()) {
-                // Vérifier les contraintes d'unicité pour les champs de type "ref", "codepromo" ou "email"
-                if ("ref".equals(column.getType()) || "codepromo".equals(column.getType())) {
+                Field field = entityClass.getDeclaredField(column.getNom());
+                Column columnAnnotation = field.getAnnotation(Column.class);
+                if (columnAnnotation != null && columnAnnotation.unique()) {
                     String jpql = "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e " +
-                            "WHERE e.customid = :customid AND e." + column.getNom() + " = :valeur " +
-                            "AND e." + input.getColonne() + " != :id";
+                            "WHERE e.customid = :customid AND e." + column.getNom() +
+                            " = :valeur AND e." + input.getColonne() + " != :idtoup";
 
                     TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
                     query.setParameter("customid", input.getBouticid());
                     query.setParameter("valeur", column.getValeur());
-                    query.setParameter("id", input.getIdtoup());
+                    query.setParameter("idtoup", input.getIdtoup());
 
-                    if (query.getSingleResult() > 0) {
+                    Long lCount = query.getSingleResult();
+                    if (lCount > 0) {
                         throw new IllegalArgumentException("Impossible d'avoir plusieurs fois la valeur '" +
                                 column.getValeur() + "' dans la colonne '" +
                                 column.getDesc() + "'");
                     }
                 }
-
-                if ("email".equals(column.getType())) {
-                    String jpql = "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e " +
-                            "WHERE e." + column.getNom() + " = :valeur " +
-                            "AND e." + input.getColonne() + " != :id";
-
-                    TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
-                    query.setParameter("valeur", column.getValeur());
-                    query.setParameter("id", input.getIdtoup());
-
-                    if (query.getSingleResult() > 0) {
-                        throw new IllegalArgumentException("Le courriel '" + column.getValeur() +
-                                "' existe déjà dans la base de données");
-                    }
-                }
-
-                // Traiter le cas spécial des mots de passe vides (à ne pas mettre à jour)
-                if ("pass".equals(column.getType()) && (column.getValeur() == null ||
-                        column.getValeur().toString().isEmpty())) {
-                    continue; // Sauter ce champ
-                }
-
-                // Définir la valeur de la colonne sur l'entité
-                String setterName = "set" + column.getNom().substring(0, 1).toUpperCase() +
-                        column.getNom().substring(1);
-
-                // Trouver la méthode appropriée
-                Method[] methods = entityClass.getMethods();
-                Method setterMethod = null;
-
-                for (Method method : methods) {
-                    if (method.getName().equals(setterName) && method.getParameterCount() == 1) {
-                        setterMethod = method;
-                        break;
-                    }
-                }
-
-                if (setterMethod == null) {
-                    throw new NoSuchMethodException("Méthode " + setterName + " non trouvée");
-                }
-
-                // Convertir et assigner la valeur selon le type
-                Class<?> paramType = setterMethod.getParameterTypes()[0];
-                Object value = column.getValeur();
-
-                // Traiter les cas spéciaux comme les mots de passe
-                if ("pass".equals(column.getType())) {
-                    // Utiliser BCrypt pour hacher le mot de passe
-                    value = new BCryptPasswordEncoder().encode(column.getValeur().toString());
-                }
-
-                // Convertir la valeur au type approprié
-                if (paramType == Long.class || paramType == long.class) {
-                    value = Long.parseLong(column.getValeur().toString());
-                } else if (paramType == Integer.class || paramType == int.class) {
-                    value = Integer.parseInt(column.getValeur().toString());
-                } else if (paramType == Double.class || paramType == double.class) {
-                    value = Double.parseDouble(column.getValeur().toString());
-                } else if (paramType == Boolean.class || paramType == boolean.class) {
-                    value = Boolean.parseBoolean(column.getValeur().toString());
-                } else if (paramType == Date.class) {
-                    // Adapter selon votre format de date
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    value = format.parse(column.getValeur().toString());
-                }
-
-                // Appliquer la valeur
-                setterMethod.invoke(entity, value);
             }
 
-            // Persister les modifications
-            entityManager.merge(entity);
+            // Préparer et exécuter la mise à jour
+            StringBuilder jpql = new StringBuilder("UPDATE " + entityClass.getSimpleName() + " e SET ");
 
-            response.put("success", true);
+            for (int i = 0; i < input.getRow().size(); i++) {
+                ColumnData column = input.getRow().get(i);
+                jpql.append("e.").append(column.getNom()).append(" = :").append(column.getNom());
+
+                if (i < input.getRow().size() - 1) {
+                    jpql.append(", ");
+                }
+            }
+
+            jpql.append(" WHERE e.customid = :customid AND e.").append(input.getColonne()).append(" = :idtoup");
+
+            Query updateQuery = entityManager.createQuery(jpql.toString());
+
+            // Set parameters
+            for (ColumnData column : input.getRow()) {
+                Object value = column.getValeur();
+                if ("pass".equals(column.getType())) {
+                    value = new BCryptPasswordEncoder().encode(column.getValeur());
+                }
+                if ("bool".equals(column.getType())) {
+                    value = (Boolean) column.getValeur().equals("1");
+                }
+                updateQuery.setParameter(column.getNom(), value);
+
+            }
+
+            updateQuery.setParameter("customid", input.getBouticid());
+            updateQuery.setParameter("idtoup", input.getIdtoup());
+
+            int updatedCount = updateQuery.executeUpdate();
+            response.put("success", updatedCount > 0);
 
         } catch (Exception e) {
             response.put("error", e.getMessage());
@@ -539,90 +461,58 @@ public class DatabaseController {
      * @param input La requête contenant les informations pour récupérer les valeurs
      * @return Une Map contenant le résultat de l'opération
      */
-    @PostMapping("/get-values")
+    @GetMapping("/get-values")
     public Map<String, Object> getValues(@RequestBody GetValuesRequest input) {
         Map<String, Object> response = new HashMap<>();
-
         try {
             // Validation de l'entrée
             if (input.getTable() == null || input.getTable().isEmpty()) {
                 response.put("error", "Le nom de la table est requis");
                 return response;
             }
-
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
                 return response;
             }
-
             if (input.getIdtoup() == null) {
                 response.put("error", "L'ID de l'élément est requis");
                 return response;
             }
-
+            try {
+                sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+            } catch (Throwable ex) {
+                throw new ExceptionInInitializerError(ex);
+            }
             // Construction dynamique de la classe d'entité
             Class<?> entityClass;
             try {
-                String entityName = "com.ecommerce.praticboutic_backend_java.entities." + input.getTable();
-                entityClass = Class.forName(entityName);
+                entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
             } catch (ClassNotFoundException ex) {
                 response.put("error", "L'entité spécifiée n'existe pas : " + input.getTable());
                 return response;
             }
-
-            // Trouver la clé primaire (chercher l'annotation @Id)
-            String primaryKeyField = null;
-            Field[] fields = entityClass.getDeclaredFields();
-            for (Field field : fields) {
-                if (field.isAnnotationPresent(Id.class)) {
-                    primaryKeyField = field.getName();
-                    break;
+            String strClePrimaire = BaseEntity.getPrimaryKeyName(sessionFactory, entityManager, input.getTable());
+            if (strClePrimaire == null) {
+                throw new IllegalArgumentException("Aucune clé primaire trouvée pour cette table");
+            }
+            StringBuilder sbQuerySelect = new StringBuilder("SELECT ");
+            for (Field field : entityClass.getDeclaredFields() ) {
+                if ((field.getAnnotation(Column.class) != null) && (!field.getName().equals("customid"))) {
+                    if (!field.equals(entityClass.getDeclaredFields()[0])) sbQuerySelect.append(", ");
+                    sbQuerySelect.append(field.getName());
                 }
             }
-
-            if (primaryKeyField == null) {
-                response.put("error", "Impossible de déterminer la clé primaire pour l'entité " + input.getTable());
-                return response;
-            }
-
-            // Créer la requête JPQL pour récupérer l'entité
-            String jpql = "SELECT e FROM " + entityClass.getSimpleName() + " e " +
-                    "WHERE e." + primaryKeyField + " = :id AND e.customid = :customid";
-
-            Query query = entityManager.createQuery(jpql);
-            query.setParameter("id", input.getIdtoup());
-            query.setParameter("customid", input.getBouticid());
-
-            Object entity;
-            try {
-                entity = query.getSingleResult();
-            } catch (NoResultException e) {
-                response.put("error", "Aucun enregistrement trouvé avec l'ID " + input.getIdtoup());
-                return response;
-            }
-
-            // Extraire toutes les valeurs des champs
-            List<Object> values = new ArrayList<>();
-            for (Field field : fields) {
-                // Rendre le champ accessible s'il est privé
-                field.setAccessible(true);
-
-                // Récupérer la valeur
-                Object value = field.get(entity);
-
-                // Ajouter la valeur à la liste (gérer les cas null)
-                values.add(value != null ? value.toString() : "");
-            }
-
-            // Ajouter les valeurs à la réponse
-            response.put("values", values);
+            sbQuerySelect.append(" FROM ").append(input.getTable()).append(" WHERE ");
+            sbQuerySelect.append(strClePrimaire).append(" = ").append(input.getIdtoup());
+            sbQuerySelect.append(" AND ").append("customid = ").append(input.getBouticid());
+            Query qSelect = entityManager.createNativeQuery(sbQuerySelect.toString());
+            Object result = qSelect.getSingleResult();
+            response.put("values", result);
             response.put("success", true);
-
         } catch (Exception e) {
             response.put("error", e.getMessage());
             e.printStackTrace();
         }
-
         return response;
     }
 
@@ -632,7 +522,7 @@ public class DatabaseController {
      * @param input La requête contenant les paramètres de pagination et l'ID boutic
      * @return Une Map contenant le résultat de l'opération avec les couleurs
      */
-    @PostMapping("/color-row")
+    @GetMapping("/color-row")
     public Map<String, Object> getOrderColors(@RequestBody ColorRowRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -659,7 +549,7 @@ public class DatabaseController {
                     "WHERE c.customid = :customid " +
                     "ORDER BY c.cmdid";
 
-            Query query = entityManager.createQuery(jpql);
+            Query query = entityManager.createQuery(jpql, String.class);
             query.setParameter("customid", input.getBouticid());
             query.setFirstResult(input.getOffset());
             query.setMaxResults(input.getLimite());
@@ -692,7 +582,7 @@ public class DatabaseController {
      * @param input La requête contenant l'ID de la commande et l'ID boutic
      * @return Une Map contenant le résultat de l'opération
      */
-    @PostMapping("/get-com-data")
+    @GetMapping("/get-com-data")
     public Map<String, Object> getOrderData(@RequestBody GetComDataRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -754,9 +644,9 @@ public class DatabaseController {
             formatter.setMinimumFractionDigits(2);
             formatter.setMaximumFractionDigits(2);
 
-            BigDecimal sstotal = (BigDecimal) row[11];
-            BigDecimal fraislivraison = (BigDecimal) row[12];
-            BigDecimal total = (BigDecimal) row[13];
+            Double sstotal = (Double) row[11];
+            Double fraislivraison = (Double) row[12];
+            Double total = (Double) row[13];
 
             content = content.replace("%sstotal%", formatter.format(sstotal)); // sstotal
             content = content.replace("%fraislivraison%", formatter.format(fraislivraison)); // fraislivraison
@@ -786,7 +676,7 @@ public class DatabaseController {
     /**
      * Récupère une propriété spécifique d'un customer
      */
-    @PostMapping("/get-custom-prop")
+    @GetMapping("/get-custom-prop")
     public ResponseEntity<Map<String, Object>> getCustomProperty(@RequestBody CustomPropertyRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -840,10 +730,8 @@ public class DatabaseController {
         }
     }
 
-    /**
-     * Met à jour une propriété spécifique d'un customer
-     */
     @PostMapping("/set-custom-prop")
+    @Transactional
     public ResponseEntity<Map<String, Object>> setCustomProperty(@RequestBody CustomPropertyUpdateRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -869,9 +757,7 @@ public class DatabaseController {
 
             // Vérifier si la valeur existe déjà pour d'autres customers (pour le champ 'customer')
             if ("customer".equals(input.getProp())) {
-                String checkJpql = "SELECT COUNT(c) FROM Customer c " +
-                        "WHERE c." + input.getProp() + " = :valeur " +
-                        "AND c.customid != :customid";
+                String checkJpql = "SELECT COUNT(c) FROM Customer c WHERE c." + input.getProp() + " = :valeur AND c.customid != :customid";
 
                 Query checkQuery = entityManager.createQuery(checkJpql);
                 checkQuery.setParameter("valeur", input.getValeur());
@@ -885,24 +771,22 @@ public class DatabaseController {
                 }
             }
 
-            // Mise à jour de la propriété
-            String updateJpql = "UPDATE Customer c SET c." + input.getProp() + " = :valeur " +
-                    "WHERE c.customid = :customid";
+            // Mise à jour de la propriété - use parameterized query instead of string concatenation
+            String updateJpql = "UPDATE Customer c SET c." + input.getProp() + " = :valeur WHERE c.customid = :customid";
 
             Query updateQuery = entityManager.createQuery(updateJpql);
             updateQuery.setParameter("valeur", input.getValeur());
             updateQuery.setParameter("customid", input.getBouticid());
 
-            int updatedRows = updateQuery.executeUpdate();
+            int updatedCount = updateQuery.executeUpdate();
 
-            if (updatedRows > 0) {
+            if (updatedCount > 0) {
                 response.put("result", "OK");
             } else {
                 response.put("result", "KO");
             }
 
             return ResponseEntity.ok(response);
-
         } catch (Exception e) {
             response.put("result", "KO");
             response.put("error", e.getMessage());
@@ -913,7 +797,7 @@ public class DatabaseController {
     /**
      * Récupère une propriété spécifique d'un client associé à un customer
      */
-    @PostMapping("/get-client-prop")
+    @GetMapping("/get-client-prop")
     public ResponseEntity<Map<String, Object>> getClientProperty(@RequestBody ClientPropertyRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -973,6 +857,7 @@ public class DatabaseController {
      * Met à jour une propriété spécifique d'un client associé à un customer
      */
     @PostMapping("/set-client-prop")
+    @Transactional
     public ResponseEntity<Map<String, Object>> setClientProperty(@RequestBody ClientPropertyUpdateRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -997,42 +882,41 @@ public class DatabaseController {
             validatePropertyName(input.getProp());
 
             // Récupérer l'ID du client associé au customer
-            String cltIdQuery = "SELECT c.cltid FROM Customer c WHERE c.customid = :customid";
+            String cltIdQuery = "SELECT c.client.cltid FROM Customer c WHERE c.customid = :customid";
             Query query = entityManager.createQuery(cltIdQuery);
             query.setParameter("customid", input.getBouticid());
 
-            Long cltid;
+            Integer cltid;
             try {
-                cltid = (Long) query.getSingleResult();
+                cltid = (Integer) query.getSingleResult();
             } catch (NoResultException e) {
                 response.put("error", "Aucun client trouvé pour le customer avec l'ID " + input.getBouticid());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
 
             // Mise à jour de la propriété
-            String updateJpql;
+            String updateJpql = "UPDATE Client c SET c." + input.getProp() + " = :valeur WHERE c.cltid = :cltid";
+
+            Query updateQuery = entityManager.createQuery(updateJpql);
+
             if ("pass".equals(input.getProp()) && !input.getValeur().isEmpty()) {
                 // Cas spécial pour le mot de passe : hachage avant stockage
                 String hashedPassword = BCrypt.hashpw(input.getValeur(), BCrypt.gensalt());
-                updateJpql = "UPDATE Client c SET c." + input.getProp() + " = :valeur " +
-                        "WHERE c.cltid = :cltid";
-
-                Query updateQuery = entityManager.createQuery(updateJpql);
                 updateQuery.setParameter("valeur", hashedPassword);
-                updateQuery.setParameter("cltid", cltid);
-                updateQuery.executeUpdate();
             } else {
                 // Cas général
-                updateJpql = "UPDATE Client c SET c." + input.getProp() + " = :valeur " +
-                        "WHERE c.cltid = :cltid";
-
-                Query updateQuery = entityManager.createQuery(updateJpql);
                 updateQuery.setParameter("valeur", input.getValeur());
-                updateQuery.setParameter("cltid", cltid);
-                updateQuery.executeUpdate();
             }
 
-            response.put("result", "OK");
+            updateQuery.setParameter("cltid", cltid);
+            int updatedCount = updateQuery.executeUpdate();
+
+            if (updatedCount > 0) {
+                response.put("result", "OK");
+            } else {
+                response.put("result", "KO");
+            }
+
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
@@ -1054,7 +938,7 @@ public class DatabaseController {
     /**
      * Méthode pour créer une nouvelle boutique et configurer tous ses paramètres associés
      */
-    @PostMapping("/build-boutic")
+    @PutMapping("/build-boutic")
     public ResponseEntity<Map<String, Object>> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
 
@@ -1168,7 +1052,7 @@ public class DatabaseController {
     /**
      * Méthode pour mettre à jour l'adresse email d'une boutique
      */
-    @PostMapping("/radress-boutic")
+    @PatchMapping("/radress-boutic")
     public ResponseEntity<Map<String, Object>> updateBouticEmail(@RequestBody UpdateEmailRequest input, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
 
@@ -1272,24 +1156,24 @@ public class DatabaseController {
     /**
      * Méthode pour créer les paramètres par défaut d'une boutique
      */
-    private void createDefaultParameters(Integer customId, HttpSession session) {
+    private void createDefaultParameters(Integer customid, HttpSession session) {
         List<Parametre> parametres = Arrays.asList(
-                new Parametre(customId, "isHTML_mail", "1", "HTML activé pour l'envoi de mail"),
-                new Parametre(customId, "Subject_mail", "Commande Praticboutic", "Sujet du courriel pour l'envoi de mail"),
-                new Parametre(customId, "VALIDATION_SMS", (String) session.getAttribute("confboutic_validsms"), "Commande validée par sms ?"),
-                new Parametre(customId, "VerifCP", "0", "Activation de la verification des codes postaux"),
-                new Parametre(customId, "Choix_Paiement", (String) session.getAttribute("confboutic_chxpaie"), "COMPTANT ou LIVRAISON ou TOUS"),
-                new Parametre(customId, "MP_Comptant", "Par carte bancaire", "Texte du paiement comptant"),
-                new Parametre(customId, "MP_Livraison", "Moyens conventionnels", "Texte du paiement à la livraison"),
-                new Parametre(customId, "Choix_Method", (String) session.getAttribute("confboutic_chxmethode"), "TOUS ou EMPORTER ou LIVRER"),
-                new Parametre(customId, "CM_Livrer", "Vente avec livraison", "Texte de la vente à la livraison"),
-                new Parametre(customId, "CM_Emporter", "Vente avec passage à la caisse", "Texte de la vente à emporter"),
-                new Parametre(customId, "MntCmdMini", (String) session.getAttribute("confboutic_mntmincmd"), "Montant commande minimal"),
-                new Parametre(customId, "SIZE_IMG", "smallimg", "bigimg ou smallimg"),
-                new Parametre(customId, "CMPT_CMD", "0", "Compteur des références des commandes"),
-                new Parametre(customId, "MONEY_SYSTEM", "STRIPE MARKETPLACE", ""),
-                new Parametre(customId, "STRIPE_ACCOUNT_ID", "", "ID Compte connecté Stripe"),
-                new Parametre(customId, "NEW_ORDER", "0", "Nombre de nouvelle(s) commande(s)")
+                new Parametre(customid, "isHTML_mail", "1", "HTML activé pour l'envoi de mail"),
+                new Parametre(customid, "Subject_mail", "Commande Praticboutic", "Sujet du courriel pour l'envoi de mail"),
+                new Parametre(customid, "VALIDATION_SMS", (String) session.getAttribute("confboutic_validsms"), "Commande validée par sms ?"),
+                new Parametre(customid, "VerifCP", "0", "Activation de la verification des codes postaux"),
+                new Parametre(customid, "Choix_Paiement", (String) session.getAttribute("confboutic_chxpaie"), "COMPTANT ou LIVRAISON ou TOUS"),
+                new Parametre(customid, "MP_Comptant", "Par carte bancaire", "Texte du paiement comptant"),
+                new Parametre(customid, "MP_Livraison", "Moyens conventionnels", "Texte du paiement à la livraison"),
+                new Parametre(customid, "Choix_Method", (String) session.getAttribute("confboutic_chxmethode"), "TOUS ou EMPORTER ou LIVRER"),
+                new Parametre(customid, "CM_Livrer", "Vente avec livraison", "Texte de la vente à la livraison"),
+                new Parametre(customid, "CM_Emporter", "Vente avec passage à la caisse", "Texte de la vente à emporter"),
+                new Parametre(customid, "MntCmdMini", (String) session.getAttribute("confboutic_mntmincmd"), "Montant commande minimal"),
+                new Parametre(customid, "SIZE_IMG", "smallimg", "bigimg ou smallimg"),
+                new Parametre(customid, "CMPT_CMD", "0", "Compteur des références des commandes"),
+                new Parametre(customid, "MONEY_SYSTEM", "STRIPE MARKETPLACE", ""),
+                new Parametre(customid, "STRIPE_ACCOUNT_ID", "", "ID Compte connecté Stripe"),
+                new Parametre(customid, "NEW_ORDER", "0", "Nombre de nouvelle(s) commande(s)")
         );
 
         parametreRepository.saveAll(parametres);
@@ -1298,19 +1182,19 @@ public class DatabaseController {
     /**
      * Méthode pour créer les statuts de commande par défaut
      */
-    private void createDefaultOrderStatuses(Integer customId) {
+    private void createDefaultOrderStatuses(Integer customid) {
         List<StatutCmd> statuts = Arrays.asList(
-                new StatutCmd(customId, "Commande à faire", "#E2001A",
+                new StatutCmd(customid, "Commande à faire", "#E2001A",
                         "Bonjour, votre commande à été transmise. %boutic% vous remercie et vous tiendra informé de son avancé. ", true, true),
-                new StatutCmd(customId, "En cours de préparation", "#EB690B",
+                new StatutCmd(customid, "En cours de préparation", "#EB690B",
                         "Votre commande est en cours de préparation. ", false, true),
-                new StatutCmd(customId, "En cours de livraison", "#E2007A",
+                new StatutCmd(customid, "En cours de livraison", "#E2007A",
                         "Votre commande est en cours de livraison, ", false, true),
-                new StatutCmd(customId, "Commande à disposition", "#009EE0",
+                new StatutCmd(customid, "Commande à disposition", "#009EE0",
                         "Votre commande est à disposition", false, true),
-                new StatutCmd(customId, "Commande terminée", "#009036",
+                new StatutCmd(customid, "Commande terminée", "#009036",
                         "%boutic% vous remercie pour votre commande. À très bientôt. ", false, true),
-                new StatutCmd(customId, "Commande anulée", "#1A171B",
+                new StatutCmd(customid, "Commande anulée", "#1A171B",
                         "Nous ne pouvons donner suite à votre commande. Pour plus d'informations, merci de nous contacter. ", false, true)
         );
 

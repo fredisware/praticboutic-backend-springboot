@@ -12,8 +12,8 @@ import java.util.List;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
-    List<Article> findByCustomId(Integer customId);
-    List<Article> findByCustomIdAndCatId(Integer customId, Integer catId);
-    List<Article> findByCustomIdAndVisible(Integer customId, boolean visible);
+    List<Article> findByCustomid(Integer customid);
+    List<Article> findByCustomidAndCatId(Integer customid, Integer catId);
+    List<Article> findByCustomidAndVisible(Integer customid, boolean visible);
 
 }

@@ -71,26 +71,26 @@ public class FraisLivraisonController {
     }
     
     private int getCustomerId(String customer) throws SQLException {
-        int customId = 0;
+        int customid = 0;
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement("SELECT customid FROM customer WHERE customer = ?")) {
             stmt.setString(1, customer);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    customId = rs.getInt("customid");
+                    customid = rs.getInt("customid");
                 }
             }
         }
-        return customId;
+        return customid;
     }
     
-    private double calculateShippingCost(int customId, double val) throws SQLException {
+    private double calculateShippingCost(int customid, double val) throws SQLException {
         double surcout = 0;
         try (Connection conn = dataSource.getConnection()) {
             String query = "SELECT surcout FROM barlivr WHERE customid = ? AND valminin <= ? " +
                            "AND (valmaxex > ? OR valminin >= valmaxex) AND actif = 1";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setInt(1, customId);
+                stmt.setInt(1, customid);
                 stmt.setDouble(2, val);
                 stmt.setDouble(3, val);
                 

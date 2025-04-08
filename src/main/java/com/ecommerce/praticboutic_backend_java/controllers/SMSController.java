@@ -41,11 +41,11 @@ public class SMSController {
                     dbUsername,
                     dbPassword)) {
 
-                Integer customId = (Integer) request.getBouticid();
+                Integer customid = (Integer) request.getBouticid();
 
                 // Récupérer les paramètres
-                String validSms = paramService.getValeurParam("VALIDATION_SMS",  customId, "0" );
-                String receiverNom = paramService.getValeurParam("Receivernom_mail", customId, "Ma PraticBoutic" );
+                String validSms = paramService.getValeurParam("VALIDATION_SMS",  customid, "0" );
+                String receiverNom = paramService.getValeurParam("Receivernom_mail", customid, "Ma PraticBoutic" );
 
                 // Vérifier si l'envoi de SMS est activé
                 if ("1".equals(validSms)) {

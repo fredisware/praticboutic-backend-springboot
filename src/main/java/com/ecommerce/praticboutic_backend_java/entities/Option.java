@@ -23,9 +23,9 @@ public class Option implements Serializable {
     private Integer optid;
 
     @Column(name = "customid", nullable = false)
-    private Integer customId;
+    private Integer customid;
 
-    @Column(name = "nom", nullable = false, length = 150)
+    @Column(name = "nom", unique = true, nullable = false, length = 150)
     private String nom;
 
     @Column(name = "surcout", nullable = false)
@@ -46,13 +46,13 @@ public class Option implements Serializable {
     public Option() {
     }
 
-    public Option(Integer customId, String nom) {
-        this.customId = customId;
+    public Option(Integer customid, String nom) {
+        this.customid = customid;
         this.nom = nom;
     }
 
-    public Option(Integer customId, String nom, Double surcout, Integer groupeOptionId) {
-        this.customId = customId;
+    public Option(Integer customid, String nom, Double surcout, Integer groupeOptionId) {
+        this.customid = customid;
         this.nom = nom;
         this.surcout = surcout;
     }
@@ -67,11 +67,11 @@ public class Option implements Serializable {
     }
 
     public Integer getCustomId() {
-        return customId;
+        return customid;
     }
 
-    public void setCustomId(Integer customId) {
-        this.customId = customId;
+    public void setCustomId(Integer customid) {
+        this.customid = customid;
     }
 
     public String getNom() {
@@ -127,7 +127,7 @@ public class Option implements Serializable {
     public String toString() {
         return "Option{" +
                 "opid=" + optid +
-                ", customId=" + customId +
+                ", customid=" + customid +
                 ", nom='" + nom + '\'' +
                 ", surcout=" + surcout +
                 ", groupeOptionId=" + grpoptid +
@@ -144,10 +144,6 @@ public class Option implements Serializable {
         map.put("groupeption" , getGroupeOption().getNom());
         map.put("visible" , getVisible() ? "1" : "0");
         return map;
-    }
-
-    public static ArrayList<?> displayData(SessionFactory sessionFactory, EntityManager entityManager, String table, Integer bouticid, Integer limit, Integer offset, String selcol, Integer selid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        return BaseEntity.displayData(sessionFactory, entityManager, table, bouticid, limit, offset, selcol, selid);
     }
 
 }

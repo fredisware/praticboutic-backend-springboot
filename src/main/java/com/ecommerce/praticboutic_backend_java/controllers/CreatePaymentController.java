@@ -91,19 +91,19 @@ public class CreatePaymentController {
             String boutic = request.getBoutic();
 
             // Obtenir l'ID du client
-            Integer customId = jdbcTemplate.queryForObject(
+            Integer customid = jdbcTemplate.queryForObject(
                     "SELECT customid FROM customer WHERE customer = ?",
                     Integer.class,
                     boutic
             );
 
-            if (customId == null) {
+            if (customid == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ErrorResponse("Boutique non trouvée"));
             }
 
             // Récupérer le compte Stripe connecté
-            String stripeAccountId = getValeurParam("STRIPE_ACCOUNT_ID", customId);
+            String stripeAccountId = getValeurParam("STRIPE_ACCOUNT_ID", customid);
 
             // Initialiser Stripe
             Stripe.apiKey = stripeSecretKey;
@@ -111,7 +111,7 @@ public class CreatePaymentController {
             // Calculer le montant de la commande
             int amount = calculateOrderAmount(
                     request.getItems(),
-                    customId,
+                    customid,
                     request.getModel(),
                     request.getFraisLivr(),
                     request.getCodePromo()
@@ -147,7 +147,7 @@ public class CreatePaymentController {
         }
     }
 
-    private int calculateOrderAmount(List<Item> items, Integer customId, String model, Double fraisLivr, String codePromo) throws Exception {
+    private int calculateOrderAmount(List<Item> items, Integer customid, String model, Double fraisLivr, String codePromo) throws Exception {
         if (items == null || items.isEmpty()) {
             throw new Exception("Panier Vide");
         }
@@ -164,14 +164,14 @@ public class CreatePaymentController {
                 prixServeur = jdbcTemplate.queryForObject(
                         "SELECT prix FROM article WHERE customid = ? AND artid = ?",
                         Double.class,
-                        customId,
+                        customid,
                         id
                 );
             } else if ("option".equals(type)) {
                 prixServeur = jdbcTemplate.queryForObject(
                         "SELECT surcout FROM `option` WHERE customid = ? AND optid = ?",
                         Double.class,
-                        customId,
+                        customid,
                         id
                 );
             } else {
@@ -193,7 +193,7 @@ public class CreatePaymentController {
                     "SELECT surcout FROM barlivr WHERE customid = ? AND valminin <= ? " +
                             "AND (valmaxex > ? OR valminin >= valmaxex) AND actif = 1",
                     Double.class,
-                    customId,
+                    customid,
                     price,
                     price
             );
@@ -212,7 +212,7 @@ public class CreatePaymentController {
             Double tauxPromo = jdbcTemplate.queryForObject(
                     "SELECT taux FROM promotion WHERE customid = ? AND code = ? AND actif = 1",
                     Double.class,
-                    customId,
+                    customid,
                     codePromo
             );
             taux = (tauxPromo != null) ? tauxPromo : 0.0;
@@ -225,12 +225,12 @@ public class CreatePaymentController {
         return (int) Math.round(total * 100);
     }
 
-    private String getValeurParam(String paramName, Integer customId) {
+    private String getValeurParam(String paramName, Integer customid) {
         return jdbcTemplate.queryForObject(
                 "SELECT valeur FROM parametre WHERE nom = ? AND customid = ?",
                 String.class,
                 paramName,
-                customId
+                customid
         );
     }
 

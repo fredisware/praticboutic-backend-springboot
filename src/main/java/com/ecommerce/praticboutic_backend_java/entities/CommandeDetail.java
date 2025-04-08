@@ -17,7 +17,7 @@ public class CommandeDetail extends BaseEntity {
     private Commande commande;
 
     @Column(name = "customid", nullable = false)
-    private Integer customId;
+    private Integer customid;
 
     @Column(name = "artid", nullable = false)
     private Integer articleId;
@@ -44,11 +44,11 @@ public class CommandeDetail extends BaseEntity {
     }
 
     public Integer getCustomId() {
-        return customId;
+        return customid;
     }
 
-    public void setCustomId(Integer customId) {
-        this.customId = customId;
+    public void setCustomId(Integer customid) {
+        this.customid = customid;
     }
 
     public Integer getArticleId() {

@@ -13,7 +13,7 @@ public class CpZone extends BaseEntity {
     private Integer cpzoneId;
 
     @Column(name = "customid", nullable = false)
-    private Integer customId;
+    private Integer customid;
 
     @Column(name = "codepostal", nullable = false, length = 5)
     private String codePostal;
@@ -26,11 +26,11 @@ public class CpZone extends BaseEntity {
 
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
     public Integer getCustomId() {
-        return customId;
+        return customid;
     }
 
-    public void setCustomId(Integer customId) {
-        this.customId = customId;
+    public void setCustomId(Integer customid) {
+        this.customid = customid;
     }
 
     public String getCodePostal() {

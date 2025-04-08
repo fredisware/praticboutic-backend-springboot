@@ -34,10 +34,10 @@ public class ArticleService {
         
         if (catId != null && catId > 0) {
             // Récupère les articles d'une catégorie spécifique
-            articles = articleRepository.findByCustomIdAndCatId(bouticId, catId);
+            articles = articleRepository.findByCustomidAndCatId(bouticId, catId);
         } else {
             // Récupère tous les articles de la boutique
-            articles = articleRepository.findByCustomId(bouticId);
+            articles = articleRepository.findByCustomid(bouticId);
         }
         
         List<List<Object>> result = new ArrayList<>();
@@ -117,7 +117,7 @@ public class ArticleService {
      * @return Liste des articles
      */
     public List<Article> getAllArticlesByBoutic(Integer bouticId) {
-        return articleRepository.findByCustomId(bouticId);
+        return articleRepository.findByCustomid(bouticId);
     }
     
     /**

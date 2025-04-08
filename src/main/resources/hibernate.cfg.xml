@@ -11,9 +11,13 @@
         <property name="hibernate.default_schema">merge_test_fusion2</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <!-- Mapping des entités -->
+        <mapping class="com.ecommerce.praticboutic_backend_java.entities.Customer" />
         <mapping class="com.ecommerce.praticboutic_backend_java.entities.Categorie" />
         <mapping class="com.ecommerce.praticboutic_backend_java.entities.Article" />
         <mapping class="com.ecommerce.praticboutic_backend_java.entities.GroupeOpt" />
         <mapping class="com.ecommerce.praticboutic_backend_java.entities.Option" />
+        <mapping class="com.ecommerce.praticboutic_backend_java.entities.Commande" />
+        <mapping class="com.ecommerce.praticboutic_backend_java.entities.StatutCmd" />
+        <mapping class="com.ecommerce.praticboutic_backend_java.entities.CommandeDetail" />
     </session-factory>
 </hibernate-configuration>

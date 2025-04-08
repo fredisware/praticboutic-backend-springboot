@@ -3,6 +3,8 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.BaseEntity;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 /**
  * Entité Customer (boutique)
  */
@@ -47,7 +49,8 @@ public class Customer extends BaseEntity {
     // Relation avec l'entité Client
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cltid", referencedColumnName = "cltid", insertable = false, updatable = false)
-    private Client clientEntity;
+    private Client client;
+
 
 
 
@@ -110,8 +113,8 @@ public class Customer extends BaseEntity {
         return customid;
     }
 
-    public void setCustomId(Integer customId) {
-        this.customid = customId;
+    public void setCustomId(Integer customid) {
+        this.customid = customid;
     }
 
     /**
@@ -205,12 +208,20 @@ public class Customer extends BaseEntity {
 
     public String getStripeCustomerId() {
         // Si la relation n'est pas chargée ou si le client associé est null
-        if (this.clientEntity == null) {
+        if (this.client == null) {
             return null;
         }
 
         // Retourne la valeur stripe_customer_id du client associé
-        return this.clientEntity.getStripeCustomerId();
+        return this.client.getStripeCustomerId();
     }
+
+    public Client getClient(){
+        return this.client;
+    }
+    public void setClient(Client client){
+        this.client = client;
+    }
+
 
 }

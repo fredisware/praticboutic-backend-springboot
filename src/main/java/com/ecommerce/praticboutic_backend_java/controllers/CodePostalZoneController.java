@@ -77,13 +77,13 @@ public class CodePostalZoneController {
             String requestCustomer = request.getCustomer();
 
             // Obtenir l'ID du client
-            Integer customId = jdbcTemplate.queryForObject(
+            Integer customid = jdbcTemplate.queryForObject(
                 "SELECT customid FROM customer WHERE customer = ?", 
                 Integer.class, 
                 requestCustomer
             );
 
-            if (customId == null) {
+            if (customid == null) {
                 return ResponseEntity.ok("ko");
             }
 
@@ -92,7 +92,7 @@ public class CodePostalZoneController {
             Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM cpzone WHERE customid = ? AND codepostal = ? AND actif = 1",
                 Integer.class,
-                customId,
+                customid,
                 cp
             );
 

@@ -3,10 +3,7 @@ package com.ecommerce.praticboutic_backend_java.requests;
 public class RemplirOptionTableRequest {
     private String table;
     private Long bouticid;
-    private String selcol;
-    private Long selid;
-    private Integer limit;
-    private Integer offset;
+    private String colonne;
 
     // Getters et Setters
     public String getTable() {
@@ -25,35 +22,12 @@ public class RemplirOptionTableRequest {
         this.bouticid = bouticid;
     }
 
-    public String getSelcol() {
-        return selcol;
+    public String getColonne() {
+        return colonne;
     }
 
-    public void setSelcol(String selcol) {
-        this.selcol = selcol;
+    public void setColonne(String colonne) {
+        this.colonne = colonne;
     }
 
-    public Long getSelid() {
-        return selid;
-    }
-
-    public void setSelid(Long selid) {
-        this.selid = selid;
-    }
-
-    public Integer getLimit() {
-        return limit;
-    }
-
-    public void setLimit(Integer limit) {
-        this.limit = limit;
-    }
-
-    public Integer getOffset() {
-        return offset;
-    }
-
-    public void setOffset(Integer offset) {
-        this.offset = offset;
-    }
 }

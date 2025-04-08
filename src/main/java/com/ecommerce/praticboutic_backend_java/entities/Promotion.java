@@ -14,7 +14,7 @@ public class Promotion extends BaseEntity {
     private Integer promoid;
 
     @Column(name = "customid", nullable = false)
-    private Integer customId;
+    private Integer customid;
 
     @Column(name = "code", nullable = false, unique = true)
     private String code;

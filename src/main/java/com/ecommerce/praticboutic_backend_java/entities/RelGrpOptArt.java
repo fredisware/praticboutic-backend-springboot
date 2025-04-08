@@ -13,7 +13,7 @@ public class RelGrpOptArt extends BaseEntity {
     private Integer relgrpoartid;
 
     @Column(name = "customid", nullable = false)
-    private Integer customId;
+    private Integer customid;
 
     @Column(name = "grpoptid", nullable = false, columnDefinition = "int DEFAULT 0")
     private Integer grpOptId = 0;
@@ -37,11 +37,11 @@ public class RelGrpOptArt extends BaseEntity {
 
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
     public Integer getCustomId() {
-        return customId;
+        return customid;
     }
 
-    public void setCustomId(Integer customId) {
-        this.customId = customId;
+    public void setCustomId(Integer customid) {
+        this.customid = customid;
     }
 
     public Integer getGrpOptId() {

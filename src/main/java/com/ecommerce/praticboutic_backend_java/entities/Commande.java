@@ -13,13 +13,13 @@ public class Commande extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cmdid")
-    private Integer cmdId;
+    private Integer cmdid;
 
     @Column(name = "customid", nullable = false)
-    private Integer customId;
+    private Integer customid;
 
     @Column(name = "numref", nullable = false, length = 60)
-    private String numRef;
+    private String numref;
 
     @Column(name = "nom", nullable = false, length = 60)
     private String nom;
@@ -37,7 +37,7 @@ public class Commande extends BaseEntity {
     private String adresse2;
 
     @Column(name = "codepostal", nullable = false, length = 5)
-    private String codePostal;
+    private String codepostal;
 
     @Column(name = "ville", nullable = false, length = 50)
     private String ville;
@@ -49,13 +49,13 @@ public class Commande extends BaseEntity {
     private String paiement;
 
     @Column(name = "sstotal", nullable = false, columnDefinition = "double DEFAULT 0")
-    private Double ssTotal = 0.0;
+    private Double sstotal = 0.0;
 
     @Column(name = "remise", nullable = false, columnDefinition = "double DEFAULT 0")
     private Double remise = 0.0;
 
     @Column(name = "fraislivraison", nullable = false, columnDefinition = "double DEFAULT 0")
-    private Double fraisLivraison = 0.0;
+    private Double fraislivraison = 0.0;
 
     @Column(name = "total", nullable = false, columnDefinition = "double DEFAULT 0")
     private Double total = 0.0;
@@ -73,28 +73,33 @@ public class Commande extends BaseEntity {
     private LocalDateTime dateCreation;
 
     @Column(name = "statid", nullable = false)
-    private Integer statId;
+    private Integer statid;
 
     // Relation optionnelle avec CommandeDetail si vous souhaitez la définir
     @OneToMany(mappedBy = "commande", fetch = FetchType.LAZY)
     private List<CommandeDetail> commandeDetails = new ArrayList<>();
 
+    // Relation avec Categorie (si vous souhaitez conserver la relation JPA)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "statid", insertable = false, updatable = false) // Utilisez insertable=false, updatable=false pour éviter les conflits
+    private StatutCmd statutCmd;
+
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
 
     public Integer getCustomId() {
-        return customId;
+        return customid;
     }
 
-    public void setCustomId(Integer customId) {
-        this.customId = customId;
+    public void setCustomId(Integer customid) {
+        this.customid = customid;
     }
 
     public String getNumRef() {
-        return numRef;
+        return numref;
     }
 
     public void setNumRef(String numRef) {
-        this.numRef = numRef;
+        this.numref = numref;
     }
 
     public String getNom() {
@@ -138,11 +143,11 @@ public class Commande extends BaseEntity {
     }
 
     public String getCodePostal() {
-        return codePostal;
+        return codepostal;
     }
 
-    public void setCodePostal(String codePostal) {
-        this.codePostal = codePostal;
+    public void setCodePostal(String codepostal) {
+        this.codepostal = codepostal;
     }
 
     public String getVille() {
@@ -170,11 +175,11 @@ public class Commande extends BaseEntity {
     }
 
     public Double getSsTotal() {
-        return ssTotal;
+        return sstotal;
     }
 
-    public void setSsTotal(Double ssTotal) {
-        this.ssTotal = ssTotal;
+    public void setSsTotal(Double sstotal) {
+        this.sstotal = sstotal;
     }
 
     public Double getRemise() {
@@ -186,11 +191,11 @@ public class Commande extends BaseEntity {
     }
 
     public Double getFraisLivraison() {
-        return fraisLivraison;
+        return fraislivraison;
     }
 
-    public void setFraisLivraison(Double fraisLivraison) {
-        this.fraisLivraison = fraisLivraison;
+    public void setFraisLivraison(Double fraislivraison) {
+        this.fraislivraison = fraislivraison;
     }
 
     public Double getTotal() {
@@ -234,11 +239,19 @@ public class Commande extends BaseEntity {
     }
 
     public Integer getStatId() {
-        return statId;
+        return statid;
     }
 
-    public void setStatId(Integer statId) {
-        this.statId = statId;
+    public void setStatId(Integer statid) {
+        this.statid = statid;
+    }
+
+    public StatutCmd getStatutCmd() {
+        return statutCmd;
+    }
+
+    public void setStatutCmd(StatutCmd statutCmd) {
+        this.statutCmd = statutCmd;
     }
 
     public List<CommandeDetail> getCommandeDetails() {

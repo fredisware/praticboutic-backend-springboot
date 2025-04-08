@@ -23,7 +23,7 @@ public class Categorie extends BaseEntity {
     @Column(name = "customid", nullable = false)
     private Integer customid;
 
-    @Column(name = "nom", nullable = false, length = 150)
+    @Column(name = "nom", unique = true, nullable = false, length = 150)
     private String nom;
 
     @Column(name = "visible", nullable = false, columnDefinition = "int DEFAULT 1")
@@ -49,8 +49,6 @@ public class Categorie extends BaseEntity {
     public void setCatid(Integer catid) {
         this.catid = catid;
     }
-
-
 
     public Integer getCustomid() {
         return customid;
@@ -102,10 +100,5 @@ public class Categorie extends BaseEntity {
         map.put("visible" , getVisible() ? "1" : "0");
         return map;
     }
-
-    public static ArrayList<?> displayData(SessionFactory sessionFactory, EntityManager entityManager, String table, Integer bouticid, Integer limit, Integer offset, String selcol, Integer selid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        return BaseEntity.displayData(sessionFactory, entityManager, table, bouticid, limit, offset, selcol, selid);
-    }
-
 
 }

@@ -56,37 +56,6 @@ public abstract class BaseEntity {
         }
     }
 
-    public static ArrayList<?> displayData(SessionFactory sessionFactory, EntityManager entityManager, String table, Integer bouticid, Integer limit, Integer offset, String selcol, Integer selid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        ArrayList<Object> data = new ArrayList<>();
-        StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("SELECT ").append(getPrimaryKeyName(sessionFactory, entityManager, table))
-                .append(" FROM `").append(table)
-                .append("` WHERE customid = ").append(bouticid)
-                .append(" LIMIT ").append(limit).append(" OFFSET ").append(offset);
-
-        if (selcol != null && !selcol.isEmpty() && selid != null) {
-            queryBuilder.append(" WHERE ").append(selcol).append(" = ").append(selid);
-        }
-        Query query = entityManager.createNativeQuery(queryBuilder.toString());
-        List<?> pkList;
-        pkList = query.getResultList();
-        for(  Object pk : pkList)
-        {
-            Class<?> entityClass = getEntityClassFromTableName(sessionFactory, table);
-            Object entityInstance = entityClass.getDeclaredConstructor().newInstance();
-            entityInstance = entityManager.find(entityClass, pk);
-            ///Object entityInstance = entity.getDeclaredConstructor().newInstance();
-            //entityManager.detach(entityInstance);
-
-            Method method = entityClass.getDeclaredMethod("getDisplayData");
-            Object ret = method.invoke(entityInstance);
-
-            data.add(ret);
-        }
-        return data;
-    }
-
-
     public static Class<?> getEntityClassFromTableName(SessionFactory sessionFactory, String tableName) throws ClassNotFoundException {
         // Parcourez toutes les entités gérées par Hibernate
         Set<EntityType<?>> entities = sessionFactory.getMetamodel().getEntities();

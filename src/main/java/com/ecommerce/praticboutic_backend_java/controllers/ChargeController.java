@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.ChargeRequest;
+import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
 import com.ecommerce.praticboutic_backend_java.services.ParameterService;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.stripe.Stripe;
@@ -89,20 +90,5 @@ public class ChargeController {
         }
     }
 
-    // Classe pour représenter les réponses d'erreur
-    private static class ErrorResponse {
-        private String error;
 
-        public ErrorResponse(String error) {
-            this.error = error;
-        }
-
-        public String getError() {
-            return error;
-        }
-
-        public void setError(String error) {
-            this.error = error;
-        }
-    }
 }

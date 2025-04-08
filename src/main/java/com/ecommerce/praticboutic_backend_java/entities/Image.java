@@ -16,7 +16,7 @@ public class Image implements Serializable {
     private Integer id;
 
     @Column(name = "customid", nullable = false)
-    private Integer customId = 0;
+    private Integer customid = 0;
 
     @Column(name = "artid") // ou le nom approprié dans la base de données
     private Integer artid;
@@ -43,8 +43,8 @@ public class Image implements Serializable {
         this.image = image;
     }
 
-    public Image(Integer customId, Integer artid, String image) {
-        this.customId = customId;
+    public Image(Integer customid, Integer artid, String image) {
+        this.customid = customid;
         this.artid = artid;
         this.image = image;
     }
@@ -59,11 +59,11 @@ public class Image implements Serializable {
     }
 
     public Integer getCustomId() {
-        return customId;
+        return customid;
     }
 
-    public void setCustomId(Integer customId) {
-        this.customId = customId;
+    public void setCustomId(Integer customid) {
+        this.customid = customid;
     }
 
     public Integer getArtid() {
@@ -136,7 +136,7 @@ public class Image implements Serializable {
     public String toString() {
         return "Image{" +
                 "id=" + id +
-                ", customId=" + customId +
+                ", customid=" + customid +
                 ", artid=" + artid +
                 ", image='" + image + '\'' +
                 ", favori=" + favori +

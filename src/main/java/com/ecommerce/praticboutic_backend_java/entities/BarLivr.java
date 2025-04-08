@@ -13,7 +13,7 @@ public class BarLivr extends BaseEntity {
     private Integer barlivrId;
 
     @Column(name = "customid", nullable = false)
-    private Integer customId;
+    private Integer customid;
 
     @Column(name = "valminin", nullable = false)
     private Float valMinIn;
@@ -43,11 +43,11 @@ public class BarLivr extends BaseEntity {
     }
 
     public Integer getCustomId() {
-        return customId;
+        return customid;
     }
 
-    public void setCustomId(Integer customId) {
-        this.customId = customId;
+    public void setCustomId(Integer customid) {
+        this.customid = customid;
     }
 
     public Float getValMinIn() {

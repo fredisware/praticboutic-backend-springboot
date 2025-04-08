@@ -3,6 +3,8 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.BaseEntity;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 /**
  * Entité Client
  */
@@ -12,25 +14,38 @@ public class Client extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cltid")
-    private Integer cltId;
-
+    private Integer cltid;
+    @Column(name = "email")
     private String email;
     @Column(name = "pass")
     private String pass;
+    @Column(name = "qualite")
     private String qualite;
+    @Column(name = "nom")
     private String nom;
+    @Column(name = "prenom")
     private String prenom;
+    @Column(name = "adr1")
     private String adr1;
+    @Column(name = "adr2")
     private String adr2;
+    @Column(name = "cp")
     private String cp;
+    @Column(name = "ville")
     private String ville;
+    @Column(name = "tel")
     private String tel;
+    @Column(name = "stripe_customer_id")
     private String stripeCustomerId;
-
     @Column(name = "actif")
     private Boolean actif;
+    @Column(name = "device_id")
     private String deviceId;
+    @Column(name = "device_type")
     private String deviceType;
+
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Customer> customers;
 
     /**
      * Constructeur par défaut sans arguments.
@@ -111,11 +126,11 @@ public class Client extends BaseEntity {
 
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
     public Integer getCltId() {
-        return cltId;
+        return cltid;
     }
 
     public void setCltId(Integer clientId) {
-        this.cltId = clientId;
+        this.cltid = clientId;
     }
 
     public String getEmail() {
@@ -228,6 +243,14 @@ public class Client extends BaseEntity {
 
     public void setDeviceType(String deviceType) {
         this.deviceType = deviceType;
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
     }
 
 }

@@ -262,7 +262,7 @@ public class FrontController {
                 
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
-                        int customId = rs.getInt("customid");
+                        int customid = rs.getInt("customid");
                         String nom = rs.getString("nom");
                         String adresse1 = rs.getString("adr1");
                         String adresse2 = rs.getString("adr2");
@@ -272,7 +272,7 @@ public class FrontController {
                         
                         String adr = nom + " " + adresse1 + " " + adresse2 + " " + codePostal + " " + ville;
                         
-                        clientInfo.add(customId);
+                        clientInfo.add(customid);
                         clientInfo.add(nom);
                         clientInfo.add(adr);
                         clientInfo.add(logo);
