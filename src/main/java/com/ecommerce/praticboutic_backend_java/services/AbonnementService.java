@@ -1,13 +1,20 @@
 package com.ecommerce.praticboutic_backend_java.services;
 
 import com.ecommerce.praticboutic_backend_java.entities.Abonnement;
+import com.ecommerce.praticboutic_backend_java.entities.Client;
+import com.ecommerce.praticboutic_backend_java.entities.Customer;
+import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
 import com.ecommerce.praticboutic_backend_java.repositories.AbonnementRepository;
+import jakarta.servlet.http.HttpSession;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Service gérant les opérations liées aux abonnements
@@ -18,6 +25,12 @@ public class AbonnementService {
 
     @Autowired
     private AbonnementRepository abonnementRepository;
+
+    @Autowired
+    private SessionService sessionService;
+
+    // Déclarez le logger en tant que champ statique en haut de votre classe
+    private static final Logger logger = LoggerFactory.getLogger(AbonnementService.class);
 
 
     /**
@@ -64,4 +77,31 @@ public class AbonnementService {
     public String getStripeCustomerId(Integer bouticid) {
         return null;
     }
+
+    /**
+     * Crée et sauvegarde un abonnement
+     */
+    public Abonnement createAndSaveAbonnement(HttpSession session, Client client, Customer customer)
+            throws DataAccessException {
+        String stripeSubscriptionId = sessionService.getSessionAttributeAsString(session, "creationabonnement_stripe_subscription_id");
+        if (StringUtils.isEmpty(stripeSubscriptionId)) {
+            throw new DatabaseException.InvalidSessionDataException("L'ID d'abonnement Stripe ne peut pas être vide");
+        }
+
+        Abonnement abonnement = new Abonnement();
+        abonnement.setCltId(client.getCltId());
+        abonnement.setCreationBoutic(false);
+        abonnement.setBouticId(customer.getCustomId());
+        abonnement.setStripeSubscriptionId(stripeSubscriptionId);
+        abonnement.setActif(1);
+
+        try {
+            return abonnementRepository.save(abonnement);
+        } catch (DataAccessException e) {
+            logger.error("Erreur lors de la sauvegarde de l'abonnement", e);
+            throw new DataAccessException("Erreur lors de la sauvegarde de l'abonnement", e) {};
+        }
+    }
+
+
 }

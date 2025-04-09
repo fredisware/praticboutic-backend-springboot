@@ -35,6 +35,14 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     Optional<Customer> findByCourrielAndActifIsTrue(String userEmail);
 
+    Optional<Customer> findByCustomerIgnoreCase(String alias);
+
+    //boolean isPresent();
+
+    // To check if any customer exists
+    //boolean existsBy();
+
+
 
 
 

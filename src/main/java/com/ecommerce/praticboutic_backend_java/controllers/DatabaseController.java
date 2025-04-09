@@ -1,60 +1,47 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
-import jakarta.json.JsonReader;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
-import jakarta.transaction.Transactional;
-import org.hibernate.Session;
-import com.ecommerce.praticboutic_backend_java.*;
-import com.ecommerce.praticboutic_backend_java.configurations.StripeConfig;
-import com.ecommerce.praticboutic_backend_java.entities.*;
-import com.ecommerce.praticboutic_backend_java.repositories.*;
-import com.ecommerce.praticboutic_backend_java.requests.*;
 
-import java.io.File;
-import java.io.StringReader;
-import java.sql.*;
+import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
+import com.ecommerce.praticboutic_backend_java.repositories.*;
+import com.ecommerce.praticboutic_backend_java.services.*;
+import com.stripe.exception.StripeException;
+import jakarta.transaction.TransactionManager;
+import jakarta.transaction.Transactional;
+import com.ecommerce.praticboutic_backend_java.*;
+import com.ecommerce.praticboutic_backend_java.entities.*;
+import com.ecommerce.praticboutic_backend_java.requests.*;
+import com.ecommerce.praticboutic_backend_java.responses.ApiResponse;
+import com.ecommerce.praticboutic_backend_java.Utils;
+
 import java.util.*;
-import java.util.Date;
 import java.util.Locale;
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.stream.Collectors;
-import java.io.FileReader;
+import java.lang.Integer;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.persistence.*;
-import jakarta.json.Json;
-
-import com.stripe.Stripe;
-import com.stripe.model.Subscription;
-import com.stripe.param.SubscriptionUpdateParams;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
-import org.hibernate.engine.spi.SessionFactoryImplementor;
-import org.hibernate.jdbc.Work;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.*;
 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.commons.lang3.StringUtils;
-import org.thymeleaf.spring6.expression.Fields;
+import java.lang.Integer;
+
 
 @RestController
 @RequestMapping("/api")
@@ -62,34 +49,43 @@ public class DatabaseController {
     // Déclarez le logger en tant que champ statique en haut de votre classe
     private static final Logger logger = LoggerFactory.getLogger(DatabaseController.class);
 
-    private final StripeConfig stripeConfig;
-
     private static SessionFactory sessionFactory = null;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    protected CustomerRepository customerRepository;
 
     @Autowired
-    private ClientRepository clientRepository;
+    protected StripeService stripeService;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    protected ClientRepository clientRepository;
 
     @Autowired
-    private AbonnementRepository abonnementRepository;
+    protected ParameterService paramService;
 
     @Autowired
-    private ParametreRepository parametreRepository;
+    protected ClientService clientService;
 
     @Autowired
-    private StatutCmdRepository statutCmdRepository;
+    protected SessionService sessionService;
 
-    public DatabaseController(StripeConfig stripeConfig) {
-        this.stripeConfig = stripeConfig;
-    }
+    @Autowired
+    protected CustomerService customerService;
+
+    @Autowired
+    protected AbonnementService abonnementService;
+
+    @Autowired
+    protected StatutCmdService statutCmdService;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
+
+    public DatabaseController() {}
 
     @GetMapping("/count-elements")
     public Map<String, Object> countElementsInTable(@RequestBody VueTableRequest input) {
@@ -293,7 +289,7 @@ public class DatabaseController {
             }
 
             // Préparation des données pour l'insertion
-            Map<String, Object> columnValues = new HashMap<>();
+            /*Map<String, Object> columnValues = new HashMap<>();
             columnValues.put("customid", input.getBouticid());
 
             for (ColumnData column : input.getRow()) {
@@ -302,7 +298,7 @@ public class DatabaseController {
                     value = new BCryptPasswordEncoder().encode(column.getValeur());
                 }
                 columnValues.put(column.getNom(), value);
-            }
+            }*/
 
             // Utiliser une requête native pour l'insertion
             StringBuilder columns = new StringBuilder("customid");
@@ -339,7 +335,6 @@ public class DatabaseController {
 
         } catch (Exception e) {
             response.put("error", e.getMessage());
-            e.printStackTrace();
         }
 
         return response;
@@ -449,7 +444,6 @@ public class DatabaseController {
 
         } catch (Exception e) {
             response.put("error", e.getMessage());
-            e.printStackTrace();
         }
 
         return response;
@@ -478,19 +472,16 @@ public class DatabaseController {
                 response.put("error", "L'ID de l'élément est requis");
                 return response;
             }
-            try {
-                sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-            } catch (Throwable ex) {
-                throw new ExceptionInInitializerError(ex);
-            }
             // Construction dynamique de la classe d'entité
             Class<?> entityClass;
             try {
+                sessionFactory = entityManager.getEntityManagerFactory().unwrap(SessionFactory.class);
                 entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
             } catch (ClassNotFoundException ex) {
                 response.put("error", "L'entité spécifiée n'existe pas : " + input.getTable());
                 return response;
             }
+
             String strClePrimaire = BaseEntity.getPrimaryKeyName(sessionFactory, entityManager, input.getTable());
             if (strClePrimaire == null) {
                 throw new IllegalArgumentException("Aucune clé primaire trouvée pour cette table");
@@ -511,7 +502,6 @@ public class DatabaseController {
             response.put("success", true);
         } catch (Exception e) {
             response.put("error", e.getMessage());
-            e.printStackTrace();
         }
         return response;
     }
@@ -549,7 +539,7 @@ public class DatabaseController {
                     "WHERE c.customid = :customid " +
                     "ORDER BY c.cmdid";
 
-            Query query = entityManager.createQuery(jpql, String.class);
+            TypedQuery<String> query = entityManager.createQuery(jpql, String.class);
             query.setParameter("customid", input.getBouticid());
             query.setFirstResult(input.getOffset());
             query.setMaxResults(input.getLimite());
@@ -570,7 +560,6 @@ public class DatabaseController {
 
         } catch (Exception e) {
             response.put("error", e.getMessage());
-            e.printStackTrace();
         }
 
         return response;
@@ -667,12 +656,39 @@ public class DatabaseController {
 
         } catch (Exception e) {
             response.put("error", e.getMessage());
-            e.printStackTrace();
         }
 
         return response;
     }
 
+
+    @GetMapping("/get-param")
+    public ResponseEntity<?> getParam(@RequestBody ParamRequest request) {
+        if (request.getParam() == null || request.getBouticid() == null) {
+            return ResponseEntity.badRequest().body("Missing parameters");
+        }
+
+        try {
+            String value = paramService.getValeurParam(request.getParam(), Integer.parseInt(request.getBouticid()),"");
+            return ResponseEntity.ok(Collections.singletonMap("value", value));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching parameter");
+        }
+    }
+
+    @PostMapping("/set-param")
+    public ResponseEntity<?> setParam(@RequestBody ParamRequest request) {
+        if (request.getParam() == null || request.getValeur() == null || request.getBouticid() == null) {
+            return ResponseEntity.badRequest().body("Missing parameters");
+        }
+
+        try {
+            boolean success = paramService.setValeurParam(request.getParam(), Integer.parseInt(request.getBouticid()), request.getValeur());
+            return ResponseEntity.ok(Collections.singletonMap("success", success));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error setting parameter");
+        }
+    }
     /**
      * Récupère une propriété spécifique d'un customer
      */
@@ -693,7 +709,7 @@ public class DatabaseController {
             }
 
             // Vérification pour éviter l'injection SQL
-            validatePropertyName(input.getProp());
+            Utils.validatePropertyName(input.getProp());
 
             // Création de la requête JPQL
             String jpql = "SELECT c." + input.getProp() + " FROM Customer c " +
@@ -753,7 +769,7 @@ public class DatabaseController {
             }
 
             // Vérification pour éviter l'injection SQL
-            validatePropertyName(input.getProp());
+            Utils.validatePropertyName(input.getProp());
 
             // Vérifier si la valeur existe déjà pour d'autres customers (pour le champ 'customer')
             if ("customer".equals(input.getProp())) {
@@ -814,7 +830,7 @@ public class DatabaseController {
             }
 
             // Vérification pour éviter l'injection SQL
-            validatePropertyName(input.getProp());
+            Utils.validatePropertyName(input.getProp());
 
             // Création de la requête JPQL
             String jpql = "SELECT cl." + input.getProp() + " FROM Customer c " +
@@ -879,7 +895,7 @@ public class DatabaseController {
             }
 
             // Vérification pour éviter l'injection SQL
-            validatePropertyName(input.getProp());
+            Utils.validatePropertyName(input.getProp());
 
             // Récupérer l'ID du client associé au customer
             String cltIdQuery = "SELECT c.client.cltid FROM Customer c WHERE c.customid = :customid";
@@ -926,126 +942,84 @@ public class DatabaseController {
     }
 
     /**
-     * Méthode utilitaire pour valider les noms de propriété afin d'éviter l'injection SQL
-     */
-    private void validatePropertyName(String propertyName) {
-        // Vérifier que le nom de propriété ne contient que des caractères alphanumériques et des underscores
-        if (!propertyName.matches("^[a-zA-Z0-9_]+$")) {
-            throw new IllegalArgumentException("Nom de propriété invalide: " + propertyName);
-        }
-    }
-
-    /**
      * Méthode pour créer une nouvelle boutique et configurer tous ses paramètres associés
+     *
+     * @param input   Les données requises pour créer une boutique
+     * @param session La session HTTP contenant les informations temporaires
+     * @return ResponseEntity contenant le résultat de l'opération
      */
     @PutMapping("/build-boutic")
-    public ResponseEntity<Map<String, Object>> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session) {
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<ApiResponse> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session) {
+        logger.info("Début de la création d'une nouvelle boutique");
 
         try {
             // Vérification de la présence des données de session nécessaires
-            validateSessionDataForBuildBoutic(session);
+            sessionService.validateSessionDataForBuildBoutic(session);
 
-            // Début de la transaction
-            CustomTransactionManager transactionManager = new CustomTransactionManager();
-            transactionManager.executeWithTransaction(status -> {
-                // Vérification de l'unicité de l'email
-                String verifyEmail = (String) session.getAttribute("verify_email");
-                if (verifyEmail == null) {
-                    throw new IllegalArgumentException("L'email ne peut pas être null");
+            // Exécution de la création de boutique dans une transaction
+            TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+            transactionTemplate.execute(status -> {
+                try {
+                    // Étape 1: Création et validation du client
+                    Client client = clientService.createAndSaveClient(session, input);
+                    logger.debug("Client créé avec succès: ID={}", client.getCltId());
+
+                    // Étape 2: Création de la boutique
+                    Customer customer = customerService.createAndSaveCustomer(session, client);
+                    logger.debug("Boutique créée avec succès: ID={}, Alias={}",
+                            customer.getCustomId(), customer.getCustomer());
+
+                    // Étape 3: Création de l'abonnement
+                    Abonnement abonnement = abonnementService.createAndSaveAbonnement(session, client, customer);
+                    logger.debug("Abonnement créé avec succès: ID={}", abonnement.getAboId());
+
+                    // Étape 4: Mise à jour des métadonnées Stripe
+                    stripeService.updateStripeSubscriptionMetadata(
+                            sessionService.getSessionAttributeAsString(session, "creationabonnement_stripe_subscription_id"),
+                            abonnement.getAboId());
+
+                    // Étape 5: Configuration des paramètres et statuts par défaut
+                    paramService.createDefaultParameters(customer.getCustomId(), session);
+                    statutCmdService.createDefaultOrderStatuses(customer.getCustomId());
+
+                    // Étape 6: Mise à jour de la session pour l'authentification
+                    sessionService.updateSessionAfterBoutiqueCreation(session, customer);
+
+                    return null;
+                } catch (Exception e) {
+                    // En cas d'erreur, force le rollback de la transaction
+                    status.setRollbackOnly();
+                    try {
+                        throw e;
+                    } catch (StripeException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
-
-                Long existingClientCount = clientRepository.countByEmail(verifyEmail);
-
-                if (existingClientCount > 0) {
-                    throw new IllegalStateException("Impossible d'avoir plusieurs fois le même courriel " + verifyEmail);
-                }
-
-                // Création du client
-                String hashedPassword = BCrypt.hashpw((String) session.getAttribute("registration_pass"), BCrypt.gensalt());
-
-                Client client = new Client();
-                client.setEmail(verifyEmail);
-                client.setPass(hashedPassword);
-                client.setQualite((String) session.getAttribute("registration_qualite"));
-                client.setNom((String) session.getAttribute("registration_nom"));
-                client.setPrenom((String) session.getAttribute("registration_prenom"));
-                client.setAdr1((String) session.getAttribute("registration_adr1"));
-                client.setAdr2((String) session.getAttribute("registration_adr2"));
-                client.setCp((String) session.getAttribute("registration_cp"));
-                client.setVille((String) session.getAttribute("registration_ville"));
-                client.setTel((String) session.getAttribute("registration_tel"));
-                client.setStripeCustomerId((String) session.getAttribute("registration_stripe_customer_id"));
-                client.setActif(true);
-                client.setDeviceId(input.getDeviceId());
-                client.setDeviceType(input.getDeviceType());
-
-                clientRepository.save(client);
-
-                // Validation de l'alias de la boutique
-                String aliasBoutic = (String) session.getAttribute("initboutic_aliasboutic");
-                if (StringUtils.isEmpty(aliasBoutic)) {
-                    throw new IllegalArgumentException("Identifiant vide");
-                }
-
-                // Vérification des identifiants interdits
-                List<String> forbiddenIds = Arrays.asList("admin", "common", "upload", "vendor");
-                if (forbiddenIds.contains(aliasBoutic)) {
-                    throw new IllegalArgumentException("Identifiant interdit");
-                }
-
-                // Création de la boutique (customer)
-                Customer customer = new Customer();
-                customer.setCltid(client.getCltId());
-                customer.setCustomer(aliasBoutic);
-                customer.setNom((String) session.getAttribute("initboutic_nom"));
-                customer.setLogo((String) session.getAttribute("initboutic_logo"));
-                customer.setCourriel((String) session.getAttribute("initboutic_email"));
-
-                customerRepository.save(customer);
-
-                // Création de l'abonnement
-                Abonnement abonnement = new Abonnement();
-                abonnement.setCltId(client.getCltId());
-                abonnement.setCreationBoutic(false);
-                abonnement.setBouticId(customer.getCustomId());
-                abonnement.setStripeSubscriptionId((String) session.getAttribute("creationabonnement_stripe_subscription_id"));
-                abonnement.setActif(1);
-
-                abonnementRepository.save(abonnement);
-
-                // Mise à jour des métadonnées Stripe
-                updateStripeSubscriptionMetadata(
-                        (String) session.getAttribute("creationabonnement_stripe_subscription_id"),
-                        abonnement.getAboId()
-                );
-
-                // Création des paramètres par défaut
-                createDefaultParameters(customer.getCustomId(), session);
-
-                // Création des statuts de commande par défaut
-                createDefaultOrderStatuses(customer.getCustomId());
-
-                // Mise à jour de la session
-                session.setAttribute("bo_stripe_customer_id", session.getAttribute("registration_stripe_customer_id"));
-                session.setAttribute("bo_id", customer.getCustomId());
-                session.setAttribute("bo_email", session.getAttribute("verify_email"));
-                session.setAttribute("bo_auth", "oui");
-                session.setAttribute("bo_init", "oui");
-
-                return null;
             });
 
-            response.put("success", true);
-            response.put("message", "Boutique créée avec succès");
-            return ResponseEntity.ok(response);
+            logger.info("Boutique créée avec succès");
+            return ResponseEntity.ok(new ApiResponse(true, "Boutique créée avec succès"));
 
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            response.put("error", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
+        } catch (DatabaseException.InvalidSessionDataException e) {
+            logger.warn("Données de session invalides: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Données de session invalides: " + e.getMessage()));
+        } catch (DatabaseException.EmailAlreadyExistsException e) {
+            logger.warn("Email déjà utilisé: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ApiResponse(false, e.getMessage()));
+        } catch (DatabaseException.InvalidAliasException e) {
+            logger.warn("Alias de boutique invalide: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, e.getMessage()));
+        } catch (DataAccessException e) {
+            logger.error("Erreur de base de données lors de la création de la boutique", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Erreur de base de données: Une erreur est survenue"));
         } catch (Exception e) {
-            response.put("error", "Une erreur est survenue: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            logger.error("Erreur inattendue lors de la création de la boutique", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, "Une erreur inattendue est survenue"));
         }
     }
 
@@ -1097,108 +1071,6 @@ public class DatabaseController {
         }
     }
 
-    /**
-     * Méthode pour vérifier la présence des données de session nécessaires à la création d'une boutique
-     */
-    private void validateSessionDataForBuildBoutic(HttpSession session) {
-        Map<String, String> requiredSessionAttributes = new HashMap<>();
-        requiredSessionAttributes.put("verify_email", "Email de vérification");
-        requiredSessionAttributes.put("registration_pass", "Mot de passe");
-        requiredSessionAttributes.put("registration_qualite", "Qualité");
-        requiredSessionAttributes.put("registration_nom", "Nom");
-        requiredSessionAttributes.put("registration_prenom", "Prénom");
-        requiredSessionAttributes.put("initboutic_aliasboutic", "Alias de la boutique");
-        requiredSessionAttributes.put("initboutic_nom", "Nom de la boutique");
-        requiredSessionAttributes.put("initboutic_logo", "Logo");
-        requiredSessionAttributes.put("initboutic_email", "Email de la boutique");
-        requiredSessionAttributes.put("creationabonnement_stripe_subscription_id", "ID d'abonnement Stripe");
-        requiredSessionAttributes.put("confboutic_validsms", "Validation par SMS");
-        requiredSessionAttributes.put("confboutic_chxpaie", "Choix de paiement");
-        requiredSessionAttributes.put("confboutic_chxmethode", "Méthode de livraison");
-        requiredSessionAttributes.put("confboutic_mntmincmd", "Montant minimum de commande");
 
-        List<String> missingAttributes = requiredSessionAttributes.entrySet().stream()
-                .filter(entry -> session.getAttribute(entry.getKey()) == null)
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
-
-        if (!missingAttributes.isEmpty()) {
-            throw new IllegalStateException("Données de session manquantes: " + String.join(", ", missingAttributes));
-        }
-    }
-
-    /**
-     * Méthode pour mettre à jour les métadonnées de l'abonnement Stripe
-     */
-    private void updateStripeSubscriptionMetadata(String subscriptionId, Integer abonnementId) {
-        try {
-            Stripe.apiKey = stripeConfig.getSecretKey();
-            Stripe.setAppInfo(
-                    "pratic-boutic/registration",
-                    "0.0.2",
-                    "https://praticboutic.fr"
-            );
-
-            Map<String, String> metadata = new HashMap<>();
-            metadata.put("pbabonumref", "ABOPB" + StringUtils.leftPad(abonnementId.toString(), 10, "0"));
-
-            SubscriptionUpdateParams params = SubscriptionUpdateParams.builder()
-                    .setMetadata(metadata)
-                    .build();
-
-            Subscription subscription = Subscription.retrieve(subscriptionId);
-            subscription.update(params);
-        } catch (Exception e) {
-            throw new RuntimeException("Erreur lors de la mise à jour des métadonnées Stripe", e);
-        }
-    }
-
-    /**
-     * Méthode pour créer les paramètres par défaut d'une boutique
-     */
-    private void createDefaultParameters(Integer customid, HttpSession session) {
-        List<Parametre> parametres = Arrays.asList(
-                new Parametre(customid, "isHTML_mail", "1", "HTML activé pour l'envoi de mail"),
-                new Parametre(customid, "Subject_mail", "Commande Praticboutic", "Sujet du courriel pour l'envoi de mail"),
-                new Parametre(customid, "VALIDATION_SMS", (String) session.getAttribute("confboutic_validsms"), "Commande validée par sms ?"),
-                new Parametre(customid, "VerifCP", "0", "Activation de la verification des codes postaux"),
-                new Parametre(customid, "Choix_Paiement", (String) session.getAttribute("confboutic_chxpaie"), "COMPTANT ou LIVRAISON ou TOUS"),
-                new Parametre(customid, "MP_Comptant", "Par carte bancaire", "Texte du paiement comptant"),
-                new Parametre(customid, "MP_Livraison", "Moyens conventionnels", "Texte du paiement à la livraison"),
-                new Parametre(customid, "Choix_Method", (String) session.getAttribute("confboutic_chxmethode"), "TOUS ou EMPORTER ou LIVRER"),
-                new Parametre(customid, "CM_Livrer", "Vente avec livraison", "Texte de la vente à la livraison"),
-                new Parametre(customid, "CM_Emporter", "Vente avec passage à la caisse", "Texte de la vente à emporter"),
-                new Parametre(customid, "MntCmdMini", (String) session.getAttribute("confboutic_mntmincmd"), "Montant commande minimal"),
-                new Parametre(customid, "SIZE_IMG", "smallimg", "bigimg ou smallimg"),
-                new Parametre(customid, "CMPT_CMD", "0", "Compteur des références des commandes"),
-                new Parametre(customid, "MONEY_SYSTEM", "STRIPE MARKETPLACE", ""),
-                new Parametre(customid, "STRIPE_ACCOUNT_ID", "", "ID Compte connecté Stripe"),
-                new Parametre(customid, "NEW_ORDER", "0", "Nombre de nouvelle(s) commande(s)")
-        );
-
-        parametreRepository.saveAll(parametres);
-    }
-
-    /**
-     * Méthode pour créer les statuts de commande par défaut
-     */
-    private void createDefaultOrderStatuses(Integer customid) {
-        List<StatutCmd> statuts = Arrays.asList(
-                new StatutCmd(customid, "Commande à faire", "#E2001A",
-                        "Bonjour, votre commande à été transmise. %boutic% vous remercie et vous tiendra informé de son avancé. ", true, true),
-                new StatutCmd(customid, "En cours de préparation", "#EB690B",
-                        "Votre commande est en cours de préparation. ", false, true),
-                new StatutCmd(customid, "En cours de livraison", "#E2007A",
-                        "Votre commande est en cours de livraison, ", false, true),
-                new StatutCmd(customid, "Commande à disposition", "#009EE0",
-                        "Votre commande est à disposition", false, true),
-                new StatutCmd(customid, "Commande terminée", "#009036",
-                        "%boutic% vous remercie pour votre commande. À très bientôt. ", false, true),
-                new StatutCmd(customid, "Commande anulée", "#1A171B",
-                        "Nous ne pouvons donner suite à votre commande. Pour plus d'informations, merci de nous contacter. ", false, true)
-        );
-
-        statutCmdRepository.saveAll(statuts);
-    }
 
 }
