@@ -1,7 +1,9 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
-import com.ecommerce.praticboutic_backend_java.entities.Customer;
+import com.ecommerce.praticboutic_backend_java.entities.Client;
+import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
+import com.ecommerce.praticboutic_backend_java.requests.LoginLinkRequest;
 import com.ecommerce.praticboutic_backend_java.services.ParameterService;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.stripe.Stripe;
@@ -44,36 +46,8 @@ public class LoginLinkController {
     @Autowired
     private ParameterService paramService;
 
-    public static class LoginLinkRequest {
-        private String sessionid;
-        private Integer bouticid;
-        private String platform;
-        
-        // Getters and setters
-        public String getSessionid() {
-            return sessionid;
-        }
-        
-        public void setSessionid(String sessionid) {
-            this.sessionid = sessionid;
-        }
-        
-        public Integer getBouticid() {
-            return bouticid;
-        }
-        
-        public void setBouticid(Integer bouticid) {
-            this.bouticid = bouticid;
-        }
-        
-        public String getPlatform() {
-            return platform;
-        }
-        
-        public void setPlatform(String platform) {
-            this.platform = platform;
-        }
-    }
+    @Autowired
+    private ClientRepository clientRepository;
 
     @PostMapping("/loginlink")
     public ResponseEntity<?> createLoginLink(@RequestBody LoginLinkRequest request) {
@@ -98,10 +72,11 @@ public class LoginLinkController {
             
             // Récupérer l'ID client Stripe
             String userEmail = sessionService.getUserEmail();
-            Customer customer = customerRepository.findByCourrielAndActifIsTrue(userEmail)
-                    .orElseThrow(() -> new Exception("Aucun client trouvé"));
+            Client client = clientRepository.findByEmailAndActif(userEmail, 1);
+            if (client == null)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Pas de client avec courriel " + userEmail));
 
-            String stripeCustomerId = customer.getStripeCustomerId();
+            String stripeCustomerId = client.getStripeCustomerId();
             if (stripeCustomerId == null || stripeCustomerId.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Id compte stripe client manquant"));
             }

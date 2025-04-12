@@ -4,6 +4,7 @@ import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
+
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -11,44 +12,94 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Service gérant les opérations liées aux boutiques
+ */
 @Service
+@Transactional
 public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
 
-
     @Autowired
     private SessionService sessionService;
 
     // Déclarez le logger en tant que champ statique en haut de votre classe
-    private static final Logger logger = LoggerFactory.getLogger(ClientService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
+
 
     /**
-     * Récupère la liste des boutiques actives avec leurs informations Stripe associées
-     *
-     * @return liste des informations des boutiques actives
+     * Récupère les informations d'une boutique
+     * 
+     * @param strCustomer L'identifiant de la boutique
+     * @return Map contenant les informations de la boutique
      */
-    public List<Customer> findActiveCustomersWithStripeInfo() {
-        return customerRepository.findActiveCustomersWithStripeInfo();
+    public List<?> getBouticInfo(String strCustomer) {
+        Customer boutic = customerRepository.findByCustomer(strCustomer);
+        if (boutic.isPresent()) {
+            return List.of(boutic.getCustomId(), boutic.getLogo(), boutic.getNom());
+        }
+        return null;
     }
-
-    public Optional<Customer> findByCustomerIgnoreCase(String alias) {
-        return customerRepository.findByCustomerIgnoreCase(alias);
+    
+    /**
+     * Trouve une boutique par son identifiant
+     * 
+     * @param bouticId L'identifiant de la boutique
+     * @return La boutique ou null si non trouvée
+     */
+    public Customer findById(Integer bouticId) {
+        return customerRepository.findById(bouticId).orElse(null);
     }
-
-    /*public boolean existsBy(){
-        return customerRepository.existsBy();
-    }*/
+    
+    /**
+     * Sauvegarde une boutique
+     * 
+     * @param boutic La boutique à sauvegarder
+     * @return La boutique sauvegardée
+     */
+    public Customer save(Customer boutic) {
+        return customerRepository.save(boutic);
+    }
+    
+    /**
+     * Met à jour l'état d'ouverture d'une boutique
+     * 
+     * @param bouticId L'identifiant de la boutique
+     * @param ouvert Nouvel état d'ouverture
+     * @return La boutique mise à jour ou null si non trouvée
+     */
 
     /**
-     * Crée et sauvegarde une boutique (customer) à partir des données de session
+     * Récupère toutes les boutiques
+     * 
+     * @return Liste des boutiques
      */
+    public List<Customer> findAll() {
+        return customerRepository.findAll();
+    }
+    
+    /**
+     * Récupère toutes les boutiques ouvertes
+     * 
+     * @return Liste des boutiques ouvertes
+     */
+    public List<Customer> findAllOpen() {
+        return customerRepository.findByActif(1);
+    }
+    
+    public List<Customer> findByActif(Integer actif) {
+        return customerRepository.findByActif(1);
+    }
+
     public Customer createAndSaveCustomer(HttpSession session, Client client)
             throws DatabaseException.InvalidAliasException, DataAccessException {
         // Validation de l'alias de la boutique
@@ -82,7 +133,7 @@ public class CustomerService {
         customer.setNom(sessionService.getSessionAttributeAsString(session, "initboutic_nom"));
         customer.setLogo(sessionService.getSessionAttributeAsString(session, "initboutic_logo"));
         customer.setCourriel(sessionService.getSessionAttributeAsString(session, "initboutic_email"));
-        customer.setActif(true);
+        customer.setActif(1);
 
         try {
             return customerRepository.save(customer);
@@ -91,7 +142,4 @@ public class CustomerService {
             throw new DataAccessException("Erreur lors de la sauvegarde de la boutique", e) {};
         }
     }
-
-
-    // Autres méthodes du service...
 }

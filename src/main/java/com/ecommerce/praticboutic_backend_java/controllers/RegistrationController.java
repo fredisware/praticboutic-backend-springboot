@@ -1,5 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
+import com.ecommerce.praticboutic_backend_java.requests.RegistrationRequest;
 import com.stripe.Stripe;
 import com.stripe.model.Customer;
 import com.stripe.param.CustomerCreateParams;
@@ -23,20 +24,9 @@ public class RegistrationController {
     @Value("${session.max.lifetime}")
     private int sessionMaxLifetime;
 
-    static class RegistrationRequest {
-        public String sessionid;
-        public String pass;
-        public String qualite;
-        public String nom;
-        public String prenom;
-        public String adr1;
-        public String adr2;
-        public String cp;
-        public String ville;
-        public String tel;
-    }
 
-    @PostMapping("/mobile")
+
+    @PostMapping("/registration")
     public ResponseEntity<?> registerMobile(@RequestBody RegistrationRequest input,
                                             HttpSession session) {
         try {

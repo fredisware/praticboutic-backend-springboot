@@ -1,16 +1,12 @@
 package com.ecommerce.praticboutic_backend_java.entities;
 
-import com.ecommerce.praticboutic_backend_java.BaseEntity;
+import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import org.hibernate.SessionFactory;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Entity
 @Table(name = "groupeopt")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class GroupeOpt extends BaseEntity {
 
     @Id
@@ -79,16 +75,6 @@ public class GroupeOpt extends BaseEntity {
 
     public void setMultiple(Boolean multiple) {
         this.multiple = multiple;
-    }
-
-    public Map<String, String> getDisplayData()
-    {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("grpopptid" , getGrpoptid().toString());
-        map.put("nom" , getNom());
-        map.put("visible" , getVisible() ? "1" : "0");
-        map.put("multiple" , getMultiple() ? "1" : "0");
-        return map;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.ecommerce.praticboutic_backend_java;
+package com.ecommerce.praticboutic_backend_java.models;
 
 import java.lang.*;
 

@@ -1,8 +1,12 @@
 package com.ecommerce.praticboutic_backend_java.services;
 
+import com.google.auth.oauth2.GoogleCredentials;
+
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
@@ -15,20 +19,21 @@ import com.stripe.model.UsageRecord;
 import com.stripe.net.RequestOptions;
 import com.stripe.param.UsageRecordCreateOnSubscriptionItemParams;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.firebase.messaging.FirebaseMessaging;
 
 @Service
 public class NotificationService {
@@ -39,6 +44,12 @@ public class NotificationService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
+
+    //@Autowired
+    //private FirebaseMessaging messaging;
+
+    @Value("${app.base-url}")
+    private String rootUrlBack;
 
 
     /**
@@ -197,5 +208,74 @@ public class NotificationService {
             }
         }
     }
+
+
+
+    /*public void FirebaseNotificationSender(String credentialsPath, String rootUrlFront) throws IOException {
+        this.rootUrlFront = rootUrlFront;
+
+        FileInputStream serviceAccount = new FileInputStream(credentialsPath);
+
+        FirebaseOptions options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .build();
+
+        if (FirebaseApp.getApps().isEmpty()) {
+            FirebaseApp.initializeApp(options);
+        }
+
+        //this.messaging = FirebaseMessaging.getInstance();
+    }*/
+
+    /*public void sendNotification(String deviceId, int deviceType) {
+        String title = "Nouvelle(s) commande(s) dans votre Praticboutic";
+        String body = "Commande(s) en attente de validation";
+        String imageUrl = rootUrlFront + "assets/img/logo-pratic-boutic.png";
+
+        String icon = rootUrlBack + "common/img/pb_notificon.png";
+        String link = rootUrlFront + "pushstart";
+
+        Message message = null;
+
+        try {
+            // Version simplifiée comme dans le code PHP final qui n'utilise pas les conditions deviceType
+            message = Message.builder()
+                    .setToken(deviceId)
+                    .setNotification(Notification.builder()
+                            .setTitle(title)
+                            .setBody(body)
+                            .setImage(icon)
+                            .build())
+                    .build();
+
+            String response = messaging.send(message);
+            logger.info("Message envoyé avec succès: " + response);
+
+        } catch (FirebaseMessagingException e) {
+            logger.error( "Erreur d'envoi: " + e.getMessage(), e);
+
+            if (e.getMessagingErrorCode() == MessagingErrorCode.UNAVAILABLE) {
+                // Implémentation de la logique de retry comme dans le code PHP
+                int retryAfterSeconds = 60; // Valeur par défaut si l'en-tête n'est pas présent
+
+                try {
+                    // Attente avant de réessayer (en production, utilisez un système de file d'attente)
+                    Thread.sleep(retryAfterSeconds * 1000L);
+                    messaging.send(message);
+                } catch (InterruptedException | FirebaseMessagingException ex) {
+                    logger.error("Échec de la nouvelle tentative: " + ex.getMessage(), ex);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Erreur générale: " + e.getMessage(), e);
+        }
+
+    }*/
+
+
+
+
+
+
 }
 

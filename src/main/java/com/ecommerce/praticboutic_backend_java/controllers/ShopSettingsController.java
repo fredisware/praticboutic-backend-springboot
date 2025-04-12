@@ -34,8 +34,8 @@ public class ShopSettingsController {
             }
 
             // Vérifier si l'email est vérifié
-            Boolean verifyEmail = (Boolean) session.getAttribute("verify_email");
-            if (verifyEmail == null || !verifyEmail) {
+            String verifyEmail = (String)session.getAttribute("verify_email");
+            if (verifyEmail == null || verifyEmail.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Courriel non vérifié");
             }
 

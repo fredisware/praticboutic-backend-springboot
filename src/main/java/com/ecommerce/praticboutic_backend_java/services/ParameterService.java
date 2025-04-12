@@ -11,9 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +35,8 @@ public class ParameterService {
     // Déclarez le logger en tant que champ statique en haut de votre classe
     private static final Logger logger = LoggerFactory.getLogger(ParameterService.class);
 
+
+
     public String getParameterValue(String paramName, Integer bouticId) {
         String sql = "SELECT valeur FROM parametre WHERE nom = ? AND customid = ?";
         try {
@@ -48,90 +47,58 @@ public class ParameterService {
     }
 
     public String getValeur(String paramName, Integer bouticId) {
-        // Implémentation pour récupérer la valeur d'un paramètre
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT valeur FROM parametre WHERE nom = ? AND customid = ?")) {
+        String sql = "SELECT valeur FROM parametre WHERE nom = ? AND customid = ?";
 
-            stmt.setString(1, paramName);
-            stmt.setInt(2, bouticId);
+        List<String> result = jdbcTemplate.query(
+                sql,
+                new Object[]{paramName, bouticId},
+                (rs, rowNum) -> rs.getString("valeur")
+        );
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("valeur");
-                }
-                return "";
-            }
-        } catch (Exception e) {
+        if (!result.isEmpty()) {
+            return result.get(0);
+        } else {
             return "";
         }
     }
 
     public void setValeur(String paramName, String paramValue, Integer bouticId) {
         // Implémentation pour définir la valeur d'un paramètre
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM parametres WHERE nomParam = ? AND bouticid = ?");
-             PreparedStatement insertStmt = conn.prepareStatement("INSERT INTO parametres (nomParam, valeur, bouticid) VALUES (?, ?, ?)");
-             PreparedStatement updateStmt = conn.prepareStatement("UPDATE parametres SET valeur = ? WHERE nomParam = ? AND bouticid = ?")) {
+        String checkSql = "SELECT COUNT(*) FROM parametres WHERE nomParam = ? AND bouticid = ?";
+        Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, paramName, bouticId);
 
-            checkStmt.setString(1, paramName);
-            checkStmt.setInt(2, bouticId);
-
-            try (ResultSet rs = checkStmt.executeQuery()) {
-                rs.next();
-                int count = rs.getInt(1);
-
-                if (count == 0) {
-                    // Insert
-                    insertStmt.setString(1, paramName);
-                    insertStmt.setString(2, paramValue);
-                    insertStmt.setInt(3, bouticId);
-                    insertStmt.executeUpdate();
-                } else {
-                    // Update
-                    updateStmt.setString(1, paramValue);
-                    updateStmt.setString(2, paramName);
-                    updateStmt.setInt(3, bouticId);
-                    updateStmt.executeUpdate();
-                }
-            }
-        } catch (Exception e) {
-            // Gestion des erreurs
+        if (count == null || count == 0) {
+            // Insert
+            String insertSql = "INSERT INTO parametres (nomParam, valeur, bouticid) VALUES (?, ?, ?)";
+            jdbcTemplate.update(insertSql, paramName, paramValue, bouticId);
+        } else {
+            // Update
+            String updateSql = "UPDATE parametres SET valeur = ? WHERE nomParam = ? AND bouticid = ?";
+            jdbcTemplate.update(updateSql, paramValue, paramName, bouticId);
         }
     }
 
 
-    public String getValeurParam(String param, int bouticId, String defaultValue) throws SQLException {
-        try (Connection conn = dataSource.getConnection()) {
+    public String getValeurParam(String param, Integer bouticId, String defaultValue) throws SQLException {
             String query = "SELECT valeur FROM parametre WHERE nom = ? AND customid = ?";
 
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setString(1, param);
-                stmt.setInt(2, bouticId);
-
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getString("valeur");
-                    }
-                }
+            try {
+                return jdbcTemplate.queryForObject(
+                        query,
+                        String.class,
+                        param,
+                        bouticId
+                );
+            } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+                return defaultValue;
             }
-        }
-
-        return defaultValue;
     }
 
     public boolean setValeurParam(String param, int bouticId, String valeur) throws SQLException {
-        try (Connection conn = dataSource.getConnection()) {
             String query = "UPDATE parametre SET valeur = ? WHERE nom = ? AND customid = ?";
 
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setString(1, valeur);
-                stmt.setString(2, param);
-                stmt.setInt(3, bouticId);
-
-                int rowsUpdated = stmt.executeUpdate();
-                return rowsUpdated > 0; // Renvoie vrai si au moins une ligne a été mise à jour
-            }
-        }
+            int rowsUpdated = jdbcTemplate.update(query, valeur, param, bouticId);
+            return rowsUpdated > 0;
     }
 
     public List<?> getParam(String param, Integer bouticid) {

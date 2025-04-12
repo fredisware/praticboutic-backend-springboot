@@ -3,6 +3,7 @@ package com.ecommerce.praticboutic_backend_java.controllers;
 import com.ecommerce.praticboutic_backend_java.exceptions.ClientNotFoundException;
 import com.ecommerce.praticboutic_backend_java.exceptions.TooManyRequestsException;
 import com.ecommerce.praticboutic_backend_java.requests.EmailVerificationRequest;
+import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
 import com.ecommerce.praticboutic_backend_java.services.MotDePasseService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -62,16 +63,5 @@ public class PasswordResetController {
         }
     }
     
-    // Classe pour les réponses d'erreur
-    private static class ErrorResponse {
-        private final String error;
-        
-        public ErrorResponse(String error) {
-            this.error = error;
-        }
-        
-        public String getError() {
-            return error;
-        }
-    }
+
 }

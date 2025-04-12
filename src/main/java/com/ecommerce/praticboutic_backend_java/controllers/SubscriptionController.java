@@ -31,12 +31,12 @@ import java.util.*;
 @RequestMapping("/api")
 public class SubscriptionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
 
     private final StripeConfig stripeConfig;
 
-    @Autowired
-    private ClientRepository clientRepository;
+    //@Autowired
+    //private ClientRepository clientRepository;
 
     @Autowired
     private AbonnementRepository abonnementRepository;
@@ -62,7 +62,7 @@ public class SubscriptionController {
      * @return Liste des abonnements avec leurs informations Stripe
      * @throws Exception Si le client n'est pas authentifié ou n'existe pas
      */
-    @PostMapping("/liens-creation-boutic")
+    /*@PostMapping("/liens-creation-boutic")
     public List<Map<String, Object>> getLiensCreationBoutic(@RequestBody LoginRequest loginRequest,
                                                             HttpSession session) throws Exception {
 
@@ -72,7 +72,7 @@ public class SubscriptionController {
         }
 
         // Récupération du client par son email
-        Client client = clientRepository.findByEmailAndActif(loginRequest.getEmail(), true);
+        Client client = clientRepository.findByEmailAndActif(loginRequest.getEmail(), 1);
         if (client == null || client.getStripeCustomerId() == null || client.getStripeCustomerId().isEmpty()) {
             throw new Exception("Erreur ! Client non trouvé");
         }
@@ -105,7 +105,7 @@ public class SubscriptionController {
         }
 
         return liensCreation;
-    }
+    }*/
 
     /**
      * Récupère la configuration Stripe nécessaire pour le frontend

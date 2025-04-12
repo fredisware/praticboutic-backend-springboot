@@ -33,13 +33,13 @@ public class FrontQueryController {
     private ArticleService articleService;
     
     @Autowired
-    private GroupeOptionService groupeOptionService;
+    private RelGrpOptArtService relGrpOptArtService;
     
     @Autowired
     private OptionService optionService;
     
     @Autowired
-    private BouticService bouticService;
+    private CustomerService customerService;
     
     @Autowired
     private ClientService clientService;
@@ -59,7 +59,8 @@ public class FrontQueryController {
     @Value("${session.max.lifetime}")
     private int maxLifetime;
 
-    @PostMapping
+
+    @PostMapping("/front")
     public ResponseEntity<?> handleRequest(@RequestBody FrontQueryRequest input,
                                           HttpServletRequest request,
                                           HttpServletResponse response) {
@@ -93,19 +94,19 @@ public class FrontQueryController {
                     break;
                     
                 case "groupesoptions":
-                    result = groupeOptionService.getGroupesOptions(input.getBouticid(), input.getArtid());
+                    result = relGrpOptArtService.getGroupesOptions(input.getBouticid(), input.getArtid());
                     break;
                     
                 case "options":
-                    result = optionService.getOptions(input.getBouticid(), input.getGrpoptid());
+                    result = optionService.getOptions(input.getGrpoptid());
                     break;
                     
                 case "getBouticInfo":
-                    result = (List<?>) bouticService.getBouticInfo(input.getBouticid());
+                    result = customerService.getBouticInfo(input.getCustomer());
                     break;
                     
                 case "getClientInfo":
-                    result = clientService.getClientInfo(input.getBouticid());
+                    result = clientService.getClientInfo(input.getCustomer());
                     break;
                     
                 case "images":

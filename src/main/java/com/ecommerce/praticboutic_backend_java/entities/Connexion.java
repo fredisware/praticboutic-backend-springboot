@@ -10,7 +10,7 @@ public class Connexion {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long connexid;
     
     @Column(name = "ip", nullable = false)
     private String ip;
@@ -21,11 +21,11 @@ public class Connexion {
     // Getters et setters
     
     public Long getId() {
-        return id;
+        return connexid;
     }
     
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long connexid) {
+        this.connexid = connexid;
     }
     
     public String getIp() {

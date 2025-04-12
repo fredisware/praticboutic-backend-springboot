@@ -1,15 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.entities;
 
-import com.ecommerce.praticboutic_backend_java.BaseEntity;
-import com.ecommerce.praticboutic_backend_java.DatabaseLink;
+import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
-import org.hibernate.SessionFactory;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "article")
@@ -151,37 +143,6 @@ public class Article extends BaseEntity {
         this.categorie = categorie;
     }
 
-    /**
-     * Méthode pour récupérer les relations (JOINS) associées à l'entité Article.
-     * @return Liste d'objets `DatabaseLink` représentant les relations de l'entité Article.
-     */
-    public static List<DatabaseLink> getLinks() {
-        List<DatabaseLink> links = new ArrayList<>();
 
-        // Relation avec Categorie (LEFT JOIN pour illustrer)
-        links.add(new DatabaseLink(
-                "article",      // Table source
-                "catid",        // Champ source (catid dans l'entité Article)
-                "categorie",    // Table destination (entité Categorie)
-                "catid",           // Champ destination (clé primaire dans la table Categorie)
-                "lj",           // Type de jointure (LEFT JOIN pour cet exemple)
-                0               // Indice unique
-        ));
-
-        return links;
-    }
-
-    public Map<String, String> getDisplayData()
-    {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("artid" , getArtId().toString());
-        map.put("nom" , getNom());
-        map.put("prix" , getPrix().toString());
-        map.put("description" , getDescription());
-        map.put("visible" , getVisible() ? "1" : "0");
-        map.put("categorie", getCategorie().getNom());
-        map.put("unite", getUnite());
-        return map;
-    }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -86,7 +87,7 @@ public class MotDePasseService {
      * @throws TooManyRequestsException si trop de tentatives ont été effectuées
      */
     public boolean reinitialiserMotDePasse(String email, String ipAddress)
-            throws ClientNotFoundException, TooManyRequestsException {
+            throws Exception {
 
         // Vérifier les limites de tentatives
         int count = connexionRepository.countByIpAndTsAfter(
@@ -99,10 +100,10 @@ public class MotDePasseService {
         }
 
         // Chercher le client par email
-        Client client = clientRepository.findByEmailAndActifTrue(email);
-        if (client == null) {
-            throw new ClientNotFoundException("Courriel non-trouvé");
-        }
+        Client client = clientRepository.findByEmailAndActif(email , 1);
+        if (client == null)
+            throw new Exception("Aucun client trouvé");
+
 
         // Générer un nouveau mot de passe
         String nouveauMotDePasse = genererMotDePasseSecurise();

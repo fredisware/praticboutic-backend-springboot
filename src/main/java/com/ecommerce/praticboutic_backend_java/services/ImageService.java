@@ -108,6 +108,6 @@ public class ImageService {
     }
     
     public List<?> getImages(Integer bouticid, Integer artid) {
-        return null;
+        return imageRepository.findByCustomidAndArtid(bouticid, artid);
     }
 }

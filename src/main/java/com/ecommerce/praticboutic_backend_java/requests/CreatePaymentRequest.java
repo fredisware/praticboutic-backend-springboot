@@ -2,25 +2,25 @@ package com.ecommerce.praticboutic_backend_java.requests;
 
 
 
-import com.ecommerce.praticboutic_backend_java.Item;
+import com.ecommerce.praticboutic_backend_java.models.Item;
 
 import java.util.List;
 
 public class CreatePaymentRequest {
-    private String sessionId;
+    private String sessionid;
     private String boutic;
     private List<Item> items;
     private String model;
-    private Double fraisLivr;
-    private String codePromo;
+    private Double fraislivr;
+    private String codepromo;
 
     // Getters et Setters
-    public String getSessionId() {
-        return sessionId;
+    public String getSessionid() {
+        return sessionid;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setSessionid(String sessionid) {
+        this.sessionid = sessionid;
     }
 
     public String getBoutic() {
@@ -47,19 +47,19 @@ public class CreatePaymentRequest {
         this.model = model;
     }
 
-    public Double getFraisLivr() {
-        return fraisLivr;
+    public Double getFraislivr() {
+        return fraislivr;
     }
 
-    public void setFraisLivr(Double fraisLivr) {
-        this.fraisLivr = fraisLivr;
+    public void setFraislivr(Double fraislivr) {
+        this.fraislivr = fraislivr;
     }
 
-    public String getCodePromo() {
-        return codePromo;
+    public String getCodepromo() {
+        return codepromo;
     }
 
-    public void setCodePromo(String codePromo) {
-        this.codePromo = codePromo;
+    public void setCodepromo(String codepromo) {
+        this.codepromo = codepromo;
     }
 }

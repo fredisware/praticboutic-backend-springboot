@@ -1,7 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.CreatePaymentRequest;
-import com.ecommerce.praticboutic_backend_java.Item;
+import com.ecommerce.praticboutic_backend_java.models.Item;
 import com.ecommerce.praticboutic_backend_java.responses.CreatePaymentResponse;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.stripe.Stripe;
@@ -18,13 +18,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class CreatePaymentController {
 
     @Autowired
@@ -43,8 +40,8 @@ public class CreatePaymentController {
     public ResponseEntity<?> createPaymentIntent(@RequestBody CreatePaymentRequest request) {
         try {
             // Vérifier si une session ID a été fournie et la définir
-            if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
-                sessionService.setSessionId(request.getSessionId());
+            if (request.getSessionid() != null && !request.getSessionid().isEmpty()) {
+                sessionService.setSessionId(request.getSessionid());
             }
 
             // Vérifier si la session est active
@@ -113,8 +110,8 @@ public class CreatePaymentController {
                     request.getItems(),
                     customid,
                     request.getModel(),
-                    request.getFraisLivr(),
-                    request.getCodePromo()
+                    request.getFraislivr(),
+                    request.getCodepromo()
             );
 
             // Créer l'intention de paiement Stripe
@@ -128,11 +125,18 @@ public class CreatePaymentController {
                     );
 
             // Paramètres supplémentaires pour le compte connecté
-            Map<String, Object> stripeOptions = new HashMap<>();
-            stripeOptions.put("stripe_account", stripeAccountId);
+            //Map<String, Object> stripeOptions = new HashMap<>();
+            //stripeOptions.put("stripe_account", stripeAccountId);
+
+
+            // Configurer les options de requête pour le compte connecté
+            RequestOptions requestOptions = RequestOptions.builder()
+                    .setStripeAccount(stripeAccountId)
+                    .build();
+
 
             // Créer l'intention de paiement
-            PaymentIntent paymentIntent = PaymentIntent.create((Map<String, Object>) paramsBuilder.build(), (RequestOptions) stripeOptions);
+            PaymentIntent paymentIntent = PaymentIntent.create(paramsBuilder.build(), requestOptions);
 
             // Renvoyer la clé client
             CreatePaymentResponse response = new CreatePaymentResponse(paymentIntent.getClientSecret());

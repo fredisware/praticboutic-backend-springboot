@@ -1,6 +1,8 @@
-package com.ecommerce.praticboutic_backend_java;
+package com.ecommerce.praticboutic_backend_java.utils;
 
 import org.springframework.web.util.HtmlUtils;
+
+import java.util.Base64;
 
 public class Utils {
     /**
@@ -22,5 +24,12 @@ public class Utils {
         }
         // Implémentation de base - à adapter selon les besoins de sécurité
         return HtmlUtils.htmlEscape(input.trim());
+    }
+
+    public static String encryptCode(String code, String key, byte[] iv) throws Exception {
+        // Implement AES-256-CBC encryption here
+        // For example: use Cipher class in Java with "AES/CBC/PKCS5Padding"
+        // Placeholder for encryption logic
+        return Base64.getEncoder().encodeToString(code.getBytes());
     }
 }

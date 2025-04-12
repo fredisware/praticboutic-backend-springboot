@@ -1,9 +1,11 @@
 package com.ecommerce.praticboutic_backend_java.services;
 
-import com.ecommerce.praticboutic_backend_java.Utils;
+import com.ecommerce.praticboutic_backend_java.utils.Utils;
 import com.ecommerce.praticboutic_backend_java.entities.Client;
+import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
 import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
+import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
 import com.ecommerce.praticboutic_backend_java.requests.BuildBouticRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
@@ -21,15 +23,16 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Service gérant les opérations liées aux clients
- */
+
 @Service
 @Transactional
 public class ClientService {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Autowired
     private SessionService sessionService;
@@ -41,13 +44,7 @@ public class ClientService {
     private static final Logger logger = LoggerFactory.getLogger(ClientService.class);
 
 
-    /**
-     * Authentifie un client
-     * 
-     * @param email Email du client
-     * @param password Mot de passe à vérifier
-     * @return Le client authentifié ou null si échec
-     */
+
     public Client authenticate(String email, String password) {
         Optional<Client> optionalClient = clientRepository.findByEmail(email);
         if (optionalClient.isPresent()) {
@@ -59,33 +56,17 @@ public class ClientService {
         return null;
     }
     
-    /**
-     * Trouve un client par son identifiant
-     * 
-     * @param clientId L'identifiant du client
-     * @return Le client ou null si non trouvé
-     */
+
     public Client findById(Integer clientId) {
         return clientRepository.findById(clientId).orElse(null);
     }
     
-    /**
-     * Trouve un client par son email
-     * 
-     * @param email Email du client
-     * @return Le client ou null si non trouvé
-     */
+
     public Client findByEmail(String email) {
         return clientRepository.findByEmail(email).orElse(null);
     }
     
-    /**
-     * Sauvegarde un client
-     * 
-     * @param client Le client à sauvegarder
-     * @param encodePassword Indique si le mot de passe doit être encodé
-     * @return Le client sauvegardé
-     */
+
     public Client save(Client client, boolean encodePassword) {
         if (encodePassword && client.getPass() != null) {
             client.setPass(passwordEncoder.encode(client.getPass()));
@@ -93,23 +74,12 @@ public class ClientService {
         return clientRepository.save(client);
     }
     
-    /**
-     * Vérifie si un email est déjà utilisé
-     * 
-     * @param email Email à vérifier
-     * @return true si l'email est déjà utilisé, false sinon
-     */
+
     public boolean emailExists(String email) {
         return clientRepository.findByEmail(email).isPresent();
     }
     
-    /**
-     * Met à jour les informations d'un client
-     * 
-     * @param clientId L'identifiant du client
-     * @param updatedClient Client avec les nouvelles informations
-     * @return Le client mis à jour ou null si non trouvé
-     */
+
     public Client updateClient(Integer clientId, Client updatedClient) {
         Optional<Client> optionalClient = clientRepository.findById(clientId);
         if (optionalClient.isPresent()) {
@@ -142,13 +112,17 @@ public class ClientService {
         return null;
     }
 
-    public List<?> getClientInfo(Integer bouticid) {
+    public List<?> getClientInfo(String strCustomer) {
+        Customer customer = customerRepository.findByCustomer(strCustomer);
+        Optional<Client> clientOpt = clientRepository.findById(customer.getCltid());
+        if (clientOpt.isPresent()) {
+            Client client = clientOpt.get();
+            return List.of(customer.getCustomId(),customer.getNom(), customer.getNom() + " " + client.getAdr1() + " " + client.getAdr2() + " " + client.getCp() + " " + client.getVille(), customer.getLogo()  );
+        }
         return null;
     }
 
-    /**
-     * Crée et sauvegarde un client à partir des données de session
-     */
+
     public Client createAndSaveClient(HttpSession session, BuildBouticRequest input)
             throws DatabaseException.EmailAlreadyExistsException, DataAccessException {
         // Récupération et validation de l'email
@@ -184,7 +158,7 @@ public class ClientService {
         client.setVille(sessionService.getSessionAttributeAsString(session, "registration_ville"));
         client.setTel(sessionService.getSessionAttributeAsString(session, "registration_tel"));
         client.setStripeCustomerId(sessionService.getSessionAttributeAsString(session, "registration_stripe_customer_id"));
-        client.setActif(true);
+        client.setActif(1);
         client.setDeviceId(Utils.sanitizeInput(input.getDeviceId()));
         client.setDeviceType(Utils.sanitizeInput(input.getDeviceType()));
 

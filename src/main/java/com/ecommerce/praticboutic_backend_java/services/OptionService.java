@@ -23,29 +23,7 @@ public class OptionService {
     @Autowired
     private OptionRepository optionRepository;
 
-    /**
-     * Récupère les options pour un groupe d'options donné
-     * 
-     * @param grpOptId L'identifiant du groupe d'options
-     * @return Liste des options sous forme de tableaux d'objets
-     */
-    public List<List<Object>> getOptionsByGroupe(Integer grpOptId) {
-        List<Option> options = optionRepository.findByGrpoptid(grpOptId);
-        List<List<Object>> result = new ArrayList<>();
-        
-        for (Option option : options) {
-            List<Object> optionArray = Arrays.asList(
-                option.getOptId(),
-                option.getGroupeOptionId(),
-                option.getNom(),
-                option.getSurcout()
-            );
-            result.add(optionArray);
-        }
-        
-        return result;
-    }
-    
+
     /**
      * Trouve une option par son identifiant
      * 
@@ -75,18 +53,9 @@ public class OptionService {
         optionRepository.deleteById(optId);
     }
     
-    /**
-     * Récupère toutes les options pour un groupe d'options
-     * 
-     * @param grpOptId L'identifiant du groupe d'options
-     * @return Liste des options
-     */
-    public List<Option> getAllOptionsByGroupe(Integer grpOptId) {
-        return optionRepository.findByGrpoptid(grpOptId);
-    }
-    
-    public List<?> getOptions(Integer bouticid, Integer grpoptid) {
-        return null;
+
+    public List<?> getOptions(Integer grpoptid) {
+        return optionRepository.findByGrpoptid(grpoptid);
     }
 
 

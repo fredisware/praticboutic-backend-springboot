@@ -1,9 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.entities;
 
-import com.ecommerce.praticboutic_backend_java.BaseEntity;
+import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 /**
  * Entité Customer (boutique)
@@ -25,18 +23,6 @@ public class Customer extends BaseEntity {
     @Column(length = 100)
     private String nom;
 
-    @Column(name = "adresse1", length = 150)
-    private String adresse1;
-
-    @Column(name = "adresse2", length = 150)
-    private String adresse2;
-
-    @Column(name = "codepostal", length = 5)
-    private String codepostal;
-
-    @Column(length = 50)
-    private String ville;
-
     @Column(length = 100)
     private String logo;
 
@@ -44,7 +30,7 @@ public class Customer extends BaseEntity {
     private String courriel;
 
     @Column(name = "actif")
-    private Boolean actif;
+    private Integer actif;
 
     // Relation avec l'entité Client
     @ManyToOne(fetch = FetchType.LAZY)
@@ -198,11 +184,11 @@ public class Customer extends BaseEntity {
     }
 
     // getters et setters
-    public Boolean getActif() {
+    public Integer getActif() {
         return actif;
     }
 
-    public void setActif(Boolean active) {
+    public void setActif(Integer actif) {
         this.actif = actif;
     }
 
@@ -224,4 +210,7 @@ public class Customer extends BaseEntity {
     }
 
 
+    public boolean isPresent() {
+        return (this.customid != null) && (this.customid != 0);
+    }
 }

@@ -1,14 +1,9 @@
 package com.ecommerce.praticboutic_backend_java.entities;
 
-import com.ecommerce.praticboutic_backend_java.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import org.hibernate.SessionFactory;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Entité représentant une option dans l'application
@@ -40,6 +35,7 @@ public class Option implements Serializable {
     // Relation avec Categorie (si vous souhaitez conserver la relation JPA)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grpoptid", insertable = false, updatable = false) // Utilisez insertable=false, updatable=false pour éviter les conflits
+    @JsonIgnoreProperties("options")
     private GroupeOpt groupeopt;
 
     // Constructeurs
@@ -135,15 +131,5 @@ public class Option implements Serializable {
                 '}';
     }
 
-    public Map<String, String> getDisplayData()
-    {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("opptid" , getOptId().toString());
-        map.put("nom" , getNom());
-        map.put("surcout" , getSurcout().toString());
-        map.put("groupeption" , getGroupeOption().getNom());
-        map.put("visible" , getVisible() ? "1" : "0");
-        return map;
-    }
 
 }

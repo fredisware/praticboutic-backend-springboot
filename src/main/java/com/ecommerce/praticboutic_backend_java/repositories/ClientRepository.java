@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.repositories;
 
 import com.ecommerce.praticboutic_backend_java.entities.Client;
+import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,9 +25,12 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
     @Query("UPDATE Client c SET c.email = :email WHERE c.id = :id")
     void updateEmailById(@Param("email") String email, @Param("id") Integer id);
 
-    Client findByEmailAndActif(String email, boolean actif);
-
-    Client findByEmailAndActifTrue(String email);
+    Client findByEmailAndActif(String email, Integer actif);
 
     Optional<Client> findByEmail(String email);
+
+    Optional<Client> findById(Integer bouticid);
+
+    @Query("SELECT c FROM Client c JOIN Customer cust ON c.cltid = cust.cltid WHERE cust = :customer")
+    Client findByCustomer(@Param("customer") Customer customer);
 }

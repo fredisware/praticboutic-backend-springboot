@@ -1,6 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.entities;
 
-import com.ecommerce.praticboutic_backend_java.BaseEntity;
+import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,16 +16,16 @@ public class RelGrpOptArt extends BaseEntity {
     private Integer customid;
 
     @Column(name = "grpoptid", nullable = false, columnDefinition = "int DEFAULT 0")
-    private Integer grpOptId = 0;
+    private Integer grpoptid = 0;
 
     @Column(name = "artid", nullable = false, columnDefinition = "int DEFAULT 0")
-    private Integer artId = 0;
+    private Integer artid = 0;
 
     @Column(name = "visible", nullable = false, columnDefinition = "int DEFAULT 1")
     private Integer visible = 1;
 
     // Relations (commentées, à activer si nécessaire)
-    /*
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grpoptid", insertable = false, updatable = false)
     private GroupeOpt groupeOpt;
@@ -33,7 +33,7 @@ public class RelGrpOptArt extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artid", insertable = false, updatable = false)
     private Article article;
-    */
+
 
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
     public Integer getCustomId() {
@@ -44,20 +44,20 @@ public class RelGrpOptArt extends BaseEntity {
         this.customid = customid;
     }
 
-    public Integer getGrpOptId() {
-        return grpOptId;
+    public Integer getGrpoptid() {
+        return grpoptid;
     }
 
-    public void setGrpOptId(Integer grpOptId) {
-        this.grpOptId = grpOptId;
+    public void setGrpoptid(Integer grpoptid) {
+        this.grpoptid = grpoptid;
     }
 
-    public Integer getArtId() {
-        return artId;
+    public Integer getArtid() {
+        return artid;
     }
 
-    public void setArtId(Integer artId) {
-        this.artId = artId;
+    public void setArtid(Integer artid) {
+        this.artid = artid;
     }
 
     public Integer getVisible() {

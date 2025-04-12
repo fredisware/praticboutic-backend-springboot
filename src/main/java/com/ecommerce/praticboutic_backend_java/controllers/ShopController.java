@@ -6,6 +6,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
@@ -23,9 +24,17 @@ public class ShopController {
     @Autowired
     private DatabaseConfig dbConfig;
 
+
+    private final JdbcTemplate jdbcTemplate;
+
     private final List<String> FORBIDDEN_IDS = Arrays.asList("admin", "common", "route", "upload", "vendor");
 
-    @PostMapping("/check-alias")
+    public ShopController(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+
+    @PostMapping("/register-boutic")
     public ResponseEntity<?> checkAliasAvailability(@RequestBody BouticRequest request, HttpSession session) {
         try {
             // Vérifier si la session est expirée
@@ -40,31 +49,13 @@ public class ShopController {
             }
 
             // Vérifier si l'email est vérifié
-            Boolean verifyEmail = (Boolean) session.getAttribute("verify_email");
-            if (verifyEmail == null || !verifyEmail) {
+            String verifyEmail = (String)session.getAttribute("verify_email");
+            if (verifyEmail == null || verifyEmail.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Courriel non vérifié");
             }
 
             // Charger les variables d'environnement
-            Dotenv dotenv = Dotenv.configure().directory(".").load();
-
-            // Établir une connexion à la base de données
-            try (Connection conn = DriverManager.getConnection(
-                    dbConfig.getUrl(),
-                    dbConfig.getUsername(),
-                    dbConfig.getPassword())) {
-
-                // Vérifier si l'alias est déjà utilisé
-                String sql = "SELECT count(*) FROM customer cu WHERE cu.customer = ? LIMIT 1";
-                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setString(1, request.getAliasboutic());
-                    try (ResultSet rs = stmt.executeQuery()) {
-                        if (rs.next() && rs.getInt(1) > 0) {
-                            return ResponseEntity.status(HttpStatus.CONFLICT).body("Alias de boutic déjà utilisé");
-                        }
-                    }
-                }
-            }
+            //Dotenv dotenv = Dotenv.configure().directory(".").load();
 
             // Valider l'alias
             if (request.getAliasboutic() == null || request.getAliasboutic().isEmpty()) {
@@ -73,6 +64,15 @@ public class ShopController {
 
             if (FORBIDDEN_IDS.contains(request.getAliasboutic())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Identifiant interdit");
+            }
+
+            // Vérifier si l'alias est déjà utilisé
+            String sql = "SELECT count(*) FROM customer cu WHERE cu.customer = ? LIMIT 1";
+
+            Integer count = jdbcTemplate.queryForObject(sql, Integer.class, request.getAliasboutic());
+
+            if (count != null && count > 0) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Alias de boutic déjà utilisé");
             }
 
             // Enregistrer les informations dans la session

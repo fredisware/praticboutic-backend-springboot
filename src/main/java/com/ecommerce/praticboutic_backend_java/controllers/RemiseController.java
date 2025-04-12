@@ -1,5 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
+import com.ecommerce.praticboutic_backend_java.requests.RemiseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,13 +23,6 @@ public class RemiseController {
 
     @Value("${session.max.lifetime}")
     private int sessionMaxLifetime;
-
-    static class RemiseRequest {
-        public String sessionid;
-        public String customer;
-        public double sstotal;
-        public String code;
-    }
 
     @PostMapping("/calcul-remise")
     public ResponseEntity<?> calculateRemise(@RequestBody RemiseRequest input,
@@ -72,13 +67,14 @@ public class RemiseController {
                 throw new RuntimeException("Customer non trouvé");
             }
 
-            // Récupération du taux de promotion
-            Double taux = jdbcTemplate.queryForObject(
+            List<Double> tauxList = jdbcTemplate.query(
                     "SELECT taux FROM promotion WHERE customid = ? AND BINARY code = ? AND actif = 1",
-                    Double.class,
+                    (rs, rowNum) -> rs.getDouble("taux"),
                     bouticId,
                     input.code
             );
+
+            Double taux = tauxList.isEmpty() ? 0.0 : tauxList.get(0);
 
             // Calcul de la remise
             double remise = 0.0;

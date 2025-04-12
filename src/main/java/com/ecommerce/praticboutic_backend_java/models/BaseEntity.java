@@ -1,19 +1,12 @@
-package com.ecommerce.praticboutic_backend_java;
+package com.ecommerce.praticboutic_backend_java.models;
 
 import jakarta.persistence.*;
 import jakarta.persistence.metamodel.Attribute;
 import jakarta.persistence.metamodel.EntityType;
 import jakarta.persistence.metamodel.SingularAttribute;
 import org.hibernate.SessionFactory;
-import org.hibernate.persister.entity.EntityPersister;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.lang.Class;
-import java.util.Locale;
 import java.util.Set;
 
 

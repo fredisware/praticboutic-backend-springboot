@@ -53,7 +53,5 @@ public class GroupeOptionService {
     }
     
 
-    public List<?> getGroupesOptions(Integer bouticid, Integer artid) {
-        return null;
-    }
+
 }

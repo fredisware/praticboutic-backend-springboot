@@ -1,6 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.requests;
 
-import com.ecommerce.praticboutic_backend_java.ColumnData;
+import com.ecommerce.praticboutic_backend_java.models.ColumnData;
 
 import java.util.List;
 

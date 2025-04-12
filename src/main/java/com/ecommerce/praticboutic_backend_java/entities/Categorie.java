@@ -1,15 +1,9 @@
 package com.ecommerce.praticboutic_backend_java.entities;
 
-import com.ecommerce.praticboutic_backend_java.BaseEntity;
-import com.ecommerce.praticboutic_backend_java.DatabaseLink;
+import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
-import org.hibernate.SessionFactory;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "categorie")
@@ -82,23 +76,5 @@ public class Categorie extends BaseEntity {
         this.articles = articles;
     }
 
-    /**
-     * Méthode pour récupérer les relations (JOINS) associées à l'entité Categorie.
-     * @return Liste d'objets `DatabaseLink` représentant les relations de l'entité Categorie.
-     */
-    public static List<DatabaseLink> getLinks() {
-        List<DatabaseLink> links = new ArrayList<>();
-        // Vous pouvez ajouter ici les relations avec d'autres tables si nécessaire
-        return links;
-    }
-
-    public Map<String, String> getDisplayData()
-    {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("catid" , getCatid().toString());
-        map.put("nom" , getNom());
-        map.put("visible" , getVisible() ? "1" : "0");
-        return map;
-    }
 
 }

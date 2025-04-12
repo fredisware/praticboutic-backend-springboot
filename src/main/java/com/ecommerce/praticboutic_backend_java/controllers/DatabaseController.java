@@ -1,17 +1,18 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 
+
 import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
+import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
+import com.ecommerce.praticboutic_backend_java.models.ColumnData;
 import com.ecommerce.praticboutic_backend_java.repositories.*;
 import com.ecommerce.praticboutic_backend_java.services.*;
 import com.stripe.exception.StripeException;
-import jakarta.transaction.TransactionManager;
 import jakarta.transaction.Transactional;
-import com.ecommerce.praticboutic_backend_java.*;
 import com.ecommerce.praticboutic_backend_java.entities.*;
 import com.ecommerce.praticboutic_backend_java.requests.*;
 import com.ecommerce.praticboutic_backend_java.responses.ApiResponse;
-import com.ecommerce.praticboutic_backend_java.Utils;
+import com.ecommerce.praticboutic_backend_java.utils.Utils;
 
 import java.util.*;
 import java.util.Locale;
@@ -23,15 +24,12 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.persistence.*;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +37,6 @@ import org.springframework.web.bind.annotation.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.Integer;
 
 
 @RestController
@@ -85,7 +81,7 @@ public class DatabaseController {
     private PlatformTransactionManager transactionManager;
 
 
-    public DatabaseController() {}
+    //public DatabaseController() {}
 
     @GetMapping("/count-elements")
     public Map<String, Object> countElementsInTable(@RequestBody VueTableRequest input) {
@@ -954,7 +950,7 @@ public class DatabaseController {
 
         try {
             // Vérification de la présence des données de session nécessaires
-            sessionService.validateSessionDataForBuildBoutic(session);
+            //sessionService.validateSessionDataForBuildBoutic(session);
 
             // Exécution de la création de boutique dans une transaction
             TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);

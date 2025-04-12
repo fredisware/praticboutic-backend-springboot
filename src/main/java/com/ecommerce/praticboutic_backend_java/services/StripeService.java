@@ -2,7 +2,7 @@ package com.ecommerce.praticboutic_backend_java.services;
 
 
 import com.ecommerce.praticboutic_backend_java.configurations.StripeConfig;
-import com.ecommerce.praticboutic_backend_java.controllers.DatabaseController;
+
 import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;

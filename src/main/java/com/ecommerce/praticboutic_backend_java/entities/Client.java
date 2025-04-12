@@ -1,6 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.entities;
 
-import com.ecommerce.praticboutic_backend_java.BaseEntity;
+import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class Client extends BaseEntity {
     @Column(name = "stripe_customer_id")
     private String stripeCustomerId;
     @Column(name = "actif")
-    private Boolean actif;
+    private Integer actif;
     @Column(name = "device_id")
     private String deviceId;
     @Column(name = "device_type")
@@ -73,7 +73,7 @@ public class Client extends BaseEntity {
      */
     public Client(String email, String pass, String qualite, String nom, String prenom, String adr1,
                   String adr2, String cp, String ville, String tel, String stripeCustomerId,
-                  boolean actif, String deviceId, String deviceType) {
+                  Integer actif, String deviceId, String deviceType) {
         this.email = email;
         this.pass = pass;
         this.qualite = qualite;
@@ -103,7 +103,7 @@ public class Client extends BaseEntity {
         this.pass = pass;
         this.nom = nom;
         this.prenom = prenom;
-        this.actif = true;
+        this.actif = 1;
     }
 
     /**
@@ -121,7 +121,7 @@ public class Client extends BaseEntity {
         this.qualite = qualite;
         this.nom = nom;
         this.prenom = prenom;
-        this.actif = true;
+        this.actif = 1;
     }
 
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
@@ -221,11 +221,11 @@ public class Client extends BaseEntity {
         this.stripeCustomerId = stripeCustomerId;
     }
 
-    public boolean isActif() {
-        return actif;
+    public Integer isActif() {
+        return 1;
     }
 
-    public void setActif(boolean actif) {
+    public void setActif(Integer actif) {
         this.actif = actif;
     }
 
@@ -251,6 +251,10 @@ public class Client extends BaseEntity {
 
     public void setCustomers(List<Customer> customers) {
         this.customers = customers;
+    }
+
+    public boolean isPresent() {
+        return (this.cltid != null) && (this.cltid != 0);
     }
 
 }
