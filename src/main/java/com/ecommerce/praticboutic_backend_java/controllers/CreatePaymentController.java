@@ -1,7 +1,8 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.CreatePaymentRequest;
-import com.ecommerce.praticboutic_backend_java.models.Item;
+
+import com.ecommerce.praticboutic_backend_java.requests.Item;
 import com.ecommerce.praticboutic_backend_java.responses.CreatePaymentResponse;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.stripe.Stripe;

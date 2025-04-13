@@ -2,7 +2,7 @@ package com.ecommerce.praticboutic_backend_java.requests;
 
 
 
-import com.ecommerce.praticboutic_backend_java.models.Item;
+
 
 import java.util.List;
 

@@ -15,64 +15,64 @@ public class Commande extends BaseEntity {
     @Column(name = "cmdid")
     private Integer cmdid;
 
-    @Column(name = "customid", nullable = false)
+    @Column(name = "customid")
     private Integer customid;
 
-    @Column(name = "numref", nullable = false, length = 60)
+    @Column(name = "numref", length = 60)
     private String numref;
 
-    @Column(name = "nom", nullable = false, length = 60)
+    @Column(name = "nom", length = 60)
     private String nom;
 
-    @Column(name = "prenom", nullable = false, length = 60)
+    @Column(name = "prenom", length = 60)
     private String prenom;
 
-    @Column(name = "telephone", nullable = false, length = 60)
+    @Column(name = "telephone", length = 60)
     private String telephone;
 
-    @Column(name = "adresse1", nullable = false, length = 150)
+    @Column(name = "adresse1", length = 150)
     private String adresse1;
 
-    @Column(name = "adresse2", nullable = false, length = 150)
+    @Column(name = "adresse2", length = 150)
     private String adresse2;
 
-    @Column(name = "codepostal", nullable = false, length = 5)
+    @Column(name = "codepostal", length = 5)
     private String codepostal;
 
-    @Column(name = "ville", nullable = false, length = 50)
+    @Column(name = "ville", length = 50)
     private String ville;
 
-    @Column(name = "vente", nullable = false, length = 45)
+    @Column(name = "vente", length = 45)
     private String vente;
 
-    @Column(name = "paiement", nullable = false, length = 45)
+    @Column(name = "paiement", length = 45)
     private String paiement;
 
-    @Column(name = "sstotal", nullable = false, columnDefinition = "double DEFAULT 0")
+    @Column(name = "sstotal", columnDefinition = "double DEFAULT 0")
     private Double sstotal = 0.0;
 
-    @Column(name = "remise", nullable = false, columnDefinition = "double DEFAULT 0")
+    @Column(name = "remise", columnDefinition = "double DEFAULT 0")
     private Double remise = 0.0;
 
-    @Column(name = "fraislivraison", nullable = false, columnDefinition = "double DEFAULT 0")
+    @Column(name = "fraislivraison", columnDefinition = "double DEFAULT 0")
     private Double fraislivraison = 0.0;
 
-    @Column(name = "total", nullable = false, columnDefinition = "double DEFAULT 0")
+    @Column(name = "total", columnDefinition = "double DEFAULT 0")
     private Double total = 0.0;
 
-    @Column(name = "commentaire", nullable = false, length = 300)
+    @Column(name = "commentaire", length = 300)
     private String commentaire;
 
-    @Column(name = "method", nullable = false, length = 45)
+    @Column(name = "method", length = 45)
     private String method;
 
-    @Column(name = "table", nullable = false)
+    @Column(name = "`table`")
     private Integer table;
 
-    @Column(name = "datecreation", nullable = false)
+    @Column(name = "datecreation")
     private LocalDateTime dateCreation;
 
-    @Column(name = "statid", nullable = false)
+    @Column(name = "statid")
     private Integer statid;
 
     // Relation avec Categorie (si vous souhaitez conserver la relation JPA)
@@ -103,7 +103,7 @@ public class Commande extends BaseEntity {
         return numref;
     }
 
-    public void setNumRef(String numRef) {
+    public void setNumRef(String numref) {
         this.numref = numref;
     }
 

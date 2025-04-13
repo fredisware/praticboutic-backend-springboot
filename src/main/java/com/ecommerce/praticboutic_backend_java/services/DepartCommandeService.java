@@ -4,16 +4,20 @@ import com.ecommerce.praticboutic_backend_java.entities.Commande;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import com.ecommerce.praticboutic_backend_java.entities.LigneCmd;
 import com.ecommerce.praticboutic_backend_java.entities.StatutCmd;
-import com.ecommerce.praticboutic_backend_java.models.Item;
+import com.ecommerce.praticboutic_backend_java.models.Item2;
 import com.ecommerce.praticboutic_backend_java.repositories.CommandeRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.LigneCmdRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.StatutCmdRepository;
 import com.ecommerce.praticboutic_backend_java.requests.DepartCommandeRequest;
+import com.ecommerce.praticboutic_backend_java.requests.Item;
 import com.ecommerce.praticboutic_backend_java.utils.Utils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -45,20 +51,22 @@ public class DepartCommandeService {
 
 
 
-    public void sendEmail(String recipientEmail, String subject, String compteurCommande, DepartCommandeRequest input , Double sum) throws MessagingException {
+    public void sendEmail(String recipientEmail, String subject, String compteurCommande, Map<String, Object> input , Double sum, HttpSession session) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
+        message.setFrom("onairmenu@gmail.com");
         helper.setTo(recipientEmail);
         helper.setSubject(subject);
 
-        helper.setText(generateEmailContent(compteurCommande, input, sum), true);
+        String strContent = generateEmailContent(compteurCommande, input, sum, session);
+
+        helper.setText(strContent, true);
 
         mailSender.send(message);
     }
 
 
-    public String generateEmailContent(String compteurCommande, DepartCommandeRequest input, Double sum) {
+    public String generateEmailContent(String compteurCommande, Map<String, Object> input, Double sum, HttpSession session) {
 
 
         StringBuilder text = new StringBuilder();
@@ -93,61 +101,60 @@ public class DepartCommandeService {
         text.append("<p style=\"font-family: 'Sans'\"><b>Référence commande: </b> ").append(compteurCommande).append("<br></p>");
         text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
 
-        if (Integer.parseInt(input.getMethod()) == 2) {
+        if (Integer.parseInt((String) session.getAttribute("method")) == 2) {
             text.append("<p style=\"font-family: 'Sans'\"><b>Vente : </b>Consomation sur place<br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
-            text.append("<p style=\"font-family: 'Sans'\"><b>Commande table numéro : </b> ").append(input.getTable()).append("<br></p>");
+            text.append("<p style=\"font-family: 'Sans'\"><b>Commande table numéro : </b> ").append((String) session.getAttribute("table")).append("<br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
-            text.append("<p style=\"font-family: 'Sans'\"><b>Téléphone : </b>").append(input.getTelephone()).append("<br></p>");
+            text.append("<p style=\"font-family: 'Sans'\"><b>Téléphone : </b>").append(input.get("telephone")).append("<br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
         }
 
-        if (Integer.parseInt(input.getMethod()) == 3) {
-            if (input.getVente().equals("EMPORTER")) {
+        if (Integer.parseInt((String) session.getAttribute("method")) == 3) {
+            if (input.get("vente").equals("EMPORTER")) {
                 text.append("<p style=\"font-family: 'Sans'\"><b>Vente : </b> A emporter<br></p>");
                 text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             }
-            if (input.getVente().equals("LIVRER")) {
+            if (input.get("vente").equals("LIVRER")) {
                 text.append("<p style=\"font-family: 'Sans'\"><b>Vente : </b> A livrer<br></p>");
                 text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             }
-            if (input.getPaiement().equals("COMPTANT")) {
+            if (input.get("paiement").equals("COMPTANT")) {
                 text.append("<p style=\"font-family: 'Sans'\"><b>Paiement : </b> Au comptant<br></p>");
                 text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             }
-            if (input.getPaiement().equals("LIVRAISON")) {
+            if (input.get("paiement").equals("LIVRAISON")) {
                 text.append("<p style=\"font-family: 'Sans'\"><b>Paiement : </b> A la livraison<br></p>");
                 text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             }
 
             text.append("<p style=\"font-family: 'Sans'\"><b>Nom du client : </b>")
-                    .append(Utils.sanitizeInput(input.getNom()))
-                    .append(" ")
-                    .append(Utils.sanitizeInput(input.getPrenom()))
+                    .append(Utils.sanitizeInput(input.get("nom").toString())).append(" ")
+                    .append(Utils.sanitizeInput(input.get("prenom").toString()))
                     .append("<br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
-            text.append("<p style=\"font-family: 'Sans'\"><b>Téléphone : </b>").append(input.getTelephone()).append("<br></p>");
+            text.append("<p style=\"font-family: 'Sans'\"><b>Téléphone : </b>").append(input.get("telephone").toString()).append("<br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
 
-            if (input.getVente().equals("LIVRER")) {
+            if (input.get("vente").equals("LIVRER")) {
                 text.append("<p style=\"font-family: 'Sans'\"><b>Adresse (ligne1) : </b>")
-                        .append(Utils.sanitizeInput(input.getAdresse1()))
+                        .append(Utils.sanitizeInput(input.get("adresse1").toString()))
                         .append("</p><hr style=\"width:50%;text-align:left;margin-left:0\">");
                 text.append("<p style=\"font-family: 'Sans'\"><b>Adresse (ligne2) : </b>")
-                        .append(Utils.sanitizeInput(input.getAdresse2()))
+                        .append(Utils.sanitizeInput(input.get("adresse2").toString()))
                         .append("</p><hr style=\"width:50%;text-align:left;margin-left:0\">");
                 text.append("<p style=\"font-family: 'Sans'\"><b>Code Postal : </b>")
-                        .append(Utils.sanitizeInput(input.getCodePostal()))
+                        .append(Utils.sanitizeInput(input.get("codepostal").toString()))
                         .append("<br><hr style=\"width:50%;text-align:left;margin-left:0\"></p>");
                 text.append("<p style=\"font-family: 'Sans'\"><b>Ville : </b>")
-                        .append(Utils.sanitizeInput(input.getVille()))
+                        .append(Utils.sanitizeInput(input.get("ville").toString()))
                         .append("<br><hr style=\"width:50%;text-align:left;margin-left:0\"></p>");
             }
         }
 
         text.append("<p style=\"font-family: 'Sans'\"><b>Information complémentaire : </b>");
         // Conversion nl2br et stripslashes
-        String infoSup = input.getInfoSup()
+        String infoSup = input.get("infosup").toString()
                 .replace("\n", "<br>")
                 .replace("\\", "");
         infoSup = Utils.sanitizeInput(infoSup);
@@ -158,7 +165,13 @@ public class DepartCommandeService {
 
         text.append("<p style=\"font-size:130%;margin-bottom:25px;font-family: 'Sans'\"><b>Détail de la commande : </b><br></p>");
 
-        ArrayList<Item> items = (ArrayList<Item>) input.getItems();
+        //ArrayList<Item> items = (ArrayList<Item>) input.get("items");
+        List<Map<String, Object>> itemsRaw = (List<Map<String, Object>>) input.get("items");
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<Item> items = itemsRaw.stream()
+                .map(map -> mapper.convertValue(map, Item.class))
+                .collect(Collectors.toList());
         int numItems = items.size();
         int i = 0;
 
@@ -204,13 +217,13 @@ public class DepartCommandeService {
         formatter.setMinimumFractionDigits(2);
         formatter.setMaximumFractionDigits(2);
 
-        if (!input.getVente().equals("LIVRER")) {
+        if (!input.get("vente").equals("LIVRER")) {
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Remise : ")
-                    .append(formatter.format(-input.getRemise()))
+                    .append(formatter.format(-Double.parseDouble(input.get("remise").toString())))
                     .append("€ <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\"><b>Total Commande : ")
-                    .append(formatter.format(sum - input.getRemise()))
+                    .append(formatter.format(sum - Double.parseDouble(input.get("remise").toString())))
                     .append("€ </b><br></p>");
         } else {
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Sous-total Commande : ")
@@ -218,15 +231,15 @@ public class DepartCommandeService {
                     .append("€ <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Remise : ")
-                    .append(formatter.format(-input.getRemise()))
+                    .append(formatter.format(-Double.parseDouble(input.get("remise").toString())))
                     .append("€ <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Frais de Livraison : ")
-                    .append(formatter.format(input.getFraislivr()))
+                    .append(formatter.format(Double.parseDouble(input.get("fraislivr").toString())))
                     .append("€ <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\"><b>Total Commande : ")
-                    .append(formatter.format(sum - input.getRemise() + input.getFraislivr()))
+                    .append(formatter.format(sum - Double.parseDouble(input.get("remise").toString()) + Double.parseDouble(input.get("fraislivr").toString())))
                     .append("€ </b><br></p>");
         }
 
@@ -234,56 +247,78 @@ public class DepartCommandeService {
         text.append("</html>");
 
         return text.toString();
+
     }
 
-    public Integer enregistreCommande(String compteurCommande, DepartCommandeRequest input, Double sum)
+    public Integer enregistreCommande(String compteurCommande, Map<String, Object> input, Double sum, HttpSession session)
     {
         // Enregistrer la commande dans la base de données
-        Customer custo = new Customer();
-        custo = customerRepository.findByCustomer(input.getCustomer());
+        Customer custo = customerRepository.findByCustomer((String) session.getAttribute("customer"));
+
         Commande order = new Commande();
         order.setNumRef(compteurCommande);
         order.setCustomId(custo.getCustomId());
-        order.setNom(input.getNom());
-        order.setPrenom(input.getPrenom());
-        order.setTelephone(input.getTelephone());
-        //order.setMethod(input.getMethod());
-        order.setAdresse1(input.getAdresse1());
-        order.setAdresse2(input.getAdresse2());
-        order.setCodePostal(input.getCodePostal());
-        order.setVille(input.getVille());
-        order.setVente(input.getVente());
-        order.setPaiement(input.getPaiement());
+
+        // Récupérer les données du Map input
+        // Assurez-vous que les clés correspondent à vos données d'entrée
+        order.setNom((String) input.get("nom"));
+        order.setPrenom((String) input.get("prenom"));
+        order.setTelephone((String) input.get("telephone"));
+        order.setAdresse1((String) input.get("adresse1"));
+        order.setAdresse2((String) input.get("adresse2"));
+        order.setCodePostal((String) input.get("codepostal"));
+        order.setVille((String) input.get("ville"));
+        order.setVente((String) input.get("vente"));
+        order.setPaiement((String) input.get("paiement"));
         order.setSsTotal(sum);
-        order.setRemise(-input.getRemise());
-        order.setFraisLivraison(input.getFraislivr());
-        order.setTotal(sum - input.getRemise() + input.getFraislivr());
-        order.setCommentaire(input.getInfoSup());
+        order.setRemise(-(Double) input.get("remise"));
+        order.setFraisLivraison((Double) input.get("fraislivr"));
+        order.setTotal(sum - (Double) input.get("remise") + (Double) input.get("fraislivr"));
+        order.setCommentaire((String) input.get("infosup"));
+
         // Convertir la méthode de commande en chaîne de caractères
-        String methodStr = switch (input.getMethod())
-            { case "2" -> "ATABLE"; case "3" -> "CLICKNCOLLECT"; default -> "INCONNU"; };
+        String methodStr = switch ((String)session.getAttribute("method")) {
+            case "2" -> "ATABLE";
+            case "3" -> "CLICKNCOLLECT";
+            default -> "INCONNU";
+        };
         order.setMethod(methodStr);
-        order.setTable(Integer.parseInt(input.getTable()));
+
+        // Convertir la valeur de la table en Integer
+        String tableValue = (String) session.getAttribute("table");
+        if (tableValue != null && !tableValue.isEmpty()) {
+            order.setTable(Integer.parseInt(tableValue));
+        }
+
         order.setDateCreation(LocalDateTime.now());
         order.setStatId(statutCmdRepository.findByCustomidAndDefaut(custo.getCustomId(), 1).getStatid());
+
+        // Sauvegarde de la commande
         commandeRepository.save(order);
 
         Integer cmdId = order.getCmdId();
-        if (cmdId == 0) {
+        if (cmdId == null || cmdId == 0) {
             throw new RuntimeException("Erreur lors de la récupération de l'ID de la commande");
         }
 
         // Enregistrer les lignes de commande
         Integer ordre = 0;
-        for (Item item : input.getItems()) {
-            ordre++;
+        @SuppressWarnings("unchecked")
+        //List<Item> items = (List<Item>) input.get("items");
+        ObjectMapper mapper = new ObjectMapper();
 
-            enregistreLigneCmd(custo.getCustomId(), ordre, cmdId, item);
+        List<Map<String, Object>> rawItems = (List<Map<String, Object>>) input.get("items");
+        List<Item> items = rawItems.stream()
+                .map(map -> mapper.convertValue(map, Item.class))
+                .collect(Collectors.toList());
+        if (items != null) {
+            for (Item item : items) {
+                ordre++;
+                enregistreLigneCmd(custo.getCustomId(), ordre, cmdId, item);
+            }
         }
 
         return cmdId;
-
-        //dbService.saveOrder(conn, order);
     }
 
     public void enregistreLigneCmd(Integer customId, Integer ordre, Integer cmdId, Item item)

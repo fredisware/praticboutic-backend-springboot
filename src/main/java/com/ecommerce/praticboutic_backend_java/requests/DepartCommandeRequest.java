@@ -1,93 +1,23 @@
 package com.ecommerce.praticboutic_backend_java.requests;
 
-import com.ecommerce.praticboutic_backend_java.models.Item;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class DepartCommandeRequest {
-    private String sessionid;
-    private String customer;
-    private String method;
-    private String table;
-    private String telephone;
-    private String vente;
-    private String paiement;
     private String nom;
     private String prenom;
     private String adresse1;
     private String adresse2;
     private String codepostal;
     private String ville;
+    private String telephone;
+    private String paiement;
+    private String vente;
     private String infosup;
-    private double remise;
-    private double fraislivr;
-
     private List<Item> items;
-
-
-    // Getter et Setter pour sessionId
-    public String getSessionId() {
-        return sessionid;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionid = sessionId;
-    }
-
-    // Getter et Setter pour customer
-    public String getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(String customer) {
-        this.customer = customer;
-    }
-
-    // Getter et Setter pour method
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    // Getter et Setter pour table
-    public String getTable() {
-        return table;
-    }
-
-    public void setTable(String table) {
-        this.table = table;
-    }
-
-    // Getter et Setter pour method
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    // Getter et Setter pour method
-    public String getVente() {
-        return vente;
-    }
-
-    public void setVente(String vente) {
-        this.vente = vente;
-    }
-
-    // Getter et Setter pour method
-    public String getPaiement() {
-        return paiement;
-    }
-
-    public void setPaiement(String paiement) {
-        this.paiement = paiement;
-    }
+    private Double remise;
+    private Double fraislivr;
+    private String sessionid;
 
     // Getter et Setter pour method
     public String getNom() {
@@ -179,6 +109,42 @@ public class DepartCommandeRequest {
         this.items = items;
     }
 
+    // Getter et Setter pour method
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    // Getter et Setter pour method
+    public String getVente() {
+        return vente;
+    }
+
+    public void setVente(String vente) {
+        this.vente = vente;
+    }
+
+    // Getter et Setter pour method
+    public String getPaiement() {
+        return paiement;
+    }
+
+    public void setPaiement(String paiement) {
+        this.paiement = paiement;
+    }
+
+    // Getter et Setter pour method
+    public String getSessionid() {
+        return sessionid;
+    }
+
+    public void setSessionid(String sessionid) {
+        this.sessionid = sessionid;
+    }
+
     // Méthodes utilitaires additionnelles pour la liste (optionnelles)
     public void addItem(Item item) {
         if (this.items == null) {
@@ -202,3 +168,4 @@ public class DepartCommandeRequest {
     }
 
 }
+

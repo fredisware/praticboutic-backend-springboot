@@ -58,7 +58,7 @@ public class ClientService {
     
 
     public Client findById(Integer clientId) {
-        return clientRepository.findByCltid(clientId);
+        return clientRepository.findClientById(clientId);
     }
     
 
@@ -81,7 +81,7 @@ public class ClientService {
     
 
     public Client updateClient(Integer clientId, Client updatedClient) throws Exception {
-        Client client = clientRepository.findByCltid(clientId);
+        Client client = clientRepository.findClientById(clientId);
         if (client.getCltId() == 0)
             throw new Exception ("Le client n'existe pas");
 
@@ -115,7 +115,7 @@ public class ClientService {
 
     public List<?> getClientInfo(String strCustomer) throws Exception {
         Customer customer = customerRepository.findByCustomer(strCustomer);
-        Client client = clientRepository.findByCltid(customer.getCltid());
+        Client client = clientRepository.findClientById(customer.getCltid());
         if (client.getCltId() == 0)
             throw new Exception ("Le client n'existe pas");
 

@@ -1,17 +1,16 @@
-package com.ecommerce.praticboutic_backend_java.models;
+package com.ecommerce.praticboutic_backend_java.requests;
 
 public class Item {
     private String id;
-    private String name;
-
     private String type;
+    private String name;
     private Double prix;
     private Integer qt;
-    private String opts;
     private String unite;
+    private String opts;
     private String txta;
+    // getters et setters
 
-    // Getters et Setters
     public String getId() {
         return id;
     }
@@ -20,21 +19,20 @@ public class Item {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Double getPrix() {
@@ -53,20 +51,20 @@ public class Item {
         this.qt = qt;
     }
 
-    public String getOpts() {
-        return opts;
-    }
-
-    public void setOpts(String opts) {
-        this.opts = opts;
-    }
-
     public String getUnite() {
         return unite;
     }
 
     public void setUnite(String unite) {
         this.unite = unite;
+    }
+
+    public String getOpts() {
+        return opts;
+    }
+
+    public void setOpts(String opts) {
+        this.opts = opts;
     }
 
     public String getTxta() {

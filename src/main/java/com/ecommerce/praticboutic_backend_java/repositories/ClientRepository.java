@@ -34,5 +34,8 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
     @Query("SELECT c FROM Client c JOIN Customer cust ON c.cltid = cust.cltid WHERE cust = :customer")
     Client findByCustomer(@Param("customer") Customer customer);
 
-    Client findByCltid(Integer clientId);
+    //Client findByCltid(Integer clientId);
+
+    @Query("SELECT c FROM Client c WHERE c.cltid = :cltid")
+    Client findClientById(@Param("cltid") Integer cltid);
 }
