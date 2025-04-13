@@ -75,16 +75,21 @@ public class Commande extends BaseEntity {
     @Column(name = "statid", nullable = false)
     private Integer statid;
 
-    // Relation optionnelle avec CommandeDetail si vous souhaitez la définir
-    @OneToMany(mappedBy = "commande", fetch = FetchType.LAZY)
-    private List<CommandeDetail> commandeDetails = new ArrayList<>();
-
     // Relation avec Categorie (si vous souhaitez conserver la relation JPA)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statid", insertable = false, updatable = false) // Utilisez insertable=false, updatable=false pour éviter les conflits
     private StatutCmd statutCmd;
 
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
+
+    public Integer getCmdId() {
+        return cmdid;
+    }
+
+    public void setCmdId(Integer cmdid) {
+        this.cmdid = cmdid;
+    }
+
 
     public Integer getCustomId() {
         return customid;
@@ -254,23 +259,4 @@ public class Commande extends BaseEntity {
         this.statutCmd = statutCmd;
     }
 
-    public List<CommandeDetail> getCommandeDetails() {
-        return commandeDetails;
-    }
-
-    public void setCommandeDetails(List<CommandeDetail> commandeDetails) {
-        this.commandeDetails = commandeDetails;
-    }
-
-    // Méthode pratique pour ajouter un détail de commande
-    public void addCommandeDetail(CommandeDetail commandeDetail) {
-        commandeDetails.add(commandeDetail);
-        commandeDetail.setCommande(this);
-    }
-
-    // Méthode pratique pour supprimer un détail de commande
-    public void removeCommandeDetail(CommandeDetail commandeDetail) {
-        commandeDetails.remove(commandeDetail);
-        commandeDetail.setCommande(null);
-    }
 }

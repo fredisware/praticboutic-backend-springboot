@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface StatutCmdRepository extends JpaRepository<StatutCmd, Integer> {
 
+    StatutCmd findByCustomidAndDefaut(Integer customid, Integer defaut);
+
 }

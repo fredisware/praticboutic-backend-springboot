@@ -18,6 +18,5 @@
         <mapping class="com.ecommerce.praticboutic_backend_java.entities.Option" />
         <mapping class="com.ecommerce.praticboutic_backend_java.entities.Commande" />
         <mapping class="com.ecommerce.praticboutic_backend_java.entities.StatutCmd" />
-        <mapping class="com.ecommerce.praticboutic_backend_java.entities.CommandeDetail" />
     </session-factory>
 </hibernate-configuration>

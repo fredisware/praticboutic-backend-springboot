@@ -29,8 +29,10 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 
     Optional<Client> findByEmail(String email);
 
-    Optional<Client> findById(Integer bouticid);
+    //Client find(Integer bouticid);
 
     @Query("SELECT c FROM Client c JOIN Customer cust ON c.cltid = cust.cltid WHERE cust = :customer")
     Client findByCustomer(@Param("customer") Customer customer);
+
+    Client findByCltid(Integer clientId);
 }

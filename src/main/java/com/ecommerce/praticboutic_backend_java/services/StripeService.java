@@ -7,15 +7,24 @@ import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Subscription;
+import com.stripe.model.SubscriptionItem;
+import com.stripe.model.SubscriptionItemCollection;
+import com.stripe.model.UsageRecord;
+import com.stripe.model.billing.MeterEvent;
+import com.stripe.net.RequestOptions;
+import com.stripe.param.SubscriptionItemListParams;
 import com.stripe.param.SubscriptionUpdateParams;
+import com.stripe.param.billing.MeterEventCreateParams;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +33,9 @@ import org.slf4j.LoggerFactory;
  */
 @Service
 public class StripeService {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     // Déclarez le logger en tant que champ statique en haut de votre classe
     private static final Logger logger = LoggerFactory.getLogger(StripeService.class);
@@ -80,5 +92,45 @@ public class StripeService {
             logger.error("Erreur lors de la mise à jour des métadonnées Stripe", e);
             throw e;
         }
+    }
+
+    /**
+     * Enregistre un événement de mesure pour un client donné
+     *
+     * @param customId ID du client/boutique
+     * @param sum Montant de base
+     * @param discount Remise à appliquer
+     * @param shippingCost Frais de livraison
+     * @return boolean indiquant si l'événement de mesure a été créé
+     * @throws Exception En cas d'erreur durant le processus
+     */
+    public boolean recordSubscriptionUsage(int customId, double sum,
+                                    double discount, double shippingCost) throws Exception {
+        boolean meterEventCreated = false;
+        String query = "SELECT aboid, stripe_customer_id FROM abonnement WHERE bouticid = ?";
+
+        try {
+            List<Map<String, Object>> results = jdbcTemplate.queryForList(query, customId);
+
+            for (Map<String, Object> row : results) {
+
+                String customerId = (String) row.get("stripe_customer_id");
+
+                // Calcul de la valeur d'utilisation
+                long usageValue = Math.round(sum - discount + shippingCost);
+
+                // Configuration des paramètres pour l'événement de mesure
+                MeterEventCreateParams params = MeterEventCreateParams.builder()
+                        .setEventName("transaction_value")  // Nom de l'événement à mesurer
+                        .putPayload("stripe_customer_id", customerId)
+                        .putPayload("value", String.valueOf(usageValue))
+                        .build();
+
+            }
+        } catch (DataAccessException e) {
+            throw new Exception("Database error: " + e.getMessage());
+        }
+
+        return meterEventCreated;
     }
 }

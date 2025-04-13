@@ -58,7 +58,7 @@ public class ClientService {
     
 
     public Client findById(Integer clientId) {
-        return clientRepository.findById(clientId).orElse(null);
+        return clientRepository.findByCltid(clientId);
     }
     
 
@@ -80,10 +80,11 @@ public class ClientService {
     }
     
 
-    public Client updateClient(Integer clientId, Client updatedClient) {
-        Optional<Client> optionalClient = clientRepository.findById(clientId);
-        if (optionalClient.isPresent()) {
-            Client client = optionalClient.get();
+    public Client updateClient(Integer clientId, Client updatedClient) throws Exception {
+        Client client = clientRepository.findByCltid(clientId);
+        if (client.getCltId() == 0)
+            throw new Exception ("Le client n'existe pas");
+
             
             if (updatedClient.getNom() != null) {
                 client.setNom(updatedClient.getNom());
@@ -108,18 +109,18 @@ public class ClientService {
             }
             
             return clientRepository.save(client);
-        }
-        return null;
+
+
     }
 
-    public List<?> getClientInfo(String strCustomer) {
+    public List<?> getClientInfo(String strCustomer) throws Exception {
         Customer customer = customerRepository.findByCustomer(strCustomer);
-        Optional<Client> clientOpt = clientRepository.findById(customer.getCltid());
-        if (clientOpt.isPresent()) {
-            Client client = clientOpt.get();
-            return List.of(customer.getCustomId(),customer.getNom(), customer.getNom() + " " + client.getAdr1() + " " + client.getAdr2() + " " + client.getCp() + " " + client.getVille(), customer.getLogo()  );
-        }
-        return null;
+        Client client = clientRepository.findByCltid(customer.getCltid());
+        if (client.getCltId() == 0)
+            throw new Exception ("Le client n'existe pas");
+
+        return List.of(customer.getCustomId(),customer.getNom(), customer.getNom() + " " + client.getAdr1() + " " + client.getAdr2() + " " + client.getCp() + " " + client.getVille(), customer.getLogo()  );
+
     }
 
 

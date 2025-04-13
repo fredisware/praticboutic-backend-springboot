@@ -2,8 +2,13 @@ package com.ecommerce.praticboutic_backend_java.services;
 
 import com.ecommerce.praticboutic_backend_java.entities.Commande;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
+import com.ecommerce.praticboutic_backend_java.entities.LigneCmd;
+import com.ecommerce.praticboutic_backend_java.entities.StatutCmd;
 import com.ecommerce.praticboutic_backend_java.models.Item;
+import com.ecommerce.praticboutic_backend_java.repositories.CommandeRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
+import com.ecommerce.praticboutic_backend_java.repositories.LigneCmdRepository;
+import com.ecommerce.praticboutic_backend_java.repositories.StatutCmdRepository;
 import com.ecommerce.praticboutic_backend_java.requests.DepartCommandeRequest;
 import com.ecommerce.praticboutic_backend_java.utils.Utils;
 import jakarta.mail.MessagingException;
@@ -14,7 +19,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -27,19 +34,31 @@ public class DepartCommandeService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public void sendEmail(String recipientEmail, String subject, String compteurCommande, DepartCommandeRequest input) throws MessagingException {
+    @Autowired
+    private CommandeRepository commandeRepository;
+
+    @Autowired
+    private LigneCmdRepository ligneCmdRepository;
+
+    @Autowired
+    private StatutCmdRepository statutCmdRepository;
+
+
+
+    public void sendEmail(String recipientEmail, String subject, String compteurCommande, DepartCommandeRequest input , Double sum) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         helper.setTo(recipientEmail);
         helper.setSubject(subject);
-        helper.setText(generateEmailContent(compteurCommande, input), true);
+
+        helper.setText(generateEmailContent(compteurCommande, input, sum), true);
 
         mailSender.send(message);
     }
 
 
-    public String generateEmailContent(String compteurCommande, DepartCommandeRequest input) {
+    public String generateEmailContent(String compteurCommande, DepartCommandeRequest input, Double sum) {
 
 
         StringBuilder text = new StringBuilder();
@@ -135,8 +154,7 @@ public class DepartCommandeService {
         text.append(infoSup).append("</p>");
         text.append("<hr style=\"border: 3px solid black;margin-top:15px;margin-bottom:25px;width:50%;text-align:left;margin-left:0\">");
 
-        double val = 0;
-        double sum = 0;
+        Integer val = 0;
 
         text.append("<p style=\"font-size:130%;margin-bottom:25px;font-family: 'Sans'\"><b>Détail de la commande : </b><br></p>");
 
@@ -218,7 +236,7 @@ public class DepartCommandeService {
         return text.toString();
     }
 
-    public void enregistreCommande(String compteurCommande, DepartCommandeRequest input)
+    public Integer enregistreCommande(String compteurCommande, DepartCommandeRequest input, Double sum)
     {
         // Enregistrer la commande dans la base de données
         Customer custo = new Customer();
@@ -229,13 +247,75 @@ public class DepartCommandeService {
         order.setNom(input.getNom());
         order.setPrenom(input.getPrenom());
         order.setTelephone(input.getTelephone());
-        order.setMethod(input.getMethod());
+        //order.setMethod(input.getMethod());
         order.setAdresse1(input.getAdresse1());
         order.setAdresse2(input.getAdresse2());
         order.setCodePostal(input.getCodePostal());
         order.setVille(input.getVille());
+        order.setVente(input.getVente());
+        order.setPaiement(input.getPaiement());
+        order.setSsTotal(sum);
+        order.setRemise(-input.getRemise());
+        order.setFraisLivraison(input.getFraislivr());
+        order.setTotal(sum - input.getRemise() + input.getFraislivr());
+        order.setCommentaire(input.getInfoSup());
+        // Convertir la méthode de commande en chaîne de caractères
+        String methodStr = switch (input.getMethod())
+            { case "2" -> "ATABLE"; case "3" -> "CLICKNCOLLECT"; default -> "INCONNU"; };
+        order.setMethod(methodStr);
+        order.setTable(Integer.parseInt(input.getTable()));
+        order.setDateCreation(LocalDateTime.now());
+        order.setStatId(statutCmdRepository.findByCustomidAndDefaut(custo.getCustomId(), 1).getStatid());
+        commandeRepository.save(order);
+
+        Integer cmdId = order.getCmdId();
+        if (cmdId == 0) {
+            throw new RuntimeException("Erreur lors de la récupération de l'ID de la commande");
+        }
+
+        // Enregistrer les lignes de commande
+        Integer ordre = 0;
+        for (Item item : input.getItems()) {
+            ordre++;
+
+            enregistreLigneCmd(custo.getCustomId(), ordre, cmdId, item);
+        }
+
+        return cmdId;
 
         //dbService.saveOrder(conn, order);
+    }
+
+    public void enregistreLigneCmd(Integer customId, Integer ordre, Integer cmdId, Item item)
+    {
+        // Initialisation des IDs pour l'article et l'option
+        Integer artId = 0;
+        Integer optId = 0;
+
+        // Détermination de l'ID en fonction du type de l'item
+        if ("article".equals(item.getType())) {
+            artId = Integer.parseInt(item.getId());
+        } else if ("option".equals(item.getType())) {
+            optId = Integer.parseInt(item.getId());
+        }
+
+        // Création d'une nouvelle instance de LigneCmd
+        LigneCmd ligneCmd = new LigneCmd();
+        ligneCmd.setCustomId(customId); // customid doit être défini dans le contexte de la classe
+        ligneCmd.setCmdId(cmdId);
+        ligneCmd.setOrdre(ordre);
+        ligneCmd.setType(item.getType());
+        ligneCmd.setNom(item.getName());
+        ligneCmd.setPrix(item.getPrix().floatValue()); // Conversion de Double à Float
+        ligneCmd.setQuantite(item.getQt().floatValue()); // Conversion de Integer à Float
+        ligneCmd.setCommentaire(item.getTxta());
+        ligneCmd.setArtId(artId);
+        ligneCmd.setOptId(optId);
+
+        // Enregistrement de la ligne de commande dans la base de données
+        // Ici, vous devez utiliser votre mécanisme de persistance (par exemple, un repository JPA)
+        // Exemple avec un repository JPA :
+         ligneCmdRepository.save(ligneCmd);
     }
 
 }

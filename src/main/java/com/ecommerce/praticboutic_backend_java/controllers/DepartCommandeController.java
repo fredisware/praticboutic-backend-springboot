@@ -6,12 +6,10 @@ import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import com.ecommerce.praticboutic_backend_java.exceptions.SessionExpiredException;
 import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
+import com.ecommerce.praticboutic_backend_java.repositories.CommandeRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
 import com.ecommerce.praticboutic_backend_java.requests.DepartCommandeRequest;
-import com.ecommerce.praticboutic_backend_java.services.DepartCommandeService;
-import com.ecommerce.praticboutic_backend_java.services.EmailService;
-import com.ecommerce.praticboutic_backend_java.services.NotificationService;
-import com.ecommerce.praticboutic_backend_java.services.ParameterService;
+import com.ecommerce.praticboutic_backend_java.services.*;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -19,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +27,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import static java.lang.Double.valueOf;
 import static java.lang.Integer.parseInt;
 
 
@@ -60,13 +60,23 @@ public class DepartCommandeController {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private StripeService stripeService;
+
+    @Autowired
+    private SmsService smsService;
+
+
     // Déclarez le logger en tant que champ statique en haut de votre classe
     private static final Logger logger = LoggerFactory.getLogger(DepartCommandeController.class);
 
 
 
 
-    @PostMapping("/depart")
+    @PostMapping("/depart-commande")
     public ResponseEntity<String> creerDepartCommande(@RequestBody DepartCommandeRequest input, HttpSession session) {
         Customer customerInfo;
         try {
@@ -113,7 +123,7 @@ public class DepartCommandeController {
             //getCustomerInfo(customer);
 
             // Get client device information
-            Optional<Client> clientInfo = clientRepository.findById(customerInfo.getCltid());
+            Client clientInfo = clientRepository.findByCltid(customerInfo.getCltid());
 
             Integer compteur = parseInt(paramService.getParameterValue("CMPT_CMD", customerInfo.getCustomId()));
             String compteurCommande = String.format("%010d", compteur);
@@ -121,34 +131,44 @@ public class DepartCommandeController {
 
             String subject = paramService.getParameterValue("Subject", customerInfo.getCustomId());
 
-
+            Double sum = 0.0;
             // Send email
-            departCommandeService.sendEmail(sendmail, subject, compteurCommande, input);
+            departCommandeService.sendEmail(sendmail, subject, compteurCommande, input, sum);
 
             // enregistre la commande
-            departCommandeService.enregistreCommande(compteurCommande, input);
+            Integer cmdId = departCommandeService.enregistreCommande(compteurCommande, input, sum);
+
+            Integer cmptneworder = Integer.valueOf(paramService.getParameterValue("NEW_ORDER", customerInfo.getCustomId()));
+            paramService.setValeurParam("NEW_ORDER", customerInfo.getCustomId(), (++cmptneworder).toString());
 
             // Envoyer la notification
+            notificationService.sendPushNotification(clientInfo.getDeviceId(),
+                    "Nouvelle(s) commande(s) dans votre Praticboutic",
+                    "Commande(s) en attente de validation");
 
-            //try {
-            //    FirebaseNotificationSender sender = new FirebaseNotificationSender(
-            //            "chemin/vers/credentials.json",
-            //"http://votre-domaine.com/");
+            // Comptabiliser la tansaction sur stripe
+            boolean usageRecordCreated = stripeService.recordSubscriptionUsage(
+                    customerInfo.getCustomId(), sum, input.getRemise(), input.getFraislivr());
 
-            //sender.sendNotification(clientInfo.getDeviceId(), clientInfo.getDeviceType()); // 0 pour Web, 1 pour Android, 2 pour iOS
+            // Vérification du résultat
+            if (usageRecordCreated) {
+                logger.info("L'enregistrement d'utilisation a été créé avec succès.");
+            } else {
+                logger.info("Aucun enregistrement d'utilisation n'a été créé.");
+            }
+
+            // Envoyer sms si nécessaire
+            // Get SMS validation parameter
+            String validSms = paramService.getParameterValue("VALIDATION_SMS", customerInfo.getCustomId());
+            smsService.sendOrderSms(validSms, cmdId, customerInfo.getCustomId(), input.getTelephone());
+
+            session.setAttribute(customer + "_mail", "oui");
 
         } catch (SessionExpiredException e) {
-            logger.error("Erreur d'initialisation: " + e.getMessage(), e);
-        } catch (SQLException | MessagingException ex) {
-            throw new RuntimeException(ex);
+            logger.error("Erreur d'initialisation: {}", e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        // Comptabiliser la tansaction sur stripe
-
-        // Envoyer sms si nécessaire
-        // Get SMS validation parameter
-        //String validSms = paramService.getParameterValue("VALIDATION_SMS", customerInfo.getCustomId());
-
 
         return null;
     }

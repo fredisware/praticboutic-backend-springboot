@@ -2,14 +2,12 @@ package com.ecommerce.praticboutic_backend_java.services;
 
 import com.google.auth.oauth2.GoogleCredentials;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.*;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Subscription;
@@ -45,12 +43,13 @@ public class NotificationService {
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
-    //@Autowired
-    //private FirebaseMessaging messaging;
-
     @Value("${app.base-url}")
     private String rootUrlBack;
 
+    @Value("${app.root.url.front}")
+    private String rootUrlFront;
+
+    FirebaseMessaging messaging;
 
     /**
      * Envoie une notification push à un appareil spécifique en utilisant Firebase Cloud Messaging API v1
@@ -58,10 +57,9 @@ public class NotificationService {
      * @param deviceId L'identifiant unique de l'appareil destinataire
      * @param title Titre de la notification
      * @param body Corps du message de la notification
-     * @param data Données supplémentaires (facultatif)
      * @return L'ID du message envoyé ou null en cas d'échec
      */
-    public String sendPushNotification(String deviceId, String title, String body, Map<String, String> data) {
+    public String sendPushNotification(String deviceId, String title, String body) {
         try {
             // Récupérer le token FCM associé au deviceId depuis votre base de données
             String token = getTokenFromDeviceId(deviceId);
@@ -81,11 +79,6 @@ public class NotificationService {
             Message.Builder messageBuilder = Message.builder()
                     .setToken(token)
                     .setNotification(notification);
-
-            // Ajouter les données si elles sont présentes
-            if (data != null && !data.isEmpty()) {
-                messageBuilder.putAllData(data);
-            }
 
             // Envoyer le message et récupérer l'ID du message
             String messageId = FirebaseMessaging.getInstance().send(messageBuilder.build());
@@ -209,10 +202,7 @@ public class NotificationService {
         }
     }
 
-
-
-    /*public void FirebaseNotificationSender(String credentialsPath, String rootUrlFront) throws IOException {
-        this.rootUrlFront = rootUrlFront;
+    public void FirebaseNotificationSender(String credentialsPath) throws IOException {
 
         FileInputStream serviceAccount = new FileInputStream(credentialsPath);
 
@@ -224,10 +214,10 @@ public class NotificationService {
             FirebaseApp.initializeApp(options);
         }
 
-        //this.messaging = FirebaseMessaging.getInstance();
-    }*/
+        messaging = FirebaseMessaging.getInstance();
+    }
 
-    /*public void sendNotification(String deviceId, int deviceType) {
+    public void sendNotification(String deviceId, int deviceType) {
         String title = "Nouvelle(s) commande(s) dans votre Praticboutic";
         String body = "Commande(s) en attente de validation";
         String imageUrl = rootUrlFront + "assets/img/logo-pratic-boutic.png";
@@ -249,10 +239,10 @@ public class NotificationService {
                     .build();
 
             String response = messaging.send(message);
-            logger.info("Message envoyé avec succès: " + response);
+            logger.info("Message envoyé avec succès: {}", response);
 
         } catch (FirebaseMessagingException e) {
-            logger.error( "Erreur d'envoi: " + e.getMessage(), e);
+            logger.error("Erreur d'envoi: {}", e.getMessage(), e);
 
             if (e.getMessagingErrorCode() == MessagingErrorCode.UNAVAILABLE) {
                 // Implémentation de la logique de retry comme dans le code PHP
@@ -267,10 +257,10 @@ public class NotificationService {
                 }
             }
         } catch (Exception e) {
-            logger.error("Erreur générale: " + e.getMessage(), e);
+            logger.error("Erreur générale: {}", e.getMessage(), e);
         }
 
-    }*/
+    }
 
 
 

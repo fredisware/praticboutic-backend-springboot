@@ -21,8 +21,8 @@ public class StatutCmd extends BaseEntity {
     private String etat;
     private String couleur;
     private String message;
-    private Boolean defaut;
-    private Boolean actif;
+    private Integer defaut;
+    private Integer actif;
 
     // Relation inverse avec Statutcmd - si vous souhaitez la maintenir
     @OneToMany(mappedBy = "statid", fetch = FetchType.LAZY)
@@ -30,7 +30,7 @@ public class StatutCmd extends BaseEntity {
 
     public StatutCmd() {}
 
-    public StatutCmd( Integer customid, String etat, String couleur, String message, Boolean defaut, Boolean actif) {
+    public StatutCmd( Integer customid, String etat, String couleur, String message, Integer defaut, Integer actif) {
         this.customid = customid;
         this.etat = etat;
         this.couleur = couleur;
@@ -79,19 +79,19 @@ public class StatutCmd extends BaseEntity {
         this.message = message;
     }
 
-    public boolean isDefaut() {
+    public Integer isDefaut() {
         return defaut;
     }
 
-    public void setDefaut(boolean defaut) {
+    public void setDefaut(Integer defaut) {
         this.defaut = defaut;
     }
 
-    public boolean isActif() {
+    public Integer isActif() {
         return actif;
     }
 
-    public void setActif(boolean actif) {
+    public void setActif(Integer actif) {
         this.actif = actif;
     }
 

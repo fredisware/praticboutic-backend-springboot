@@ -24,17 +24,17 @@ public class StatutCmdService {
     public void createDefaultOrderStatuses(Integer customId) {
         List<StatutCmd> statuts = Arrays.asList(
                 new StatutCmd(customId, "Commande à faire", "#E2001A",
-                        "Bonjour, votre commande a été transmise. %boutic% vous remercie et vous tiendra informé de son avancement.", true, true),
+                        "Bonjour, votre commande a été transmise. %boutic% vous remercie et vous tiendra informé de son avancement.", 1, 1),
                 new StatutCmd(customId, "En cours de préparation", "#EB690B",
-                        "Votre commande est en cours de préparation.", false, true),
+                        "Votre commande est en cours de préparation.", 0, 1),
                 new StatutCmd(customId, "En cours de livraison", "#E2007A",
-                        "Votre commande est en cours de livraison.", false, true),
+                        "Votre commande est en cours de livraison.", 0, 1),
                 new StatutCmd(customId, "Commande à disposition", "#009EE0",
-                        "Votre commande est à disposition.", false, true),
+                        "Votre commande est à disposition.", 0, 1),
                 new StatutCmd(customId, "Commande terminée", "#009036",
-                        "%boutic% vous remercie pour votre commande. À très bientôt.", false, true),
+                        "%boutic% vous remercie pour votre commande. À très bientôt.", 0, 1),
                 new StatutCmd(customId, "Commande annulée", "#1A171B",
-                        "Nous ne pouvons donner suite à votre commande. Pour plus d'informations, merci de nous contacter.", false, true)
+                        "Nous ne pouvons donner suite à votre commande. Pour plus d'informations, merci de nous contacter.", 0, 1)
         );
 
         try {
