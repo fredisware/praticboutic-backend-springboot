@@ -54,7 +54,7 @@ public class PDFQRCodeController {
     /**
      * Endpoint pour générer un PDF avec des QR codes
      */
-    @GetMapping(value = "/qrcode")
+    @PostMapping(value = "/qrcode")
     public ResponseEntity<?> generateQRCodePDF(
             @RequestParam("sessionid") String sessionId,
             @RequestParam("bouticid") int bouticId,

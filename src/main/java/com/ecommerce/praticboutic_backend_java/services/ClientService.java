@@ -57,7 +57,7 @@ public class ClientService {
     }
     
 
-    public Client findById(Integer clientId) {
+    public Optional<Client> findById(Integer clientId) {
         return clientRepository.findClientById(clientId);
     }
     
@@ -81,45 +81,45 @@ public class ClientService {
     
 
     public Client updateClient(Integer clientId, Client updatedClient) throws Exception {
-        Client client = clientRepository.findClientById(clientId);
-        if (client.getCltId() == 0)
+        Optional<Client> client = clientRepository.findClientById(clientId);
+        if (client.isEmpty())
             throw new Exception ("Le client n'existe pas");
 
             
             if (updatedClient.getNom() != null) {
-                client.setNom(updatedClient.getNom());
+                client.get().setNom(updatedClient.getNom());
             }
             if (updatedClient.getPrenom() != null) {
-                client.setPrenom(updatedClient.getPrenom());
+                client.get().setPrenom(updatedClient.getPrenom());
             }
             if (updatedClient.getAdr1() != null) {
-                client.setAdr1(updatedClient.getAdr1());
+                client.get().setAdr1(updatedClient.getAdr1());
             }
             if (updatedClient.getAdr2() != null) {
-                client.setAdr2(updatedClient.getAdr2());
+                client.get().setAdr2(updatedClient.getAdr2());
             }
             if (updatedClient.getCp() != null) {
-                client.setCp(updatedClient.getCp());
+                client.get().setCp(updatedClient.getCp());
             }
             if (updatedClient.getVille() != null) {
-                client.setVille(updatedClient.getVille());
+                client.get().setVille(updatedClient.getVille());
             }
             if (updatedClient.getTel() != null) {
-                client.setTel(updatedClient.getTel());
+                client.get().setTel(updatedClient.getTel());
             }
             
-            return clientRepository.save(client);
+            return clientRepository.save(client.get());
 
 
     }
 
     public List<?> getClientInfo(String strCustomer) throws Exception {
         Customer customer = customerRepository.findByCustomer(strCustomer);
-        Client client = clientRepository.findClientById(customer.getCltid());
-        if (client.getCltId() == 0)
+        Optional <Client> client = clientRepository.findClientById(customer.getCltid());
+        if (!client.isPresent())
             throw new Exception ("Le client n'existe pas");
 
-        return List.of(customer.getCustomId(),customer.getNom(), customer.getNom() + " " + client.getAdr1() + " " + client.getAdr2() + " " + client.getCp() + " " + client.getVille(), customer.getLogo()  );
+        return List.of(customer.getCustomId(),customer.getNom(), customer.getNom() + " " + client.get().getAdr1() + " " + client.get().getAdr2() + " " + client.get().getCp() + " " + client.get().getVille(), customer.getLogo()  );
 
     }
 

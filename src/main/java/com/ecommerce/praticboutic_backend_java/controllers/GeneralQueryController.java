@@ -19,7 +19,7 @@ public class GeneralQueryController {
     @Autowired
     private CustomerService customerService;
     
-    @GetMapping("/genquery")
+    @PostMapping("/genquery")
     public ResponseEntity<?> processGenQuery(@RequestBody(required = false) Map<String, Object> input, HttpSession session) {
         try {
             // Gestion de la session

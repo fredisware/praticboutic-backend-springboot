@@ -83,7 +83,7 @@ public class DatabaseController {
 
     //public DatabaseController() {}
 
-    @GetMapping("/count-elements")
+    @PostMapping("/count-elements")
     public Map<String, Object> countElementsInTable(@RequestBody VueTableRequest input) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -126,7 +126,7 @@ public class DatabaseController {
         return response;
     }
 
-    @GetMapping("/vue-table")
+    @PostMapping("/vue-table")
     public Map<String, Object> vueTable(@RequestBody VueTableRequest input) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -176,7 +176,7 @@ public class DatabaseController {
         return response;
     }
 
-    @GetMapping("/fill-option")
+    @PostMapping("/fill-option")
     public Map<String, Object> remplirOption(@RequestBody RemplirOptionTableRequest input)
     {
         Map<String, Object> response = new HashMap<>();
@@ -230,7 +230,7 @@ public class DatabaseController {
      * @param input La requête contenant les informations d'insertion
      * @return Une Map contenant le résultat de l'opération
      */
-    @PutMapping("/insert-row")
+    @PostMapping("/insert-row")
     @Transactional
     public Map<String, Object> insertRow(@RequestBody InsertRowRequest input) {
         Map<String, Object> response = new HashMap<>();
@@ -342,7 +342,7 @@ public class DatabaseController {
      * @param input La requête contenant les informations de mise à jour
      * @return Une Map contenant le résultat de l'opération
      */
-    @PatchMapping("/update-row")
+    @PostMapping("/update-row")
     @Transactional
     public Map<String, Object> updateRow(@RequestBody UpdateRowRequest input) {
         Map<String, Object> response = new HashMap<>();
@@ -451,7 +451,7 @@ public class DatabaseController {
      * @param input La requête contenant les informations pour récupérer les valeurs
      * @return Une Map contenant le résultat de l'opération
      */
-    @GetMapping("/get-values")
+    @PostMapping("/get-values")
     public Map<String, Object> getValues(@RequestBody GetValuesRequest input) {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -508,7 +508,7 @@ public class DatabaseController {
      * @param input La requête contenant les paramètres de pagination et l'ID boutic
      * @return Une Map contenant le résultat de l'opération avec les couleurs
      */
-    @GetMapping("/color-row")
+    @PostMapping("/color-row")
     public Map<String, Object> getOrderColors(@RequestBody ColorRowRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -567,7 +567,7 @@ public class DatabaseController {
      * @param input La requête contenant l'ID de la commande et l'ID boutic
      * @return Une Map contenant le résultat de l'opération
      */
-    @GetMapping("/get-com-data")
+    @PostMapping("/get-com-data")
     public Map<String, Object> getOrderData(@RequestBody GetComDataRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -658,7 +658,7 @@ public class DatabaseController {
     }
 
 
-    @GetMapping("/get-param")
+    @PostMapping("/get-param")
     public ResponseEntity<?> getParam(@RequestBody ParamRequest request) {
         if (request.getParam() == null || request.getBouticid() == null) {
             return ResponseEntity.badRequest().body("Missing parameters");
@@ -688,7 +688,7 @@ public class DatabaseController {
     /**
      * Récupère une propriété spécifique d'un customer
      */
-    @GetMapping("/get-custom-prop")
+    @PostMapping("/get-custom-prop")
     public ResponseEntity<Map<String, Object>> getCustomProperty(@RequestBody CustomPropertyRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -809,7 +809,7 @@ public class DatabaseController {
     /**
      * Récupère une propriété spécifique d'un client associé à un customer
      */
-    @GetMapping("/get-client-prop")
+    @PostMapping("/get-client-prop")
     public ResponseEntity<Map<String, Object>> getClientProperty(@RequestBody ClientPropertyRequest input) {
         Map<String, Object> response = new HashMap<>();
 
@@ -944,7 +944,7 @@ public class DatabaseController {
      * @param session La session HTTP contenant les informations temporaires
      * @return ResponseEntity contenant le résultat de l'opération
      */
-    @PutMapping("/build-boutic")
+    @PostMapping("/build-boutic")
     public ResponseEntity<ApiResponse> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session) {
         logger.info("Début de la création d'une nouvelle boutique");
 
@@ -1022,7 +1022,7 @@ public class DatabaseController {
     /**
      * Méthode pour mettre à jour l'adresse email d'une boutique
      */
-    @PatchMapping("/radress-boutic")
+    @PostMapping("/radress-boutic")
     public ResponseEntity<Map<String, Object>> updateBouticEmail(@RequestBody UpdateEmailRequest input, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
 

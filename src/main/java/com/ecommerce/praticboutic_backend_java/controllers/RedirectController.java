@@ -1,6 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +14,7 @@ import java.io.IOException;
 @RequestMapping("/api")
 public class RedirectController {
 
-    @GetMapping("/redirect")
+    @PostMapping("/redirect")
     public void handleRedirect(
             @RequestParam(value = "sessionid", required = false, defaultValue = "") String sessionId,
             @RequestParam(value = "platform", required = false, defaultValue = "web") String platform,
@@ -38,7 +38,7 @@ public class RedirectController {
         }
     }
 
-    @GetMapping("/autoclose")
+    @PostMapping("/autoclose")
     public ModelAndView autoClose(@RequestParam(required = false) String sessionid) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("autoclose");

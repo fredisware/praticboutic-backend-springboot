@@ -10,10 +10,16 @@ import com.stripe.model.Subscription;
 import com.stripe.model.SubscriptionItem;
 import com.stripe.model.SubscriptionItemCollection;
 import com.stripe.model.UsageRecord;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.UsageRecord;
+
+
 import com.stripe.model.billing.MeterEvent;
 import com.stripe.net.RequestOptions;
 import com.stripe.param.SubscriptionItemListParams;
 import com.stripe.param.SubscriptionUpdateParams;
+import com.stripe.param.UsageRecordCreateOnSubscriptionItemParams;
 import com.stripe.param.billing.MeterEventCreateParams;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +28,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -87,7 +94,7 @@ public class StripeService {
             metadata.put("creation_date", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
 
             updateSubscriptionMetadata(subscriptionId, metadata);
-            logger.debug("Métadonnées Stripe mises à jour pour l'abonnement: {}", subscriptionId);
+            logger.info("Métadonnées Stripe mises à jour pour l'abonnement: {}", subscriptionId);
         } catch (StripeException e) {
             logger.error("Erreur lors de la mise à jour des métadonnées Stripe", e);
             throw e;
@@ -104,33 +111,62 @@ public class StripeService {
      * @return boolean indiquant si l'événement de mesure a été créé
      * @throws Exception En cas d'erreur durant le processus
      */
-    public boolean recordSubscriptionUsage(int customId, double sum,
-                                    double discount, double shippingCost) throws Exception {
-        boolean meterEventCreated = false;
-        String query = "SELECT aboid, stripe_customer_id FROM abonnement WHERE bouticid = ?";
+    public boolean recordSubscriptionUsage(Integer customId, Double sum,
+                                    Double discount, Double shippingCost) throws Exception {
+        boolean urCreated = false;
+        String query = "SELECT aboid, stripe_subscription_id FROM abonnement WHERE bouticid = ?";
 
         try {
-            List<Map<String, Object>> results = jdbcTemplate.queryForList(query, customId);
+            List<Map<String, Object>> subscriptions = jdbcTemplate.queryForList(query, customId);
 
-            for (Map<String, Object> row : results) {
+            for (Map<String, Object> row : subscriptions) {
+                if (!urCreated) {
+                    String subscriptionId = (String) row.get("stripe_subscription_id");
 
-                String customerId = (String) row.get("stripe_customer_id");
+                    try {
+                        // Récupérer l'abonnement depuis Stripe
+                        Subscription subscription = Subscription.retrieve(subscriptionId);
 
-                // Calcul de la valeur d'utilisation
-                long usageValue = Math.round(sum - discount + shippingCost);
+                        if ("active".equals(subscription.getStatus())) {
+                            SubscriptionItemCollection subscriptionItems = subscription.getItems();
 
-                // Configuration des paramètres pour l'événement de mesure
-                MeterEventCreateParams params = MeterEventCreateParams.builder()
-                        .setEventName("transaction_value")  // Nom de l'événement à mesurer
-                        .putPayload("stripe_customer_id", customerId)
-                        .putPayload("value", String.valueOf(usageValue))
-                        .build();
+                            for (SubscriptionItem item : subscriptionItems.getData()) {
+                                String usageType = item.getPrice().getRecurring().getUsageType();
 
+                                if ("metered".equals(usageType)) {
+                                    long usageQuantity = Math.round(sum - discount + shippingCost);
+                                    long timestamp = Instant.now().getEpochSecond();
+                                    String idempotencyKey = UUID.randomUUID().toString();
+
+                                    UsageRecordCreateOnSubscriptionItemParams params =
+                                            UsageRecordCreateOnSubscriptionItemParams.builder()
+                                                    .setQuantity(usageQuantity)
+                                                    .setTimestamp(timestamp)
+                                                    .setAction(UsageRecordCreateOnSubscriptionItemParams.Action.SET)
+                                                    .build();
+
+                                    // Créer un RequestOptions avec l'idempotency_key
+                                    RequestOptions requestOptions = RequestOptions.builder()
+                                            .setIdempotencyKey(idempotencyKey)
+                                            .build();
+
+                                    // Création du Usage Record sur l'item de l'abonnement
+                                    UsageRecord.createOnSubscriptionItem(item.getId(),  params, requestOptions);
+                                    urCreated = true;
+                                    break;
+                                }
+                            }
+                        }
+                    } catch (StripeException e) {
+                        logger.info(e.getMessage());
+                        // Passer à l'abonnement suivant
+                    }
+                }
             }
         } catch (DataAccessException e) {
             throw new Exception("Database error: " + e.getMessage());
         }
 
-        return meterEventCreated;
+        return urCreated;
     }
 }

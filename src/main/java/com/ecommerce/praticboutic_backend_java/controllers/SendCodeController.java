@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 
+import com.ecommerce.praticboutic_backend_java.services.EmailService;
 import com.ecommerce.praticboutic_backend_java.utils.Utils;
 import com.ecommerce.praticboutic_backend_java.entities.Identifiant;
 import com.ecommerce.praticboutic_backend_java.repositories.IdentifiantRepository;
@@ -8,6 +9,8 @@ import com.ecommerce.praticboutic_backend_java.requests.SendCodeRequest;
 import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -31,6 +37,15 @@ public class SendCodeController {
 
     @Value("${application.url}")
     private String applicationUrl;
+
+    @Value("${app.mail.from.address}")
+    private String fromEmail;
+
+    @Value("${app.mail.from.name}")
+    private String fromName;
+
+    // Déclarez le logger en tant que champ statique en haut de votre classe
+    private static final Logger logger = LoggerFactory.getLogger(SendCodeController.class);
 
     @PostMapping("/send-code")
     public ResponseEntity<?> sendVerificationCode(@RequestBody SendCodeRequest request) {
@@ -61,20 +76,33 @@ public class SendCodeController {
         }
     }
 
-    private void sendEmail(String recipientEmail, String verificationCode) throws MessagingException {
+    private void sendEmail(String recipientEmail, String verificationCode) throws MessagingException, UnsupportedEncodingException {
+        StringBuilder text = new StringBuilder();
+        InputStream inputStream = EmailService.class.getClassLoader().getResourceAsStream("./static/logopbsvg.html");
+        String logopb = "";
+        if (inputStream != null) {
+            try {
+                logopb = new String(inputStream.readAllBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            logger.error("InputStream est null !");
+        }
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         String subject = "Votre code confidentiel";
         String htmlContent = "<html>" +
                 "<body>" +
-                "<img src='" + applicationUrl + "/common/img/logo.png' width='253' height='114'>" +
+                logopb +
                 "<p>Bonjour,</p>" +
-                "<p>Voici le code de vérification : " + verificationCode + "</p>" +
-                "<p>Cordialement,<br>L'équipe Praticboutic</p>" +
+                "<p>Voici le code de v&eacute;rification : " + verificationCode + "</p>" +
+                "<p>Cordialement,<br>L'&eacute;quipe Praticboutic</p>" +
                 "</body>" +
                 "</html>";
 
+        helper.setFrom(fromEmail, fromName);
         helper.setTo(recipientEmail);
         helper.setSubject(subject);
         helper.setText(htmlContent, true);

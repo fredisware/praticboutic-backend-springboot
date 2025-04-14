@@ -49,10 +49,10 @@ public class SmsService {
 
         // Construction de la requête SQL
 
-        String query = "SELECT commande.telephone, statutcmd.message, commande.numref, commande.nom, commande.prenom, " +
+        String query = "SELECT commande.telephone, statutcmd.message, commande.numref, commande.nom as nomcmd, commande.prenom, " +
                 "commande.adresse1, commande.adresse2, commande.codepostal, commande.ville, commande.vente, " +
                 "commande.paiement, commande.sstotal, commande.fraislivraison, commande.total, " +
-                "commande.commentaire, statutcmd.etat, customer.nom FROM commande " +
+                "commande.commentaire, statutcmd.etat, customer.nom as nomcustomer FROM commande " +
                 "INNER JOIN statutcmd ON commande.statid = statutcmd.statid " +
                 "INNER JOIN customer ON commande.customid = statutcmd.customid " +
                 "WHERE statutcmd.defaut = 1 AND commande.cmdid = ? AND commande.customid = ? " +
@@ -76,32 +76,32 @@ public class SmsService {
                     customId
             );
 
-            String content = (String) result.get("message");
+            String content = result.get("message").toString();
 
             // Remplacements des valeurs dans le contenu du message
-            content = content.replace("%boutic%", (String) result.get("customer.nom"));
-            content = content.replace("%telephone%", (String) result.get("commande.telephone"));
-            content = content.replace("%numref%", (String) result.get("commande.numref"));
-            content = content.replace("%nom%", (String) result.get("commande.nom"));
-            content = content.replace("%prenom%", (String) result.get("commande.prenom"));
-            content = content.replace("%adresse1%", (String) result.get("commande.adresse1"));
-            content = content.replace("%adresse2%", (String) result.get("commande.adresse2"));
-            content = content.replace("%codepostal%", (String) result.get("commande.codepostal"));
-            content = content.replace("%ville%", (String) result.get("commande.ville"));
-            content = content.replace("%vente%", (String) result.get("commande.vente"));
-            content = content.replace("%paiement%", (String) result.get("commande.paiement"));
+            content = content.replace("%boutic%", result.get("nomcustomer").toString());
+            content = content.replace("%telephone%", result.get("telephone").toString());
+            content = content.replace("%numref%", result.get("numref").toString());
+            content = content.replace("%nom%", result.get("nomcmd").toString());
+            content = content.replace("%prenom%", result.get("prenom").toString());
+            content = content.replace("%adresse1%", result.get("adresse1").toString());
+            content = content.replace("%adresse2%", result.get("adresse2").toString());
+            content = content.replace("%codepostal%", result.get("codepostal").toString());
+            content = content.replace("%ville%", result.get("ville").toString());
+            content = content.replace("%vente%", result.get("vente").toString());
+            content = content.replace("%paiement%", result.get("paiement").toString());
 
             // Formatage des valeurs numériques
-            Double ssTotal = ((Number) result.get("commande.sstotal")).doubleValue();
-            Double fraisLivraison = ((Number) result.get("commande.fraislivraison")).doubleValue();
-            Double total = ((Number) result.get("commande.total")).doubleValue();
+            Double ssTotal = Double.parseDouble(result.get("sstotal").toString());
+            Double fraisLivraison = Double.parseDouble(result.get("fraislivraison").toString());
+            Double total = Double.parseDouble(result.get("total").toString());
 
             content = content.replace("%sstotal%", formatter.format(ssTotal));
             content = content.replace("%fraislivraison%", formatter.format(fraisLivraison));
             content = content.replace("%total%", formatter.format(total));
 
-            content = content.replace("%commentaire%", (String) result.get("commande.commentaire"));
-            content = content.replace("%etat%", (String) result.get("statutcmd.etat"));
+            content = content.replace("%commentaire%", result.get("commentaire").toString());
+            content = content.replace("%etat%", result.get("etat").toString());
 
             message = content;
         } catch (DataAccessException e) {

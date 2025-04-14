@@ -37,5 +37,5 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
     //Client findByCltid(Integer clientId);
 
     @Query("SELECT c FROM Client c WHERE c.cltid = :cltid")
-    Client findClientById(@Param("cltid") Integer cltid);
+    Optional<Client> findClientById(@Param("cltid") Integer cltid);
 }
