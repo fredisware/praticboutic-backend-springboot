@@ -34,9 +34,6 @@ import static javax.swing.text.StyleConstants.setBold;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*", 
-    allowedHeaders = {"Content-Type", "Authorization", "Accept", "Accept-Language", "X-Authorization"}, 
-    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
 public class PDFQRCodeController {
 
     @Autowired

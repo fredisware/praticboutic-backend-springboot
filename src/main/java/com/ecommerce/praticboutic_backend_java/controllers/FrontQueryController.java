@@ -1,10 +1,15 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
+import com.ecommerce.praticboutic_backend_java.entities.Client;
+import com.ecommerce.praticboutic_backend_java.entities.Customer;
+import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
+import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
 import com.ecommerce.praticboutic_backend_java.services.*;
 import com.ecommerce.praticboutic_backend_java.requests.*;
 import com.ecommerce.praticboutic_backend_java.exceptions.SessionExpiredException;
 import com.ecommerce.praticboutic_backend_java.configurations.StripeConfig;
 
+import com.stripe.model.StripeCollectionInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -55,6 +60,12 @@ public class FrontQueryController {
     
     @Autowired
     private StripeConfig stripeConfig;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
     
     @Value("${session.max.lifetime}")
     private int maxLifetime;
@@ -79,7 +90,7 @@ public class FrontQueryController {
             }
 
             // Vérification de l'expiration de la session
-            verifierExpirationSession(session);
+            //verifierExpirationSession(session);
             
             List<?> result;
             
@@ -114,7 +125,7 @@ public class FrontQueryController {
                     break;
                     
                 case "aboactif":
-                    result = getAbonnementsActifs(input.getBouticid());
+                    result = Collections.singletonList(getAbonnementsActifs(input.getBouticid()));
                     break;
                     
                 case "initSession":
@@ -126,7 +137,7 @@ public class FrontQueryController {
                     break;
                     
                 case "getparam":
-                    result = paramService.getParam(input.getParam(), input.getBouticid());
+                    result = Collections.singletonList(paramService.getValeur(input.getParam(), input.getBouticid()));
                     break;
                     
                 default:
@@ -144,12 +155,12 @@ public class FrontQueryController {
     
     private void verifierExpirationSession(HttpSession session) throws SessionExpiredException {
         Long lastActivity = (Long) session.getAttribute("last_activity");
-        
+
         if (lastActivity == null) {
             throw new SessionExpiredException("Session expirée");
         }
-        
-        if (System.currentTimeMillis() - lastActivity > maxLifetime * 1000) {
+
+        if (System.currentTimeMillis() - lastActivity > maxLifetime * 1000L) {
             // La session a expiré
             throw new SessionExpiredException("Session expirée");
         } else {
@@ -176,8 +187,13 @@ public class FrontQueryController {
         return Arrays.asList(customer, mail, method, table);
     }
     
-    private List<?> getAbonnementsActifs(Integer bouticid) throws StripeException {
-        String stripeCustomerId = abonnementService.getStripeCustomerId(bouticid);
+    private Boolean getAbonnementsActifs(Integer bouticid) throws StripeException {
+        Optional<Customer> customer = customerRepository.findByCustomid(bouticid);
+        if (customer.isEmpty())
+            throw new RuntimeException("Impossible de récupérer l'identifiant Stripe de la boutic");
+        Client client = clientRepository.findByCustomer(customer.get());
+
+        String stripeCustomerId = client.getStripeCustomerId();
         
         if (stripeCustomerId == null || stripeCustomerId.isEmpty()) {
             throw new RuntimeException("Impossible de récupérer l'identifiant Stripe de la boutic");
@@ -192,6 +208,6 @@ public class FrontQueryController {
             .build();
             
         SubscriptionCollection subscriptions = Subscription.list(params);
-        return subscriptions.getData();
+        return !subscriptions.getData().isEmpty();
     }
 }

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -66,7 +68,7 @@ public class DepartCommandeController {
     private static final Logger logger = LoggerFactory.getLogger(DepartCommandeController.class);
 
     @PostMapping("/depart-commande")
-    public ResponseEntity<String> creerDepartCommande(@RequestBody Map<String, Object> input, HttpSession session) {
+    public ResponseEntity<List<String>> creerDepartCommande(@RequestBody Map<String, Object> input, HttpSession session) {
         Customer customerInfo;
         try {
             // Check if session is active
@@ -143,7 +145,7 @@ public class DepartCommandeController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.ok(Collections.singletonList("OK"));
     }
 }
 

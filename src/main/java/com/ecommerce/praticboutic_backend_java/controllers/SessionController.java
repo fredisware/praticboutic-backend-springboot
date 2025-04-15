@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
 @CrossOrigin
 public class SessionController {
 	
-    @PostMapping("/upsession")
+    @PostMapping("/session-marche")
     public ResponseEntity<Map<String, Object>> handleSession(@RequestBody(required = false) Map<String, Object> input, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
 
@@ -43,7 +44,7 @@ public class SessionController {
         return ResponseEntity.ok(response);
     }
     
-    @PostMapping("/actsession")
+    @PostMapping("/active-session")
     public ResponseEntity<Map<String, Object>> handleActsess(@RequestBody(required = false) Map<String, Object> input, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
 
@@ -72,6 +73,40 @@ public class SessionController {
 
         // Retourne une réponse JSON avec les informations de la session
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/exit")
+    public ResponseEntity<Map<String, String>> createSession(@RequestBody(required = false) Map<String, Object> input,
+                                                             HttpSession session) {
+        try {
+            // Si une session ID est fournie dans l'input, on pourrait la récupérer ici
+            // Mais Spring Boot gère les sessions différemment de PHP
+            // Donc cette partie est plutôt informative
+            if (input != null && input.containsKey("sessionid")) {
+                // Note: Spring n'offre pas directement la possibilité de définir l'ID de session
+                // On pourrait utiliser d'autres mécanismes pour maintenir cette logique
+                String sessionId = (String) input.get("sessionid");
+                // Logique pour gérer l'ID de session si nécessaire
+            }
+
+            // Initialisation des attributs de session
+            session.setAttribute("active", 0);
+            session.setAttribute("last_activity", System.currentTimeMillis() / 1000);
+            session.setAttribute("bo_stripe_customer_id", "");
+            session.setAttribute("bo_id", 0);
+            session.setAttribute("bo_email", "");
+            session.setAttribute("bo_auth", "non");
+            session.setAttribute("bo_init", "oui");
+
+            Map<String, String> output = new HashMap<>();
+            output.put("status", "OK");
+            return ResponseEntity.ok(output);
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
     }
     
     

@@ -907,9 +907,9 @@ public class DatabaseController {
             }
 
             // Mise à jour de la propriété
-            String updateJpql = "UPDATE Client c SET c." + input.getProp() + " = :valeur WHERE c.cltid = :cltid";
+            String updateJpql = "UPDATE client c SET c." + input.getProp() + " = :valeur WHERE c.cltid = :cltid";
 
-            Query updateQuery = entityManager.createQuery(updateJpql);
+            Query updateQuery = entityManager.createNativeQuery(updateJpql);
 
             if ("pass".equals(input.getProp()) && !input.getValeur().isEmpty()) {
                 // Cas spécial pour le mot de passe : hachage avant stockage

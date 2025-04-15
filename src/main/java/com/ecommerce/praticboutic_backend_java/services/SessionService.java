@@ -6,6 +6,7 @@ import com.google.api.client.util.Value;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -27,13 +27,11 @@ import org.slf4j.LoggerFactory;
 @Service
 public class SessionService {
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     // Déclarez le logger en tant que champ statique en haut de votre classe
     private static final Logger logger = LoggerFactory.getLogger(SessionService.class);
-
-
-
 
     public void setSessionId(String sessionId) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
@@ -88,10 +86,6 @@ public class SessionService {
 
 
     public void updateSession(Map<String, Object> sessionData) {
-        //HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        //request.changeSessionId(); // Méthode pour changer l'ID de session (peut varier selon la version de Spring)
-        //setSessionId(sessionId);
-        //sessionId = request.getSession().getId();
 
         for (Map.Entry<String, Object> entry : sessionData.entrySet()) {
             getSession().setAttribute(entry.getKey(), entry.getValue());
@@ -158,6 +152,14 @@ public class SessionService {
         if (!missingAttributes.isEmpty()) {
             throw new DatabaseException.InvalidSessionDataException("Données de session manquantes: " + String.join(", ", missingAttributes));
         }
+    }
+
+    /**
+     * Récupère la session HTTP courante
+     */
+    private HttpSession getCurrentSession() {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        return attr.getRequest().getSession(true);
     }
 
 }

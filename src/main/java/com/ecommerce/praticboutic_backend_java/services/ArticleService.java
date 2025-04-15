@@ -46,13 +46,10 @@ public class ArticleService {
             if (article.getVisible()) {
                 List<Object> articleArray = Arrays.asList(
                     article.getArtId(),
-                    //article.getCatId(),
                     article.getNom(),
-                    article.getDescription(),
                     article.getPrix(),
-                    article.getVisible(),
-                    article.getPrix(),
-                    article.getUnite()
+                    article.getUnite(),
+                    article.getDescription()
                 );
                 result.add(articleArray);
             }

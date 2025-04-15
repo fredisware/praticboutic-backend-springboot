@@ -12,21 +12,23 @@ import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.*;
+import com.stripe.param.SubscriptionListParams;
 import jakarta.servlet.http.HttpSession;
 import org.junit.platform.commons.logging.Logger;
 import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api")
 public class SubscriptionController {
@@ -34,9 +36,6 @@ public class SubscriptionController {
     private static final Logger logger = LoggerFactory.getLogger(SubscriptionController.class);
 
     private final StripeConfig stripeConfig;
-
-    //@Autowired
-    //private ClientRepository clientRepository;
 
     @Autowired
     private AbonnementRepository abonnementRepository;
@@ -50,6 +49,8 @@ public class SubscriptionController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Value("${stripe.secret.key}")
+    private String stripeSecretKey;
 
     public SubscriptionController(StripeConfig stripeConfig) {
         this.stripeConfig = stripeConfig;
@@ -656,6 +657,52 @@ public class SubscriptionController {
 
         } catch (StripeException e) {
             throw new Exception(e.getMessage());
+        }
+    }
+
+    @PostMapping("/check-subscription")
+    public ResponseEntity<?> checkSubscription(@RequestBody Map<String, Object> input, HttpSession session) {
+        try {
+            // Gérer le sessionId si fourni
+            if (input.containsKey("sessionid")) {
+                String sessionId = (String) input.get("sessionid");
+                // Note: Dans Spring, on ne peut pas directement modifier l'ID de session comme en PHP
+            }
+
+            // Configuration de Stripe
+            Stripe.apiKey = stripeSecretKey;
+            // For sample support and debugging (not required for production)
+            Stripe.setAppInfo(
+                    "pratic-boutic/subscription",
+                    "0.0.2",
+                    "https://praticboutic.fr"
+            );
+
+            // Récupérer l'ID client Stripe depuis l'input
+            String stripeCustomerId = (String) input.get("stripecustomerid");
+
+            // Paramètres pour la requête Stripe
+            SubscriptionListParams params = SubscriptionListParams.builder()
+                    .setCustomer(stripeCustomerId)
+                    .setStatus(SubscriptionListParams.Status.ACTIVE)
+                    .build();
+
+            // Requête pour obtenir les abonnements
+            SubscriptionCollection subscriptions = com.stripe.model.Subscription.list(params);
+
+            String output;
+            if (!subscriptions.getData().isEmpty()) {
+                output = "OK";
+            } else {
+                output = "KO";
+            }
+
+            return ResponseEntity.ok(output);
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 

@@ -26,7 +26,7 @@ public class EmailVerificationController {
     @Value("${session.max.lifetime}")
     private Long sessionMaxLifetime;
 
-    @PostMapping("/verify")
+    @PostMapping("/verify-email")
     public ResponseEntity<?> verifyEmail(@RequestBody EmailVerificationRequest request) {
         try {
             // Vérifier si une session ID a été fournie et la définir

@@ -1,50 +1,50 @@
 package com.ecommerce.praticboutic_backend_java.responses;
 
 public class LoginResponse {
-    private Integer customerId;
-    private String customerName;
-    private String stripeCustomerId;
-    private String subscriptionStatus;
-    private String sessionId;
+    private Integer bouticid;
+    private String customer;
+    private String stripecustomerid;
+    private String subscriptionstatus;
+    private String sessionid;
     
     // Getters and Setters
     public Integer getCustomerId() {
-        return customerId;
+        return bouticid;
     }
     
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+    public void setCustomerId(Integer bouticid) {
+        this.bouticid = bouticid;
     }
     
-    public String getCustomerName() {
-        return customerName;
+    public String getCustomer() {
+        return customer;
     }
     
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
     
     public String getStripeCustomerId() {
-        return stripeCustomerId;
+        return stripecustomerid;
     }
     
-    public void setStripeCustomerId(String stripeCustomerId) {
-        this.stripeCustomerId = stripeCustomerId;
+    public void setStripeCustomerId(String stripecustomerid) {
+        this.stripecustomerid = stripecustomerid;
     }
     
     public String getSubscriptionStatus() {
-        return subscriptionStatus;
+        return subscriptionstatus;
     }
     
-    public void setSubscriptionStatus(String subscriptionStatus) {
-        this.subscriptionStatus = subscriptionStatus;
+    public void setSubscriptionStatus(String subscriptionstatus) {
+        this.subscriptionstatus = subscriptionstatus;
     }
     
     public String getSessionId() {
-        return sessionId;
+        return sessionid;
     }
     
     public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+        this.sessionid = sessionId;
     }
 }
