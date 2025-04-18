@@ -3,6 +3,9 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "barlivr")
 public class BarLivr extends BaseEntity {
@@ -96,6 +99,17 @@ public class BarLivr extends BaseEntity {
 
     public void setActif(Integer actif) {
         this.actif = actif;
+    }
+
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(getBarLivrId());
+        row.add(getValMinIn());
+        row.add(getValMaxEx());
+        row.add(getSurCout());
+        row.add(actif.toString());
+        return row;
     }
 
 }

@@ -51,7 +51,7 @@ public class PDFQRCodeController {
     /**
      * Endpoint pour générer un PDF avec des QR codes
      */
-    @PostMapping(value = "/qrcode")
+    @GetMapping(value = "/pdfqrcode")
     public ResponseEntity<?> generateQRCodePDF(
             @RequestParam("sessionid") String sessionId,
             @RequestParam("bouticid") int bouticId,
@@ -174,10 +174,10 @@ public class PDFQRCodeController {
                     cell.add(titleParagraph);
                     
                     // Générer le QR code
-                    byte[] qrCodeImage = generateQRCodeImage(qrCodeContent, 200, 200);
+                    byte[] qrCodeImage = generateQRCodeImage(qrCodeContent, 95, 95);
                     ImageData imageData = ImageDataFactory.create(qrCodeImage);
                     Image qrCodePdfImage = new Image(imageData);
-                    qrCodePdfImage.setAutoScale(true);
+                    //qrCodePdfImage.setAutoScale(true);
                     cell.add(qrCodePdfImage);
                     
                     table.addCell(cell);
@@ -187,11 +187,11 @@ public class PDFQRCodeController {
             document.add(table);
             
             // Ajouter une nouvelle page si nécessaire
-            if (num < totalQRCodes) {
+            /*if (num < totalQRCodes) {
                 document.add(new Paragraph("\n"));
                 document.add(new Paragraph("\n"));
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-            }
+            }*/
         }
         
         document.close();

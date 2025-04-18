@@ -3,6 +3,9 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "promotion")
 public class Promotion extends BaseEntity {
@@ -22,6 +25,16 @@ public class Promotion extends BaseEntity {
     private Double taux;
 
     @Column(name = "actif", nullable = false, columnDefinition = "TINYINT UNSIGNED DEFAULT 1")
-    private Boolean actif = true;
+    private Integer actif = 1;
+
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(promoid);
+        row.add(code);
+        row.add(taux);
+        row.add(actif.toString());
+        return row;
+    }
 
 }

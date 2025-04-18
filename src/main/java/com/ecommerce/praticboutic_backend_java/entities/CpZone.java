@@ -3,6 +3,9 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "cpzone")
 public class CpZone extends BaseEntity {
@@ -55,5 +58,15 @@ public class CpZone extends BaseEntity {
 
     public void setActif(Integer actif) {
         this.actif = actif;
+    }
+
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(cpzoneId);
+        row.add(codePostal);
+        row.add(ville);
+        row.add(actif.toString());
+        return row;
     }
 }
