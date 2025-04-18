@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entité représentant une option dans l'application
@@ -30,7 +32,7 @@ public class Option implements Serializable {
     private Integer grpoptid;
 
     @Column(name = "visible", nullable = false)
-    private Boolean visible = true;
+    private Integer visible = 1;
 
     // Relation avec Categorie (si vous souhaitez conserver la relation JPA)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -94,11 +96,11 @@ public class Option implements Serializable {
         this.grpoptid = grpoptid;
     }
 
-    public Boolean getVisible() {
+    public Integer getVisible() {
         return visible;
     }
 
-    public void setVisible(Boolean visible) {
+    public void setVisible(Integer visible) {
         this.visible = visible;
     }
 
@@ -115,7 +117,7 @@ public class Option implements Serializable {
      * @return true si l'option est visible, false sinon
      */
     @Transient
-    public boolean isVisible() {
+    public Integer isVisible() {
         return visible;
     }
 
@@ -129,6 +131,17 @@ public class Option implements Serializable {
                 ", groupeOptionId=" + grpoptid +
                 ", visible=" + visible +
                 '}';
+    }
+
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(getOptId());
+        row.add(getNom());
+        row.add(getSurcout());
+        row.add(getGroupeOption().getNom());
+        row.add((getVisible()==1) ? "1" : "0");
+        return row;
     }
 
 

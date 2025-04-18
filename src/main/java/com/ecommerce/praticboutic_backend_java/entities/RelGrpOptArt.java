@@ -3,6 +3,9 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "relgrpoptart")
 public class RelGrpOptArt extends BaseEntity {
@@ -33,6 +36,15 @@ public class RelGrpOptArt extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artid", insertable = false, updatable = false)
     private Article article;
+
+    // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
+    public Integer getRelgrpoartid() {
+        return relgrpoartid;
+    }
+
+    public void setRelgrpoartid(Integer relgrpoartid) {
+        this.relgrpoartid = this.relgrpoartid;
+    }
 
 
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
@@ -74,5 +86,31 @@ public class RelGrpOptArt extends BaseEntity {
      */
     public boolean isVisible() {
         return visible != null && visible == 1;
+    }
+
+    public GroupeOpt getGroupeOpt() {
+        return groupeOpt;
+    }
+
+    public void setGroupeOpt(GroupeOpt groupeOpt) {
+        this.groupeOpt = groupeOpt;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(getRelgrpoartid());
+        row.add(getGroupeOpt().getNom());
+        row.add(getArticle().getNom());
+        row.add(getVisible().toString());
+        return row;
     }
 }

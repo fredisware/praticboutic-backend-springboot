@@ -89,7 +89,7 @@ public class DatabaseController {
         try {
             String strTable = input.getTable(); Integer iBouticid = input.getBouticid();
             String strSelcol = input.getSelcol(); Integer iSelid = input.getSelid();
-            Integer iLimit = input.getLimit(); Integer iOffset = input.getOffset();
+            Integer iLimit = input.getLimite(); Integer iOffset = input.getOffset();
             // Vérification si le nom de la table est fourni
             if (strTable == null || strTable.isEmpty()) {
                 response.put("error", "Le nom de la table est vide.");
@@ -105,9 +105,9 @@ public class DatabaseController {
                 throw new ExceptionInInitializerError(ex);
             }
             // Création de la requête avec le EntityManager
-            StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(*) FROM ");
+            StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(*) FROM `");
             queryBuilder.append(strTable);
-            queryBuilder.append(" e WHERE e.customid = :bouticid");
+            queryBuilder.append("` e WHERE e.customid = :bouticid");
             // Ajout de conditions supplémentaires
             boolean bSel = (strSelcol != null && !strSelcol.isEmpty() && iSelid != null && iSelid > 0);
             if (bSel) queryBuilder.append(" AND e.").append(strSelcol).append(" = :selid");
@@ -131,9 +131,9 @@ public class DatabaseController {
         Map<String, Object> response = new HashMap<>();
         try {
             // Variables d'entrée
-            String strTable = input.getTable(); Integer iBouticid = input.getBouticid();
+           String strTable = input.getTable(); Integer iBouticid = input.getBouticid();
             String strSelcol = input.getSelcol(); Integer iSelid = input.getSelid();
-            Integer iLimit = input.getLimit(); Integer iOffset = input.getOffset();
+            Integer iLimit = input.getLimite(); Integer iOffset = input.getOffset();
             // Validation des données d'entrée
             if (strTable == null || strTable.isEmpty()) {
                 throw new IllegalArgumentException("Le nom de la table est vide.");
@@ -151,12 +151,15 @@ public class DatabaseController {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.append("SELECT ").append(BaseEntity.getPrimaryKeyName(sessionFactory, entityManager, strTable))
                     .append(" FROM `").append(strTable)
-                    .append("` WHERE customid = ").append(iBouticid)
-                    .append(" LIMIT ").append(iLimit).append(" OFFSET ").append(iOffset);
+                    .append("` WHERE customid = ").append(iBouticid);
+
 
             if (strSelcol != null && !strSelcol.isEmpty() && iSelid != null) {
-                queryBuilder.append(" WHERE ").append(strSelcol).append(" = ").append(iSelid);
+                queryBuilder.append(" AND ").append(strSelcol).append(" = ").append(iSelid);
             }
+
+            queryBuilder.append(" LIMIT ").append(iLimit).append(" OFFSET ").append(iOffset);
+
             Query query = entityManager.createNativeQuery(queryBuilder.toString());
             for(Object primaryKey : query.getResultList())
             {
@@ -176,7 +179,7 @@ public class DatabaseController {
         return response;
     }
 
-    @PostMapping("/fill-option")
+    @PostMapping("/remplir-options")
     public Map<String, Object> remplirOption(@RequestBody RemplirOptionTableRequest input)
     {
         Map<String, Object> response = new HashMap<>();
@@ -486,10 +489,10 @@ public class DatabaseController {
             for (Field field : entityClass.getDeclaredFields() ) {
                 if ((field.getAnnotation(Column.class) != null) && (!field.getName().equals("customid"))) {
                     if (!field.equals(entityClass.getDeclaredFields()[0])) sbQuerySelect.append(", ");
-                    sbQuerySelect.append(field.getName());
+                    sbQuerySelect.append("`").append(field.getName()).append("`");
                 }
             }
-            sbQuerySelect.append(" FROM ").append(input.getTable()).append(" WHERE ");
+            sbQuerySelect.append(" FROM `").append(input.getTable()).append("` WHERE ");
             sbQuerySelect.append(strClePrimaire).append(" = ").append(input.getIdtoup());
             sbQuerySelect.append(" AND ").append("customid = ").append(input.getBouticid());
             Query qSelect = entityManager.createNativeQuery(sbQuerySelect.toString());

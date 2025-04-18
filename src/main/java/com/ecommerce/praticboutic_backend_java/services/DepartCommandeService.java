@@ -24,12 +24,15 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.time.Instant.now;
 
 
 @Service
@@ -297,7 +300,7 @@ public class DepartCommandeService {
             order.setTable(Integer.parseInt(tableValue));
         }
 
-        order.setDateCreation(LocalDateTime.now());
+        order.setDateCreation(LocalDateTime.from(now()));
         order.setStatId(statutCmdRepository.findByCustomidAndDefaut(custo.getCustomId(), 1).getStatid());
 
         // Sauvegarde de la commande

@@ -4,6 +4,9 @@ import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "groupeopt")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -75,6 +78,16 @@ public class GroupeOpt extends BaseEntity {
 
     public void setMultiple(Boolean multiple) {
         this.multiple = multiple;
+    }
+
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(getGrpoptid());
+        row.add(getNom());
+        row.add(getVisible() ? "1" : "0");
+        row.add(getMultiple() ? "1" : "0");
+        return row;
     }
 
 }

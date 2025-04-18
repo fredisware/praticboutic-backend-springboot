@@ -3,6 +3,7 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -76,5 +77,12 @@ public class Categorie extends BaseEntity {
         this.articles = articles;
     }
 
-
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(getCatid());
+        row.add(getNom());
+        row.add(getVisible() ? "1" : "0");
+        return row;
+    }
 }

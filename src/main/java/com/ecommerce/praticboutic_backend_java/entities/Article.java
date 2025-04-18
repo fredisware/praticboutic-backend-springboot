@@ -2,6 +2,13 @@ package com.ecommerce.praticboutic_backend_java.entities;
 
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
+import org.hibernate.SessionFactory;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "article")
@@ -38,9 +45,6 @@ public class Article extends BaseEntity {
 
     @Column(name = "imgvisible", nullable = false, columnDefinition = "int DEFAULT 0")
     private Integer imgVisible = 0;
-
-    @Column(name = "obligatoire", nullable = false, columnDefinition = "int DEFAULT 0")
-    private Integer obligatoire = 0;
 
     // Relation avec Categorie (si vous souhaitez conserver la relation JPA)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -85,14 +89,6 @@ public class Article extends BaseEntity {
 
     public void setImgVisible(Integer imgVisible) {
         this.imgVisible = imgVisible;
-    }
-
-    public Integer getObligatoire() {
-        return obligatoire;
-    }
-
-    public void setObligatoire(Integer obligatoire) {
-        this.obligatoire = obligatoire;
     }
 
     public String getNom() {
@@ -142,6 +138,23 @@ public class Article extends BaseEntity {
     public void setCategorie(Categorie categorie) {
         this.categorie = categorie;
     }
+
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(getArtId());
+        row.add(getNom());
+        row.add(getPrix());
+        row.add(getDescription());
+        row.add(getVisible() ? "1" : "0");
+        row.add(getCategorie() != null ? getCategorie().getNom() : "");
+        row.add(getUnite());
+        return row;
+    }
+
+    //public static ArrayList<?> displayData(SessionFactory sessionFactory, EntityManager entityManager, String table, Integer bouticid, Integer limit, Integer offset, String selcol, Integer selid) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+    //    return BaseEntity.displayData(sessionFactory, entityManager, table, bouticid, limit, offset, selcol, selid);
+    //}
 
 
 

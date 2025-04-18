@@ -5,7 +5,7 @@ public class VueTableRequest {
     private Integer bouticid;
     private String selcol;
     private Integer selid;
-    private Integer limit;
+    private Integer limite;
     private Integer offset;
 
     // Getters et Setters
@@ -41,12 +41,12 @@ public class VueTableRequest {
         this.selid = selid;
     }
 
-    public Integer getLimit() {
-        return limit;
+    public Integer getLimite() {
+        return limite;
     }
 
-    public void setLimit(Integer limit) {
-        this.limit = limit;
+    public void setLimite(Integer limite) {
+        this.limite = limite;
     }
 
     public Integer getOffset() {

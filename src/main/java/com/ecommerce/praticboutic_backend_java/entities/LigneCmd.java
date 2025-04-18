@@ -3,6 +3,11 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 @Entity
 @Table(name = "lignecmd", uniqueConstraints = @UniqueConstraint(name = "numref_UNIQUE", columnNames = {"customid", "cmdid", "ordre"}))
 public class LigneCmd extends BaseEntity {
@@ -51,6 +56,15 @@ public class LigneCmd extends BaseEntity {
 
     @Column(name = "optid", nullable = false)
     private Integer optId;
+
+    // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
+    public Integer getLignecmdid() {
+        return lignecmdid;
+    }
+
+    public void setLignecmdid(Integer lignecmdid) {
+        this.lignecmdid = lignecmdid;
+    }
 
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
     public Integer getCustomId() {
@@ -158,5 +172,21 @@ public class LigneCmd extends BaseEntity {
             return prix * quantite;
         }
         return 0.0f;
+    }
+
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(getLignecmdid());
+        row.add(getCommande().getNumRef());
+        row.add(getOrdre());
+        row.add(getType());
+        row.add(getNom());
+        row.add(getPrix());
+        row.add(getQuantite());
+        row.add(getCommentaire());
+        row.add(getArticle().getNom());
+        //row.add(getOptId());
+        return row;
     }
 }

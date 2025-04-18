@@ -3,8 +3,10 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Table(name = "commande", uniqueConstraints = @UniqueConstraint(name = "numref_UNIQUE", columnNames = {"customid", "numref"}))
@@ -257,6 +259,34 @@ public class Commande extends BaseEntity {
 
     public void setStatutCmd(StatutCmd statutCmd) {
         this.statutCmd = statutCmd;
+    }
+
+    public List<Object> getDisplayData()
+    {
+        List<Object> row = new ArrayList<>();
+        row.add(getCmdId());
+        row.add(getNumRef());
+        row.add(getNom());
+        row.add(getPrenom());
+        row.add(getTelephone());
+        row.add(getAdresse1());
+        row.add(getAdresse2());
+        row.add(getCodePostal());
+        row.add(getVille());
+        row.add(getVente());
+        row.add(getPaiement());
+        row.add(getSsTotal());
+        row.add(getRemise());
+        row.add(getFraisLivraison());
+        row.add(getTotal());
+        row.add(getCommentaire());
+        row.add(getMethod());
+        row.add(getTable());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy, HH:mm:ss", Locale.FRENCH);
+        String formatted = dateCreation.format(formatter);
+        row.add(formatted);
+        row.add(getStatutCmd().getEtat());
+        return row;
     }
 
 }
