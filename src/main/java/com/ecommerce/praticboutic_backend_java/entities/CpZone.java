@@ -13,13 +13,13 @@ public class CpZone extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cpzoneid")
-    private Integer cpzoneId;
+    private Integer cpzoneid;
 
     @Column(name = "customid", nullable = false)
     private Integer customid;
 
     @Column(name = "codepostal", nullable = false, length = 5)
-    private String codePostal;
+    private String codepostal;
 
     @Column(name = "ville", nullable = false, length = 45)
     private String ville;
@@ -28,20 +28,20 @@ public class CpZone extends BaseEntity {
     private Integer actif = 1;
 
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
-    public Integer getCustomId() {
+    public Integer getCustomid() {
         return customid;
     }
 
-    public void setCustomId(Integer customid) {
+    public void setCustomid(Integer customid) {
         this.customid = customid;
     }
 
-    public String getCodePostal() {
-        return codePostal;
+    public String getCodepostal() {
+        return codepostal;
     }
 
-    public void setCodePostal(String codePostal) {
-        this.codePostal = codePostal;
+    public void setCodepostal(String codepostal) {
+        this.codepostal = codepostal;
     }
 
     public String getVille() {
@@ -63,8 +63,8 @@ public class CpZone extends BaseEntity {
     public List<Object> getDisplayData()
     {
         List<Object> row = new ArrayList<>();
-        row.add(cpzoneId);
-        row.add(codePostal);
+        row.add(cpzoneid);
+        row.add(codepostal);
         row.add(ville);
         row.add(actif.toString());
         return row;

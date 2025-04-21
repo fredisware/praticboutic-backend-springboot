@@ -34,13 +34,19 @@ public class SMSController {
             // Get SMS validation parameter
             String validSms = paramService.getParameterValue("VALIDATION_SMS", request.getBouticid());
             if (validSms.equals("1"))
+            {
                 if(smsService.sendSmsViaApi(request.getMessage(), request.getTelephone()))
-                    return ResponseEntity.ok("SMS OK");
+                    return ResponseEntity.ok(Map.of("result","SMS OK"));
+                else
+                    return ResponseEntity.ok(Map.of("result","Aucun SMS n'a été envoyé"));
+            }
+            else
+                return ResponseEntity.ok(Map.of("result","Aucun SMS n'a été envoyé"));
 
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur: " + e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Aucun SMS n'a été envoyé");
+
     }
 }

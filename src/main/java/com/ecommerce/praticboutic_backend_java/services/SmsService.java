@@ -161,7 +161,7 @@ public class SmsService {
 
             // Analyse de la réponse pour déterminer si l'envoi a réussi
             // Cette partie peut être adaptée selon le format de réponse exact de SMSFactor
-            return response != null && response.contains("\"status\":\"success\"");
+            return response != null && response.contains("\"status\":1");
 
         } catch (Exception e) {
             throw new Exception("Erreur lors de l'envoi du SMS : " + e.getMessage());

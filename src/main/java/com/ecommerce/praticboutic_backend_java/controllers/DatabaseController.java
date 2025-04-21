@@ -429,7 +429,7 @@ public class DatabaseController {
                     value = new BCryptPasswordEncoder().encode(column.getValeur());
                 }
                 if ("bool".equals(column.getType())) {
-                    value = (Boolean) column.getValeur().equals("1");
+                    value = column.getValeur().equals("1") ? 1 : 0;
                 }
                 updateQuery.setParameter(column.getNom(), value);
 
@@ -948,7 +948,7 @@ public class DatabaseController {
      * @return ResponseEntity contenant le résultat de l'opération
      */
     @PostMapping("/build-boutic")
-    public ResponseEntity<ApiResponse> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session) {
+    public ResponseEntity<?> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session) {
         logger.info("Début de la création d'une nouvelle boutique");
 
         try {
@@ -997,28 +997,28 @@ public class DatabaseController {
             });
 
             logger.info("Boutique créée avec succès");
-            return ResponseEntity.ok(new ApiResponse(true, "Boutique créée avec succès"));
+            return ResponseEntity.ok(Map.of("result", "Boutique créée avec succès"));
 
         } catch (DatabaseException.InvalidSessionDataException e) {
             logger.warn("Données de session invalides: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(false, "Données de session invalides: " + e.getMessage()));
+                    .body(Map.of("error", "Données de session invalides: " + e.getMessage()));
         } catch (DatabaseException.EmailAlreadyExistsException e) {
             logger.warn("Email déjà utilisé: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ApiResponse(false, e.getMessage()));
+                    .body(Map.of("error", e.getMessage()));
         } catch (DatabaseException.InvalidAliasException e) {
             logger.warn("Alias de boutique invalide: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(false, e.getMessage()));
+                    .body(Map.of("error", e.getMessage()));
         } catch (DataAccessException e) {
             logger.error("Erreur de base de données lors de la création de la boutique", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse(false, "Erreur de base de données: Une erreur est survenue"));
+                    .body(Map.of("error", "Erreur de base de données: Une erreur est survenue"));
         } catch (Exception e) {
             logger.error("Erreur inattendue lors de la création de la boutique", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse(false, "Une erreur inattendue est survenue"));
+                    .body(Map.of("error", "Une erreur inattendue est survenue"));
         }
     }
 

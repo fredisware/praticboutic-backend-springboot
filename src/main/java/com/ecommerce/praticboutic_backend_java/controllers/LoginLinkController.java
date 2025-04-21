@@ -38,6 +38,9 @@ public class LoginLinkController {
     @Value("${app.version:0.0.2}")
     private String appVersion;
 
+    @Value("${app.base-url}")
+    private String baseUrl;
+
     @Autowired
     private CustomerRepository customerRepository;
     
@@ -49,6 +52,8 @@ public class LoginLinkController {
 
     @Autowired
     private ClientRepository clientRepository;
+
+
 
     @PostMapping("/login-link")
     public ResponseEntity<?> createLoginLink(@RequestBody LoginLinkRequest request) {
@@ -121,8 +126,7 @@ public class LoginLinkController {
     }
     
     private String createInscription(String sessionId, Integer bouticId, String platform) throws StripeException {
-        String serverName = getServerName();
-        
+
         // Créer un compte Stripe Connect Express
         AccountCreateParams accountParams = AccountCreateParams.builder()
                 .setType(AccountCreateParams.Type.EXPRESS)
@@ -145,8 +149,8 @@ public class LoginLinkController {
         sessionService.setBoId(bouticId);
         
         // Créer un lien d'onboarding
-        String refreshUrl = protocol + "://" + serverName + "/api/redirect-handler?sessionid=" + sessionId + "&platform=" + platform;
-        String returnUrl = protocol + "://" + serverName + "/api/redirect-handler?sessionid=" + sessionId + "&platform=" + platform;
+        String refreshUrl = baseUrl + "/api/redirect-handler?sessionid=" + sessionId + "&platform=" + platform;
+        String returnUrl = baseUrl + "/api/redirect-handler?sessionid=" + sessionId + "&platform=" + platform;
         
         AccountLinkCreateParams linkParams = AccountLinkCreateParams.builder()
                 .setAccount(account.getId())
@@ -160,9 +164,4 @@ public class LoginLinkController {
         return accountLink.getUrl();
     }
     
-    private String getServerName() {
-        // Dans un environnement Spring, vous pouvez obtenir cette information autrement
-        // Ceci est une implémentation simple
-        return "praticboutic.fr";
-    }
 }

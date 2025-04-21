@@ -2,13 +2,9 @@ package com.ecommerce.praticboutic_backend_java.entities;
 
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
-import org.hibernate.SessionFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "article")
@@ -17,7 +13,7 @@ public class Article extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "artid")
-    private Integer artId;
+    private Integer artid;
 
     @Column(name = "customid", nullable = false)
     private Integer customid;
@@ -32,10 +28,10 @@ public class Article extends BaseEntity {
     private String description;
 
     @Column(name = "visible", nullable = false, columnDefinition = "int DEFAULT 1")
-    private Boolean visible = true;
+    private Integer visible = 1;
 
     @Column(name = "catid", nullable = false, columnDefinition = "int DEFAULT 0")
-    private Integer catId = 0;
+    private Integer catid = 0;
 
     @Column(name = "unite", nullable = false, length = 150)
     private String unite;
@@ -51,12 +47,12 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "catid", insertable = false, updatable = false) // Utilisez insertable=false, updatable=false pour éviter les conflits
     private Categorie categorie;
 
-    public Integer getArtId() {
-        return artId;
+    public Integer getArtid() {
+        return artid;
     }
 
-    public void setArtId(Integer artId) {
-        this.artId = artId;
+    public void setArtid(Integer artid) {
+        this.artid = artid;
     }
 
     public Integer getCustomId() {
@@ -67,12 +63,12 @@ public class Article extends BaseEntity {
         this.customid = customid;
     }
 
-    public Integer getCatId() {
-        return catId;
+    public Integer getCatid() {
+        return catid;
     }
 
-    public void setCatId(Integer catId) {
-        this.catId = catId;
+    public void setCatid(Integer catid) {
+        this.catid = catid;
     }
 
     public String getImage() {
@@ -115,11 +111,11 @@ public class Article extends BaseEntity {
         this.description = description;
     }
 
-    public boolean getVisible() { // renommer "isVisible" en "getVisible"
+    public Integer getVisible() { // renommer "isVisible" en "getVisible"
         return visible;
     }
 
-    public void setVisible(boolean visible) {
+    public void setVisible(Integer visible) {
         this.visible = visible;
     }
 
@@ -142,11 +138,11 @@ public class Article extends BaseEntity {
     public List<Object> getDisplayData()
     {
         List<Object> row = new ArrayList<>();
-        row.add(getArtId());
+        row.add(getArtid());
         row.add(getNom());
         row.add(getPrix());
         row.add(getDescription());
-        row.add(getVisible() ? "1" : "0");
+        row.add(getVisible().toString());
         row.add(getCategorie() != null ? getCategorie().getNom() : "");
         row.add(getUnite());
         return row;

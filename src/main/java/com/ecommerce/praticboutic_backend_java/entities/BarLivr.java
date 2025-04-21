@@ -13,19 +13,19 @@ public class BarLivr extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "barlivrid")
-    private Integer barlivrId;
+    private Integer barlivrid;
 
     @Column(name = "customid", nullable = false)
     private Integer customid;
 
     @Column(name = "valminin", nullable = false)
-    private Float valMinIn;
+    private Float valminin;
 
     @Column(name = "valmaxex", nullable = false)
-    private Float valMaxEx;
+    private Float valmaxex;
 
     @Column(name = "surcout", nullable = false, columnDefinition = "float DEFAULT 0")
-    private Float surCout = 0.0f;
+    private Float surcout = 0.0f;
 
     @Column(name = "limitebasse", nullable = false, columnDefinition = "int unsigned DEFAULT 1")
     private Integer limiteBasse = 1;
@@ -37,12 +37,12 @@ public class BarLivr extends BaseEntity {
     private Integer actif = 1;
 
     // Getters et Setters
-    public Integer getBarLivrId() {
-        return barlivrId;
+    public Integer getBarLivrid() {
+        return barlivrid;
     }
 
-    public void setBarLivrId(Integer barlivrId) {
-        this.barlivrId = barlivrId;
+    public void setBarLivrid(Integer barlivrid) {
+        this.barlivrid = barlivrid;
     }
 
     public Integer getCustomId() {
@@ -53,28 +53,28 @@ public class BarLivr extends BaseEntity {
         this.customid = customid;
     }
 
-    public Float getValMinIn() {
-        return valMinIn;
+    public Float getValminin() {
+        return valminin;
     }
 
-    public void setValMinIn(Float valMinIn) {
-        this.valMinIn = valMinIn;
+    public void setValminin(Float valminin) {
+        this.valminin = valminin;
     }
 
-    public Float getValMaxEx() {
-        return valMaxEx;
+    public Float getValmaxex() {
+        return valmaxex;
     }
 
-    public void setValMaxEx(Float valMaxEx) {
-        this.valMaxEx = valMaxEx;
+    public void setValmaxex(Float valmaxex) {
+        this.valmaxex = valmaxex;
     }
 
-    public Float getSurCout() {
-        return surCout;
+    public Float getSurcout() {
+        return surcout;
     }
 
-    public void setSurCout(Float surCout) {
-        this.surCout = surCout;
+    public void setSurcout(Float surcout) {
+        this.surcout = surcout;
     }
 
     public Integer getLimiteBasse() {
@@ -104,10 +104,10 @@ public class BarLivr extends BaseEntity {
     public List<Object> getDisplayData()
     {
         List<Object> row = new ArrayList<>();
-        row.add(getBarLivrId());
-        row.add(getValMinIn());
-        row.add(getValMaxEx());
-        row.add(getSurCout());
+        row.add(getBarLivrid());
+        row.add(getValminin());
+        row.add(getValmaxex());
+        row.add(getSurcout());
         row.add(actif.toString());
         return row;
     }

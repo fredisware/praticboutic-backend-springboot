@@ -1,20 +1,26 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api")
 public class RedirectController {
 
-    @PostMapping("/redirect")
+    @Value("${app.base-url}")
+    private String baseUrl;
+
+    @GetMapping("/redirect-handler")
     public void handleRedirect(
             @RequestParam(value = "sessionid", required = false, defaultValue = "") String sessionId,
             @RequestParam(value = "platform", required = false, defaultValue = "web") String platform,
@@ -34,15 +40,23 @@ public class RedirectController {
             response.sendRedirect("praticboutic://onboarding-complete?sessionid=" + sessionId);
         } else {
             // Redirection vers la version web
-            response.sendRedirect("redirect:/autoclose?sessionid=" + sessionId);
+            //response.sendRedirect(protocol + server + "/autoclose?sessionid=" + sessionId);
+            String redirectUrl = baseUrl + "/autoclose?sessionid=" + sessionId;
+            response.sendRedirect(redirectUrl);
         }
     }
 
-    @PostMapping("/autoclose")
+    /*@PostMapping("/autoclose")
     public ModelAndView autoClose(@RequestParam(required = false) String sessionid) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("autoclose");
         modelAndView.addObject("sessionid", sessionid);
         return modelAndView;
+    }*/
+
+    @GetMapping("/autoclose")
+    public String showAutoclosePage(@RequestParam String sessionid, Model model) {
+        model.addAttribute("sessionid", sessionid);
+        return "autoclose"; // => templates/autoclose.html
     }
 }

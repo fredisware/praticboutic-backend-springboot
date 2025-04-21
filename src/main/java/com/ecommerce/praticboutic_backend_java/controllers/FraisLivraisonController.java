@@ -20,7 +20,7 @@ public class FraisLivraisonController {
     @Autowired
     private DataSource dataSource;
 
-    @PostMapping("/fraislivr")
+    @PostMapping("/frais-livr")
     public ResponseEntity<?> getFraisLivr(@RequestBody ShippingCostRequest request, HttpSession session) {
         try {
             // Vérifier si la session est expirée

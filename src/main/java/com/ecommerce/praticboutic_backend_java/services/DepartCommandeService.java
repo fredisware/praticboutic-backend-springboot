@@ -26,7 +26,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -300,7 +302,8 @@ public class DepartCommandeService {
             order.setTable(Integer.parseInt(tableValue));
         }
 
-        order.setDateCreation(LocalDateTime.from(now()));
+        order.setDateCreation(LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()));
+
         order.setStatId(statutCmdRepository.findByCustomidAndDefaut(custo.getCustomId(), 1).getStatid());
 
         // Sauvegarde de la commande

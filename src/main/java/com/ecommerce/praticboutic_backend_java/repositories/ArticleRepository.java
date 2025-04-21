@@ -13,7 +13,7 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
     List<Article> findByCustomid(Integer customid);
-    List<Article> findByCustomidAndCatId(Integer customid, Integer catId);
-    List<Article> findByCustomidAndVisible(Integer customid, boolean visible);
+    List<Article> findByCustomidAndCatid(Integer customid, Integer catid);
+    List<Article> findByCustomidAndVisible(Integer customid, Integer visible);
 
 }

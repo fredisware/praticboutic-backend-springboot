@@ -34,7 +34,7 @@ public class ArticleService {
         
         if (catId != null && catId > 0) {
             // Récupère les articles d'une catégorie spécifique
-            articles = articleRepository.findByCustomidAndCatId(bouticId, catId);
+            articles = articleRepository.findByCustomidAndCatid(bouticId, catId);
         } else {
             // Récupère tous les articles de la boutique
             articles = articleRepository.findByCustomid(bouticId);
@@ -43,9 +43,9 @@ public class ArticleService {
         List<List<Object>> result = new ArrayList<>();
         
         for (Article article : articles) {
-            if (article.getVisible()) {
+            if (article.getVisible() == 1) {
                 List<Object> articleArray = Arrays.asList(
-                    article.getArtId(),
+                    article.getArtid(),
                     article.getNom(),
                     article.getPrix(),
                     article.getUnite(),
@@ -128,7 +128,7 @@ public class ArticleService {
         Optional<Article> optionalArticle = articleRepository.findById(artId);
         if (optionalArticle.isPresent()) {
             Article article = optionalArticle.get();
-            article.setVisible(visible);
+            article.setVisible(visible ? 1 : 0);
             return articleRepository.save(article);
         }
         return null;

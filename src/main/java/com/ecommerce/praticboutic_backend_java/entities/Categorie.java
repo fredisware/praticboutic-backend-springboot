@@ -22,7 +22,7 @@ public class Categorie extends BaseEntity {
     private String nom;
 
     @Column(name = "visible", nullable = false, columnDefinition = "int DEFAULT 1")
-    private Boolean visible = true;
+    private Integer visible = 1;
 
     // Relation inverse avec Article - si vous souhaitez la maintenir
     @OneToMany(mappedBy = "categorie", fetch = FetchType.LAZY)
@@ -61,11 +61,11 @@ public class Categorie extends BaseEntity {
         this.nom = nom;
     }
 
-    public Boolean getVisible() {
+    public Integer getVisible() {
         return visible;
     }
 
-    public void setVisible(Boolean visible) {
+    public void setVisible(Integer visible) {
         this.visible = visible;
     }
 
@@ -82,7 +82,7 @@ public class Categorie extends BaseEntity {
         List<Object> row = new ArrayList<>();
         row.add(getCatid());
         row.add(getNom());
-        row.add(getVisible() ? "1" : "0");
+        row.add(getVisible().toString());
         return row;
     }
 }

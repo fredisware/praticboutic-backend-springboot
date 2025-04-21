@@ -24,10 +24,10 @@ public class GroupeOpt extends BaseEntity {
     private String nom;
 
     @Column(name = "visible", nullable = false, columnDefinition = "int DEFAULT 1")
-    private Boolean visible = true;
+    private Integer visible = 1;
 
     @Column(name = "multiple", nullable = false, columnDefinition = "int DEFAULT 0")
-    private Boolean multiple = false;
+    private Integer multiple = 1;
 
     /**
      * Retourne l'identifiant du groupe d'options
@@ -64,19 +64,19 @@ public class GroupeOpt extends BaseEntity {
         this.nom = nom;
     }
 
-    public Boolean getVisible() {
+    public Integer getVisible() {
         return visible;
     }
 
-    public void setVisible(Boolean visible) {
+    public void setVisible(Integer visible) {
         this.visible = visible;
     }
 
-    public Boolean getMultiple() {
+    public Integer getMultiple() {
         return multiple;
     }
 
-    public void setMultiple(Boolean multiple) {
+    public void setMultiple(Integer multiple) {
         this.multiple = multiple;
     }
 
@@ -85,8 +85,8 @@ public class GroupeOpt extends BaseEntity {
         List<Object> row = new ArrayList<>();
         row.add(getGrpoptid());
         row.add(getNom());
-        row.add(getVisible() ? "1" : "0");
-        row.add(getMultiple() ? "1" : "0");
+        row.add(getVisible().toString());
+        row.add(getMultiple().toString());
         return row;
     }
 
