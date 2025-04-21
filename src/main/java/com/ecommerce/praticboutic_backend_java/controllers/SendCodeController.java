@@ -9,6 +9,7 @@ import com.ecommerce.praticboutic_backend_java.requests.SendCodeRequest;
 import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Base64;
 
 @RestController
@@ -44,6 +50,9 @@ public class SendCodeController {
     @Value("${app.mail.from.name}")
     private String fromName;
 
+    @Value("${identification.key}")
+    private String idkey;
+
     // Déclarez le logger en tant que champ statique en haut de votre classe
     private static final Logger logger = LoggerFactory.getLogger(SendCodeController.class);
 
@@ -55,10 +64,21 @@ public class SendCodeController {
             int verificationCode = secureRandom.nextInt(999999);
             String formattedCode = String.format("%06d", verificationCode);
 
-            // Encrypt the code (AES-256-CBC)
             byte[] iv = new byte[16];
             secureRandom.nextBytes(iv);
-            String encryptedCode = Utils.encryptCode(formattedCode, System.getenv("IDENTIFICATION_KEY"), iv);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+
+            byte[] keyBytes = Hex.decodeHex(idkey); // "2190..." → 16 octets
+            SecretKeySpec secretKey = new SecretKeySpec(keyBytes, "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+
+            byte[] encrypted = cipher.doFinal(formattedCode.getBytes(StandardCharsets.UTF_8));
+            String encryptedCode = Base64.getEncoder().encodeToString(encrypted);
+            String encodedIv = Base64.getEncoder().encodeToString(iv);
 
             // Save to database
             Identifiant identifiant = new Identifiant(request.getEmail(), encryptedCode, 0);
@@ -67,8 +87,6 @@ public class SendCodeController {
             // Send email
             sendEmail(request.getEmail(), formattedCode);
 
-            // Return encrypted code and IV
-            String encodedIv = Base64.getEncoder().encodeToString(iv);
             return ResponseEntity.ok(new String[]{encryptedCode, encodedIv});
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

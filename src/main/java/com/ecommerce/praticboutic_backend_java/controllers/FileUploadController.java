@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -31,13 +28,12 @@ public class FileUploadController {
     private final List<String> ALLOWED_EXTENSIONS = Arrays.asList(".png", ".gif", ".jpg", ".jpeg");
     private final List<String> ALLOWED_MIME_TYPES = Arrays.asList("image/gif", "image/png", "image/jpeg");
 
-    @CrossOrigin
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam(value = "file", required = false) MultipartFile file,
                                         HttpSession session) {
 
         if (file == null || file.isEmpty()) {
-            return ResponseEntity.ok().body("");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de fichier");
         }
 
         try {
@@ -58,19 +54,19 @@ public class FileUploadController {
             if (!ALLOWED_EXTENSIONS.contains(fileExtension)) {
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
-                        .body("{\"error\": \"Vous devez uploader un fichier de type png, gif, jpg, jpeg...\"}");
+                        .body(Map.of("error","Vous devez uploader un fichier de type png, gif, jpg, jpeg..."));
             }
 
             if (contentType == null || !ALLOWED_MIME_TYPES.contains(contentType)) {
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
-                        .body("{\"error\": \"Type mime non reconnu\"}");
+                        .body(Map.of("error", "Type mime non reconnu"));
             }
 
             if (fileSize > maxFileSize) {
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
-                        .body("{\"error\": \"Le fichier est trop gros...\"}");
+                        .body(Map.of("error", "Le fichier est trop gros..."));
             }
 
             // Generate unique filename
@@ -83,18 +79,17 @@ public class FileUploadController {
             // Store filename in session
             session.setAttribute("initboutic_logo", newFilename);
 
-            return ResponseEntity.ok().body("\"" + newFilename + "\"");
+            return ResponseEntity.ok().body(Map.of("result", newFilename));
 
         } catch (IOException e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("{\"error\": \"Echec de l'upload!\"}");
+                    .body(Map.of("error","Echec de l'upload!"));
         }
     }
 
-    @CrossOrigin
     @PostMapping("/boupload")
-    public ResponseEntity<?> uploadFiles(@RequestParam(value = "file", required = false) MultipartFile[] files,
+    public ResponseEntity<?> uploadFiles(@RequestParam(value = "file[]", required = false) MultipartFile[] files,
                                          @RequestParam(value = "sessionid", required = false) String sessionId,
                                          HttpSession session) {
 

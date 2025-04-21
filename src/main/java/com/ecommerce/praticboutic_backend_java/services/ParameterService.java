@@ -64,16 +64,16 @@ public class ParameterService {
 
     public void setValeur(String paramName, String paramValue, Integer bouticId) {
         // Implémentation pour définir la valeur d'un paramètre
-        String checkSql = "SELECT COUNT(*) FROM parametres WHERE nomParam = ? AND bouticid = ?";
+        String checkSql = "SELECT COUNT(*) FROM parametre WHERE nom = ? AND customid = ?";
         Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, paramName, bouticId);
 
         if (count == null || count == 0) {
             // Insert
-            String insertSql = "INSERT INTO parametres (nomParam, valeur, bouticid) VALUES (?, ?, ?)";
+            String insertSql = "INSERT INTO parametre (nom, valeur, customid) VALUES (?, ?, ?)";
             jdbcTemplate.update(insertSql, paramName, paramValue, bouticId);
         } else {
             // Update
-            String updateSql = "UPDATE parametres SET valeur = ? WHERE nomParam = ? AND bouticid = ?";
+            String updateSql = "UPDATE parametre SET valeur = ? WHERE nom = ? AND customid = ?";
             jdbcTemplate.update(updateSql, paramValue, paramName, bouticId);
         }
     }

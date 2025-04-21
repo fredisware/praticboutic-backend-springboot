@@ -6,6 +6,7 @@ import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.repositories.AbonnementRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
 
+import com.ecommerce.praticboutic_backend_java.requests.LiensRequest;
 import com.ecommerce.praticboutic_backend_java.requests.LoginRequest;
 import com.ecommerce.praticboutic_backend_java.requests.SubscriptionRequest;
 import com.google.gson.Gson;
@@ -28,7 +29,6 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api")
 public class SubscriptionController {
@@ -41,6 +41,9 @@ public class SubscriptionController {
     private AbonnementRepository abonnementRepository;
 
     @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
     private Environment environment;  // Pour accéder aux variables d'environnement
 
     @Autowired
@@ -48,6 +51,9 @@ public class SubscriptionController {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Value("${stripe.public.key}")
+    private String stripePublicKey;
 
     @Value("${stripe.secret.key}")
     private String stripeSecretKey;
@@ -63,9 +69,10 @@ public class SubscriptionController {
      * @return Liste des abonnements avec leurs informations Stripe
      * @throws Exception Si le client n'est pas authentifié ou n'existe pas
      */
-    /*@PostMapping("/liens-creation-boutic")
-    public List<Map<String, Object>> getLiensCreationBoutic(@RequestBody LoginRequest loginRequest,
+    @PostMapping("/liens-creation-boutic")
+    public ResponseEntity<?> getLiensCreationBoutic(@RequestBody LiensRequest loginRequest,
                                                             HttpSession session) throws Exception {
+        Map<String, Object> response = new HashMap<>();
 
         // Vérification de l'authentification
         if (session.getAttribute("bo_auth") == null || !session.getAttribute("bo_auth").equals("oui")) {
@@ -73,13 +80,13 @@ public class SubscriptionController {
         }
 
         // Récupération du client par son email
-        Client client = clientRepository.findByEmailAndActif(loginRequest.getEmail(), 1);
-        if (client == null || client.getStripeCustomerId() == null || client.getStripeCustomerId().isEmpty()) {
+        Optional<Client> client = clientRepository.findByEmailAndActif(loginRequest.getLogin(), 1);
+        if (client.isEmpty() || client.get().getStripeCustomerId() == null || client.get().getStripeCustomerId().isEmpty()) {
             throw new Exception("Erreur ! Client non trouvé");
         }
 
         // Récupération des abonnements du client
-        List<Abonnement> abonnements = abonnementRepository.findByCltId(client.getCltId());
+        List<Abonnement> abonnements = abonnementRepository.findByCltId(client.get().getCltId());
 
         // Préparation de la réponse
         List<Map<String, Object>> liensCreation = new ArrayList<>();
@@ -95,7 +102,7 @@ public class SubscriptionController {
                     item.put("aboid", abonnement.getAboId());
                     item.put("creationboutic", abonnement.getCreationBoutic());
                     item.put("bouticid", abonnement.getBouticId());
-                    item.put("stripe_subscription", subscription);
+                    item.put("stripe_subscription", subscription.toJson());
 
                     liensCreation.add(item);
                 }
@@ -104,9 +111,11 @@ public class SubscriptionController {
                 logger.debug(() -> "Erreur lors de la récupération de l'abonnement Stripe: " + e.getMessage());
             }
         }
+        response.put("status", "OK");
+        response.put("data", liensCreation);
 
-        return liensCreation;
-    }*/
+        return ResponseEntity.ok(response);
+    }
 
     /**
      * Récupère la configuration Stripe nécessaire pour le frontend
@@ -122,9 +131,6 @@ public class SubscriptionController {
             throw new Exception("Courriel non vérifié");
         }
 
-        // Récupérer la clé publique depuis les variables d'environnement
-        String publishableKey = environment.getProperty("STRIPE_PUBLISHABLE_KEY");
-
         // Récupérer les prix depuis Stripe
 
         Map<String, Object> params = new HashMap<>();
@@ -135,7 +141,7 @@ public class SubscriptionController {
 
         // Construire la réponse
         Map<String, Object> output = new HashMap<>();
-        output.put("publishableKey", publishableKey);
+        output.put("publishableKey", stripePublicKey);
         output.put("prices", prices.getData());
 
         return output;
@@ -156,10 +162,10 @@ public class SubscriptionController {
         }
 
         // Récupérer la clé publique depuis les variables d'environnement
-        String publishableKey = environment.getProperty("STRIPE_PUBLISHABLE_KEY");
+        //String publishableKey = environment.getProperty("STRIPE_PUBLISHABLE_KEY");
 
         // Récupérer les prix depuis Stripe
-        Stripe.apiKey = environment.getProperty("STRIPE_SECRET_KEY");
+        Stripe.apiKey = stripeSecretKey;
         Map<String, Object> params = new HashMap<>();
         params.put("lookup_keys", Arrays.asList("pb_fixe", "pb_conso"));
 
@@ -167,7 +173,7 @@ public class SubscriptionController {
 
         // Construire la réponse
         Map<String, Object> output = new HashMap<>();
-        output.put("publishableKey", publishableKey);
+        output.put("publishableKey", stripePublicKey);
         output.put("prices", prices.getData());
 
         return output;
@@ -194,7 +200,7 @@ public class SubscriptionController {
         // Récupérer l'ID client Stripe
         String stripeCustomerId = (String) session.getAttribute("registration_stripe_customer_id");
 
-        Stripe.apiKey = environment.getProperty("STRIPE_SECRET_KEY");
+        Stripe.apiKey = stripeSecretKey;
 
         // Créer l'abonnement
         Map<String, Object> item = new HashMap<>();
@@ -260,7 +266,7 @@ public class SubscriptionController {
             throw new Exception("Erreur ! Client non trouvé");
         }
 
-        Stripe.apiKey = environment.getProperty("STRIPE_SECRET_KEY");
+        Stripe.apiKey = stripeSecretKey;
 
         // Créer l'abonnement
         Map<String, Object> item = new HashMap<>();
@@ -388,7 +394,7 @@ public class SubscriptionController {
      * @throws Exception Si l'utilisateur n'est pas authentifié ou si la création échoue
      */
     @PostMapping("/consocreationabonnement")
-    public Map<String, Object> createConsommationSubscription(@RequestBody Map<String, Object> requestData,
+    ResponseEntity<?> createConsommationSubscription(@RequestBody Map<String, Object> requestData,
                                                               HttpSession session) throws Exception {
         if (!"consocreationabonnement".equals(requestData.get("action"))) {
             throw new Exception("Action invalide");
@@ -402,21 +408,10 @@ public class SubscriptionController {
         String priceId = (String) requestData.get("priceId");
         String paymentMethodId = (String) requestData.get("paymentMethodId");
 
-        // Vérifier si le client existe dans la base de données
-        Integer clientId = jdbcTemplate.queryForObject(
-                "SELECT cltid FROM client WHERE stripe_customer_id = ? AND actif = 1",
-                new Object[]{stripeCustomerId},
-                Integer.class
-        );
-
-        if (stripeCustomerId == null || stripeCustomerId.isEmpty()) {
-            throw new Exception("Erreur ! Client non trouvé");
-        }
-
         session.setAttribute("creationabonnement_priceid", priceId);
 
         // Configurer Stripe
-        Stripe.apiKey = environment.getProperty("STRIPE_SECRET_KEY");
+        Stripe.apiKey = stripeSecretKey;
 
         try {
             // Attacher la méthode de paiement au client
@@ -450,10 +445,10 @@ public class SubscriptionController {
             String jsonString = gson.toJson(subscription);
             Map<String, Object> subscriptionMap = gson.fromJson(jsonString, Map.class);
 
-            return subscriptionMap;
+            return ResponseEntity.ok(Map.of("result", subscriptionMap));
 
         } catch (StripeException e) {
-            throw new Exception(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -494,7 +489,7 @@ public class SubscriptionController {
         session.setAttribute("bocreationabonnement_priceid", priceId);
 
         // Configurer Stripe
-        Stripe.apiKey = environment.getProperty("STRIPE_SECRET_KEY");
+        Stripe.apiKey = stripeSecretKey;
 
         try {
             // Attacher la méthode de paiement au client
@@ -571,7 +566,7 @@ public class SubscriptionController {
         String subscriptionId = (String) requestData.get("subscriptionid");
 
         // Configurer Stripe
-        Stripe.apiKey = environment.getProperty("STRIPE_SECRET_KEY");
+        Stripe.apiKey = stripeSecretKey;
 
         try {
             // Mettre à jour l'abonnement pour l'annuler à la fin de la période

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -67,7 +68,7 @@ public class EmailVerificationController {
                 // L'email existe déjà
                 result = "KO";
             }
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(Map.of("result", result));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

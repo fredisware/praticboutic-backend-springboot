@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -49,7 +50,7 @@ public class LoginLinkController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @PostMapping("/loginlink")
+    @PostMapping("/login-link")
     public ResponseEntity<?> createLoginLink(@RequestBody LoginLinkRequest request) {
         try {
             // Vérifier si la session est valide
@@ -72,11 +73,11 @@ public class LoginLinkController {
             
             // Récupérer l'ID client Stripe
             String userEmail = sessionService.getUserEmail();
-            Client client = clientRepository.findByEmailAndActif(userEmail, 1);
-            if (client == null)
+            Optional<Client> client = clientRepository.findByEmailAndActif(userEmail, 1);
+            if (client.isEmpty())
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Pas de client avec courriel " + userEmail));
 
-            String stripeCustomerId = client.getStripeCustomerId();
+            String stripeCustomerId = client.get().getStripeCustomerId();
             if (stripeCustomerId == null || stripeCustomerId.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Id compte stripe client manquant"));
             }
@@ -112,7 +113,7 @@ public class LoginLinkController {
                 url = createInscription(request.getSessionid(), request.getBouticid(), request.getPlatform());
             }
             
-            return ResponseEntity.ok(url);
+            return ResponseEntity.ok(Map.of("result", url));
             
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));

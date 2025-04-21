@@ -5,7 +5,7 @@ public class ShopConfigRequest {
     private String chxmethode;
     private String chxpaie;
     private String mntmincmd;
-    private Boolean validsms;
+    private Integer validsms;
 
     // Getters et Setters
     public String getSessionid() {
@@ -40,11 +40,11 @@ public class ShopConfigRequest {
         this.mntmincmd = mntmincmd;
     }
 
-    public Boolean getValidsms() {
+    public Integer getValidsms() {
         return validsms;
     }
 
-    public void setValidsms(Boolean validsms) {
+    public void setValidsms(Integer validsms) {
         this.validsms = validsms;
     }
 }

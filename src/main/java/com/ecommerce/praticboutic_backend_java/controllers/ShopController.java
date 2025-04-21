@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -42,7 +43,7 @@ public class ShopController {
             int maxLifetime = session.getMaxInactiveInterval();
 
             if (lastActivity == null || (System.currentTimeMillis() / 1000 - lastActivity) > maxLifetime) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Session expirée");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Session expirée"));
             } else {
                 // Mise à jour du timestamp de la dernière activité
                 session.setAttribute("last_activity", System.currentTimeMillis() / 1000);
@@ -51,7 +52,7 @@ public class ShopController {
             // Vérifier si l'email est vérifié
             String verifyEmail = (String)session.getAttribute("verify_email");
             if (verifyEmail == null || verifyEmail.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Courriel non vérifié");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
             }
 
             // Charger les variables d'environnement
@@ -59,11 +60,11 @@ public class ShopController {
 
             // Valider l'alias
             if (request.getAliasboutic() == null || request.getAliasboutic().isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Identifiant vide");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error","Identifiant vide"));
             }
 
             if (FORBIDDEN_IDS.contains(request.getAliasboutic())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Identifiant interdit");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error","Identifiant interdit"));
             }
 
             // Vérifier si l'alias est déjà utilisé
@@ -72,7 +73,7 @@ public class ShopController {
             Integer count = jdbcTemplate.queryForObject(sql, Integer.class, request.getAliasboutic());
 
             if (count != null && count > 0) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Alias de boutic déjà utilisé");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error","Alias de boutic déjà utilisé"));
             }
 
             // Enregistrer les informations dans la session
@@ -84,7 +85,7 @@ public class ShopController {
             // Commenté pour correspondre au code PHP commenté
             // session.setAttribute("STRIPE_ACCOUNT_ID", "");
 
-            return ResponseEntity.ok("OK");
+            return ResponseEntity.ok(Map.of("result","OK"));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur: " + e.getMessage());

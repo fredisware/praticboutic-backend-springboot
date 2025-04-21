@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class PasswordResetController {
@@ -50,7 +52,7 @@ public class PasswordResetController {
             // Réinitialiser le mot de passe
             motDePasseService.reinitialiserMotDePasse(request.getEmail(), ipAddress);
             
-            return ResponseEntity.ok("OK");
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("result","OK"));
         } catch (ClientNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse("Courriel non-trouvé"));

@@ -100,8 +100,8 @@ public class MotDePasseService {
         }
 
         // Chercher le client par email
-        Client client = clientRepository.findByEmailAndActif(email , 1);
-        if (client == null)
+        Optional<Client> client = clientRepository.findByEmailAndActif(email , 1);
+        if (client.isEmpty())
             throw new Exception("Aucun client trouvé");
 
 
@@ -109,8 +109,8 @@ public class MotDePasseService {
         String nouveauMotDePasse = genererMotDePasseSecurise();
 
         // Mettre à jour le mot de passe du client
-        client.setPass(passwordEncoder.encode(nouveauMotDePasse));
-        clientRepository.save(client);
+        client.get().setPass(passwordEncoder.encode(nouveauMotDePasse));
+        clientRepository.save(client.get());
 
         // Enregistrer la tentative
         Connexion connexion = new Connexion();

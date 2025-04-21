@@ -34,7 +34,7 @@ public class RegistrationController {
             Long lastActivity = (Long) session.getAttribute("last_activity");
             if (lastActivity == null ||
                     (Instant.now().getEpochSecond() - lastActivity > sessionMaxLifetime)) {
-                throw new RuntimeException("Session expirée");
+                throw new Exception("Session expirée");
             }
 
             // Mise à jour du timestamp de dernière activité
@@ -43,7 +43,7 @@ public class RegistrationController {
             // Vérification de l'email
             String verifyEmail = (String) session.getAttribute("verify_email");
             if (verifyEmail == null || verifyEmail.isEmpty()) {
-                throw new RuntimeException("Courriel non vérifié");
+                throw new Exception("Courriel non vérifié");
             }
 
             // Enregistrement des données dans la session
@@ -79,7 +79,7 @@ public class RegistrationController {
             Customer customer = Customer.create(params);
             session.setAttribute("registration_stripe_customer_id", customer.getId());
 
-            return ResponseEntity.ok("OK");
+            return ResponseEntity.ok(Map.of("result","OK"));
 
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();

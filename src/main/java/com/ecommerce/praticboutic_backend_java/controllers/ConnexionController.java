@@ -61,7 +61,7 @@ public class ConnexionController {
             // Vérifier si la session est active
             String sessionId = request.getSessionid();
             if (sessionId != null && !sessionService.isSessionValid(sessionId)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Session expirée");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Session expirée"));
             }
 
             // Vérifier les tentatives de connexion
@@ -69,8 +69,8 @@ public class ConnexionController {
             int attemptCount = (int) countLoginAttempts(ip);
 
             if (attemptCount >= maxRetry) {
-                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(
-                        "Vous êtes autorisé à " + maxRetry + " tentatives en " + retryInterval);
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(Map.of("error",
+                        "Vous êtes autorisé à " + maxRetry + " tentatives en " + retryInterval));
             }
 
             // Vérifier les identifiants
@@ -82,7 +82,7 @@ public class ConnexionController {
 
             if (results.isEmpty()) {
                 incrementLoginAttempts(ip);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mauvais identifiant ou mot de passe !");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Mauvais identifiant ou mot de passe !"));
             }
 
             Map<String, Object> userData = results.get(0);
@@ -91,7 +91,7 @@ public class ConnexionController {
             // Vérifier le mot de passe
             if (!verifyPassword(request.getPassword(), hashedPassword)) {
                 incrementLoginAttempts(ip);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mauvais identifiant ou mot de passe !");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Mauvais identifiant ou mot de passe !"));
             }
 
             // Créer ou mettre à jour la session
@@ -123,7 +123,7 @@ public class ConnexionController {
             //return ResponseEntity.status(HttpStatus.OK).body(Map.of(response));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error :" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error","error :" + e.getMessage()));
         }
 
         return ResponseEntity.ok(response);
@@ -180,7 +180,7 @@ public class ConnexionController {
             // Vérifier si la session est active
             String sessionId = request.getSessionid();
             if (sessionId != null && !sessionService.isSessionValid(sessionId)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Session expirée");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Session expirée"));
             }
 
             // Vérifier le token Google
@@ -251,7 +251,7 @@ public class ConnexionController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error :" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error","error :" + e.getMessage()));
         }
 
     }

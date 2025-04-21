@@ -29,6 +29,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import static javax.swing.text.StyleConstants.setBold;
 
@@ -63,21 +64,21 @@ public class PDFQRCodeController {
             // Vérifier si la session est active
             if (!sessionService.isSessionValid(sessionId)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Session expirée");
+                        .body(Map.of("error","Session expirée"));
             }
 
             // Vérifier l'authentification
             Boolean authStatus = sessionService.isAuthenticated();
-            if (authStatus == null || authStatus == true) {
+            if (authStatus == null || authStatus != true) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body("Non autorisé");
+                        .body(Map.of("error","Non autorisé"));
             }
             
             // Récupérer le nom du boutic
             String boutic = getBouticName(bouticId);
             if (boutic == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Boutic non trouvé");
+                        .body(Map.of("error","Boutic non trouvée"));
             }
             
             // Générer le PDF

@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class ShopSettingsController {
 
-    @PostMapping("/configure")
+    @PostMapping("/boutic-configure")
     public ResponseEntity<?> configureShop(@RequestBody ShopConfigRequest request, HttpSession session) {
         try {
             // Vérifier si une session ID est fournie
@@ -27,7 +29,7 @@ public class ShopSettingsController {
             int maxLifetime = session.getMaxInactiveInterval();
 
             if (lastActivity == null || (System.currentTimeMillis() / 1000 - lastActivity) > maxLifetime) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Session expirée");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Session expirée"));
             } else {
                 // Mise à jour du timestamp de la dernière activité
                 session.setAttribute("last_activity", System.currentTimeMillis() / 1000);
@@ -36,7 +38,7 @@ public class ShopSettingsController {
             // Vérifier si l'email est vérifié
             String verifyEmail = (String)session.getAttribute("verify_email");
             if (verifyEmail == null || verifyEmail.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Courriel non vérifié");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
             }
 
             // Enregistrer les configurations dans la session
@@ -45,10 +47,10 @@ public class ShopSettingsController {
             session.setAttribute("confboutic_mntmincmd", request.getMntmincmd());
             session.setAttribute("confboutic_validsms", request.getValidsms());
 
-            return ResponseEntity.ok("OK");
+            return ResponseEntity.ok(Map.of("result","OK"));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error","Erreur: " + e.getMessage()));
         }
     }
 }
