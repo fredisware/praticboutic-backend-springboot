@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -90,13 +91,20 @@ public class StripeWebhookController {
                     .build();
 
             SubscriptionCollection subscriptions = Subscription.list(params);
+            Integer bouticId;
+            try
+            {
 
-            // Get the boutic ID from the database
-            Integer bouticId = jdbcTemplate.queryForObject(
-                    "SELECT customer.customid FROM customer, client WHERE client.stripe_customer_id = ? AND customer.cltid = client.cltid",
-                    Integer.class,
-                    customerId
-            );
+                // Get the boutic ID from the database
+                bouticId = jdbcTemplate.queryForObject(
+                        "SELECT customer.customid FROM customer, client WHERE client.stripe_customer_id = ? AND customer.cltid = client.cltid",
+                        Integer.class,
+                        customerId
+                );
+            }
+            catch (EmptyResultDataAccessException e) {
+                bouticId = null;
+            }
 
             if (bouticId == null) {
                 logger.warn("No customer found for Stripe customer ID: {}", customerId);

@@ -94,10 +94,10 @@ public class FileUploadController {
                                          HttpSession session) {
 
         // Set session ID if provided
-        if (sessionId != null && !sessionId.isEmpty()) {
+        /*if (sessionId != null && !sessionId.isEmpty()) {
             // Note: Direct session ID manipulation might require custom configuration in Spring
             // This is a placeholder for the PHP session_id() equivalent
-        }
+        }*/
 
         if (files == null || files.length == 0) {
             return ResponseEntity.ok().body(new ArrayList<>());

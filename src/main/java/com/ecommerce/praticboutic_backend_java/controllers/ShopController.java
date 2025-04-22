@@ -39,7 +39,7 @@ public class ShopController {
     public ResponseEntity<?> checkAliasAvailability(@RequestBody BouticRequest request, HttpSession session) {
         try {
             // Vérifier si la session est expirée
-            Long lastActivity = (Long) session.getAttribute("last_activity");
+            /*Long lastActivity = (Long) session.getAttribute("last_activity");
             int maxLifetime = session.getMaxInactiveInterval();
 
             if (lastActivity == null || (System.currentTimeMillis() / 1000 - lastActivity) > maxLifetime) {
@@ -47,7 +47,7 @@ public class ShopController {
             } else {
                 // Mise à jour du timestamp de la dernière activité
                 session.setAttribute("last_activity", System.currentTimeMillis() / 1000);
-            }
+            }*/
 
             // Vérifier si l'email est vérifié
             String verifyEmail = (String)session.getAttribute("verify_email");

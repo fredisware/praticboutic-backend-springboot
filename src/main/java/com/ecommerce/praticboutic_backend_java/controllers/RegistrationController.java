@@ -31,14 +31,14 @@ public class RegistrationController {
                                             HttpSession session) {
         try {
             // Vérification de la session
-            Long lastActivity = (Long) session.getAttribute("last_activity");
+            /*Long lastActivity = (Long) session.getAttribute("last_activity");
             if (lastActivity == null ||
                     (Instant.now().getEpochSecond() - lastActivity > sessionMaxLifetime)) {
                 throw new Exception("Session expirée");
             }
 
             // Mise à jour du timestamp de dernière activité
-            session.setAttribute("last_activity", Instant.now().getEpochSecond());
+            session.setAttribute("last_activity", Instant.now().getEpochSecond());*/
 
             // Vérification de l'email
             String verifyEmail = (String) session.getAttribute("verify_email");

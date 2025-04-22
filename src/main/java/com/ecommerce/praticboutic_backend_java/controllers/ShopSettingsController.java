@@ -19,7 +19,7 @@ public class ShopSettingsController {
     public ResponseEntity<?> configureShop(@RequestBody ShopConfigRequest request, HttpSession session) {
         try {
             // Vérifier si une session ID est fournie
-            if (request.getSessionid() != null && !request.getSessionid().isEmpty()) {
+            /*if (request.getSessionid() != null && !request.getSessionid().isEmpty()) {
                 // Dans Spring Boot, changer l'ID de session n'est pas recommandé
                 // Cette partie devrait être gérée différemment dans une implémentation réelle
             }
@@ -33,7 +33,7 @@ public class ShopSettingsController {
             } else {
                 // Mise à jour du timestamp de la dernière activité
                 session.setAttribute("last_activity", System.currentTimeMillis() / 1000);
-            }
+            }*/
 
             // Vérifier si l'email est vérifié
             String verifyEmail = (String)session.getAttribute("verify_email");

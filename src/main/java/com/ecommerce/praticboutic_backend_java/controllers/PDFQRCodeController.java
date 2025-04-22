@@ -62,7 +62,7 @@ public class PDFQRCodeController {
         
         try {
             // Vérifier si la session est active
-            if (!sessionService.isSessionValid(sessionId)) {
+            /*if (!sessionService.isSessionValid(sessionId)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error","Session expirée"));
             }
@@ -72,7 +72,7 @@ public class PDFQRCodeController {
             if (authStatus == null || authStatus != true) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error","Non autorisé"));
-            }
+            }*/
             
             // Récupérer le nom du boutic
             String boutic = getBouticName(bouticId);

@@ -14,13 +14,13 @@ import java.util.List;
 public interface RelGrpOptArtRepository extends JpaRepository<RelGrpOptArt, Integer>  {
 
 
-    @Query(value = "SELECT g.* FROM groupeopt g " +
+    @Query(value = "SELECT g.grpoptid, g.nom, g.multiple FROM groupeopt g " +
             "INNER JOIN relgrpoptart r ON g.grpoptid = r.grpoptid " +
             "WHERE r.customid = :customid AND g.customid = :customid " +
             "AND r.visible = 1 AND g.visible = 1 AND r.artid = :artId " +
             "ORDER BY g.grpoptid",
             nativeQuery = true)
-    List<GroupeOpt> findByCustomidAndArtId(@Param("customid") Integer customid, @Param("artId") Integer artId);
+    List<?> findByCustomidAndArtId(@Param("customid") Integer customid, @Param("artId") Integer artId);
 
 
 /*    @Query(value = "SELECT g.grpoptid, g.nom, g.multiple FROM relgrpoptart r " +

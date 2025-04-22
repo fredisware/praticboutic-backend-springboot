@@ -57,6 +57,11 @@ public class LigneCmd extends BaseEntity {
     @Column(name = "optid", nullable = false)
     private Integer optId;
 
+    // Relation optionnelle avec l'entité Article
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "optid", insertable = false, updatable = false)
+    private Option option;
+
     // Getters et Setters (sans les accesseurs pour id qui sont dans BaseEntity)
     public Integer getLignecmdid() {
         return lignecmdid;
@@ -163,6 +168,14 @@ public class LigneCmd extends BaseEntity {
         this.optId = optId;
     }
 
+    public Option getOption() {
+        return option;
+    }
+
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
     /**
      * Calcule le montant total de la ligne de commande (prix * quantité)
      * @return le montant total
@@ -185,8 +198,6 @@ public class LigneCmd extends BaseEntity {
         row.add(getPrix());
         row.add(getQuantite());
         row.add(getCommentaire());
-        row.add(getArticle().getNom());
-        //row.add(getOptId());
         return row;
     }
 }

@@ -59,10 +59,10 @@ public class ConnexionController {
         Map<String, Object> response;
         try {
             // Vérifier si la session est active
-            String sessionId = request.getSessionid();
+            /*String sessionId = request.getSessionid();
             if (sessionId != null && !sessionService.isSessionValid(sessionId)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Session expirée"));
-            }
+            }*/
 
             // Vérifier les tentatives de connexion
             String ip = httpRequest.getRemoteAddr();
@@ -118,7 +118,7 @@ public class ConnexionController {
             response.put("customer", userData.get("customer"));
             response.put("stripecustomerid", stripecustomerid);
             response.put("subscriptionstatus", subscriptionstatus);
-            response.put("sessionid", sessionId);
+            //response.put("sessionid", sessionId);
 
             //return ResponseEntity.status(HttpStatus.OK).body(Map.of(response));
 
@@ -178,10 +178,10 @@ public class ConnexionController {
     public ResponseEntity<?> googleSignIn(@RequestBody GoogleSignInRequest request, HttpServletRequest httpRequest) {
         try {
             // Vérifier si la session est active
-            String sessionId = request.getSessionid();
+            /*String sessionId = request.getSessionid();
             if (sessionId != null && !sessionService.isSessionValid(sessionId)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Session expirée"));
-            }
+            }*/
 
             // Vérifier le token Google
             /*GoogleIdToken idToken = verifyGoogleToken(request.getIdToken());
@@ -209,7 +209,7 @@ public class ConnexionController {
                 response.put("subscriptionstatus", "KO");
                 response.put("status", "KO");
                 response.put("password", "");
-                response.put("sessionid", "");
+                //response.put("sessionid", "");
 
                 // Enregistrer l'email vérifié pour un usage ultérieur
                 sessionService.setAttribute("verify_email", request.getEmail());
@@ -242,11 +242,11 @@ public class ConnexionController {
             Map<String, Object> response = new HashMap<>();
             response.put("bouticid", userData.get("customid"));
             response.put("customer", userData.get("customer"));
-            response.put("stripeCustomerid", stripeCustomerId);
+            response.put("stripecustomerid", stripeCustomerId);
             response.put("subscriptionstatus", subscriptionStatus);
             response.put("status", "OK");
             response.put("password", userData.get("pass"));  // Attention: à ne pas envoyer en production
-            response.put("sessionId", sessionId);
+            //response.put("sessionId", sessionId);
 
             return ResponseEntity.ok(response);
 

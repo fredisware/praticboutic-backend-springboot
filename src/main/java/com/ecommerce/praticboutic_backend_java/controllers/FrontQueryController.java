@@ -80,10 +80,10 @@ public class FrontQueryController {
             HttpSession session = request.getSession();
             
             // Gestion de la session personnalisée si un sessionId est fourni
-            if (input.getSessionid() != null) {
+            /*if (input.getSessionid() != null) {
                 // Dans un environnement réel, vous devrez implémenter une gestion de session personnalisée
                 // car Spring gère automatiquement les sessions
-            }
+            }*/
             
             if ("initSession".equals(input.getRequete())) {
                 session.setAttribute("last_activity", System.currentTimeMillis());

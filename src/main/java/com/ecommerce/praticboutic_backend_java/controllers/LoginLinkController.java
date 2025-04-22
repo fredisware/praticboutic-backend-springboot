@@ -59,9 +59,9 @@ public class LoginLinkController {
     public ResponseEntity<?> createLoginLink(@RequestBody LoginLinkRequest request) {
         try {
             // Vérifier si la session est valide
-            if (!sessionService.isSessionValid(request.getSessionid())) {
+            /*if (!sessionService.isSessionValid(request.getSessionid())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Session expirée"));
-            }
+            }*/
             
             // Vérifier l'authentification
             if (!sessionService.isAuthenticated()) {

@@ -12,6 +12,7 @@ import com.stripe.net.RequestOptions;
 import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,7 +42,7 @@ public class CreatePaymentController {
     public ResponseEntity<?> createPaymentIntent(@RequestBody CreatePaymentRequest request) {
         try {
             // Vérifier si une session ID a été fournie et la définir
-            if (request.getSessionid() != null && !request.getSessionid().isEmpty()) {
+            /*if (request.getSessionid() != null && !request.getSessionid().isEmpty()) {
                 sessionService.setSessionId(request.getSessionid());
             }
 
@@ -60,7 +61,7 @@ public class CreatePaymentController {
             }
 
             // Mettre à jour l'horodatage de la dernière activité
-            sessionService.setAttribute("last_activity", Instant.now().getEpochSecond());
+            sessionService.setAttribute("last_activity", Instant.now().getEpochSecond());*/
 
             // Vérifier si customer est défini dans la session
             if (!sessionService.hasAttribute("customer")) {
@@ -87,13 +88,18 @@ public class CreatePaymentController {
 
             // Récupérer le nom de la boutique depuis la requête
             String boutic = request.getBoutic();
-
-            // Obtenir l'ID du client
-            Integer customid = jdbcTemplate.queryForObject(
-                    "SELECT customid FROM customer WHERE customer = ?",
-                    Integer.class,
-                    boutic
-            );
+            Integer customid;
+            try {
+                // Obtenir l'ID du client
+                customid = jdbcTemplate.queryForObject(
+                        "SELECT customid FROM customer WHERE customer = ?",
+                        Integer.class,
+                        boutic
+                );
+            }
+            catch (EmptyResultDataAccessException e) {
+                customid = null;
+            }
 
             if (customid == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -214,12 +220,18 @@ public class CreatePaymentController {
         // Recherche du code promo
         Double taux = 0.0;
         if (codePromo != null && !codePromo.isEmpty()) {
-            Double tauxPromo = jdbcTemplate.queryForObject(
+            Double tauxPromo = 0.0;
+            try {
+                 tauxPromo = jdbcTemplate.queryForObject(
                     "SELECT taux FROM promotion WHERE customid = ? AND code = ? AND actif = 1",
                     Double.class,
                     customid,
                     codePromo
-            );
+                 );
+            }
+            catch (EmptyResultDataAccessException e) {
+                tauxPromo = 0.0;
+            }
             taux = (tauxPromo != null) ? tauxPromo : 0.0;
         }
 

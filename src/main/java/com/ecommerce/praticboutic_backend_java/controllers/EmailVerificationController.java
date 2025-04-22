@@ -31,7 +31,7 @@ public class EmailVerificationController {
     public ResponseEntity<?> verifyEmail(@RequestBody EmailVerificationRequest request) {
         try {
             // Vérifier si une session ID a été fournie et la définir
-            if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
+            /*if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
                 sessionService.setSessionId(request.getSessionId());
             }
 
@@ -50,7 +50,7 @@ public class EmailVerificationController {
             }
 
             // Mettre à jour l'horodatage de la dernière activité
-            sessionService.setAttribute("last_activity", Instant.now().getEpochSecond());
+            sessionService.setAttribute("last_activity", Instant.now().getEpochSecond());*/
 
             // Vérifier si l'email existe déjà dans la base de données
             Integer count = jdbcTemplate.queryForObject(
