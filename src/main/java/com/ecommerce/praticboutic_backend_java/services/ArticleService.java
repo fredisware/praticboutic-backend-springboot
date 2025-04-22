@@ -32,14 +32,9 @@ public class ArticleService {
     public List<List<Object>> getArticles(Integer bouticId, Integer catId) {
         List<Article> articles;
         
-        if (catId != null && catId > 0) {
-            // Récupère les articles d'une catégorie spécifique
-            articles = articleRepository.findByCustomidAndCatid(bouticId, catId);
-        } else {
-            // Récupère tous les articles de la boutique
-            articles = articleRepository.findByCustomid(bouticId);
-        }
-        
+        // Récupère les articles d'une catégorie spécifique
+        articles = articleRepository.findByCustomidAndCatid(bouticId, catId);
+
         List<List<Object>> result = new ArrayList<>();
         
         for (Article article : articles) {

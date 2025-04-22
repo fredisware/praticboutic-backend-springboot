@@ -270,7 +270,7 @@ public class DatabaseController {
                     Field field = entityClass.getDeclaredField(column.getNom());
                     Column columnAnnotation = field.getAnnotation(Column.class);
                     if (columnAnnotation != null && columnAnnotation.unique()) {
-                        String jpql = "SELECT COUNT(e) FROM " + entityClass.getSimpleName() + " e " +
+                        String jpql = "SELECT COUNT(e) FROM `" + entityClass.getSimpleName() + "` e " +
                                 "WHERE e.customid = :customid AND e." + column.getNom() + " = :valeur";
                         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
                         query.setParameter("customid", input.getBouticid());
@@ -306,7 +306,7 @@ public class DatabaseController {
             values.add(input.getBouticid());
 
             for (ColumnData column : input.getRow()) {
-                columns.append(", ").append(column.getNom());
+                columns.append(", `").append(column.getNom()).append("`");
                 placeholders.append(", ?");
 
                 Object value = column.getValeur();
@@ -316,7 +316,7 @@ public class DatabaseController {
                 values.add(value);
             }
 
-            String insertSql = "INSERT INTO " + input.getTable() + " (" + columns + ") VALUES (" + placeholders + ")";
+            String insertSql = "INSERT INTO `" + input.getTable() + "` (" + columns + ") VALUES (" + placeholders + ")";
 
             Query insertQuery = entityManager.createNativeQuery(insertSql);
             for (int i = 0; i < values.size(); i++) {

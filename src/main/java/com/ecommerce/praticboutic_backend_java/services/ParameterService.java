@@ -123,7 +123,7 @@ public class ParameterService {
                 new Parametre(customId, "CM_Emporter", "Vente avec passage à la caisse", "Texte de la vente à emporter"),
                 new Parametre(customId, "MntCmdMini", sessionService.getSessionAttributeAsString(session, "confboutic_mntmincmd"), "Montant commande minimal"),
                 new Parametre(customId, "SIZE_IMG", "smallimg", "bigimg ou smallimg"),
-                new Parametre(customId, "CMPT_CMD", "0", "Compteur des références des commandes"),
+                new Parametre(customId, "CMPT_CMD", "1", "Compteur des références des commandes"),
                 new Parametre(customId, "MONEY_SYSTEM", "STRIPE MARKETPLACE", ""),
                 new Parametre(customId, "STRIPE_ACCOUNT_ID", "", "ID Compte connecté Stripe"),
                 new Parametre(customId, "NEW_ORDER", "0", "Nombre de nouvelle(s) commande(s)"),
