@@ -10,12 +10,7 @@ public class FrontQueryRequest {
      * Type de requête (categories, articles, options, etc.)
      */
     private String requete;
-    
-    /**
-     * Identifiant de session
-     */
-    private String sessionid;
-    
+
     /**
      * Identifiant de la boutique
      */
@@ -71,14 +66,6 @@ public class FrontQueryRequest {
 
     public void setRequete(String requete) {
         this.requete = requete;
-    }
-
-    public String getSessionid() {
-        return sessionid;
-    }
-
-    public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
     }
 
     public Integer getBouticid() {
@@ -149,7 +136,6 @@ public class FrontQueryRequest {
     public String toString() {
         return "FrontQueryRequest{" +
                 "requete='" + requete + '\'' +
-                ", sessionid='" + sessionid + '\'' +
                 ", bouticid=" + bouticid +
                 ", catid=" + catid +
                 ", artid=" + artid +
@@ -166,7 +152,6 @@ public class FrontQueryRequest {
      */
     public static class Builder {
         private String requete;
-        private String sessionid;
         private Integer bouticid;
         private Integer catid;
         private Integer artid;
@@ -178,11 +163,6 @@ public class FrontQueryRequest {
 
         public Builder requete(String requete) {
             this.requete = requete;
-            return this;
-        }
-
-        public Builder sessionid(String sessionid) {
-            this.sessionid = sessionid;
             return this;
         }
 
@@ -229,7 +209,6 @@ public class FrontQueryRequest {
         public FrontQueryRequest build() {
             FrontQueryRequest request = new FrontQueryRequest();
             request.requete = this.requete;
-            request.sessionid = this.sessionid;
             request.bouticid = this.bouticid;
             request.catid = this.catid;
             request.artid = this.artid;

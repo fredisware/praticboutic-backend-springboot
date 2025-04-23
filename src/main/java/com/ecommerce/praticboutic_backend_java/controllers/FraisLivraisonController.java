@@ -23,17 +23,6 @@ public class FraisLivraisonController {
     @PostMapping("/frais-livr")
     public ResponseEntity<?> getFraisLivr(@RequestBody ShippingCostRequest request, HttpSession session) {
         try {
-            // Vérifier si la session est expirée
-            /*Long lastActivity = (Long) session.getAttribute("last_activity");
-            int maxLifetime = session.getMaxInactiveInterval();
-            
-            if (lastActivity == null || (System.currentTimeMillis() / 1000) - lastActivity > maxLifetime) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("Session expirée"));
-            } else {
-                // Mise à jour du timestamp de dernière activité
-                session.setAttribute("last_activity", System.currentTimeMillis() / 1000);
-            }*/
 
             // Vérifier si le client existe dans la session
             String customer = (String) session.getAttribute("customer");
@@ -106,17 +95,8 @@ public class FraisLivraisonController {
     
     // Classes pour la sérialisation/désérialisation JSON
     public static class ShippingCostRequest {
-        private String sessionid;
         private String customer;
         private double sstotal;
-
-        public String getSessionid() {
-            return sessionid;
-        }
-
-        public void setSessionid(String sessionid) {
-            this.sessionid = sessionid;
-        }
 
         public String getCustomer() {
             return customer;

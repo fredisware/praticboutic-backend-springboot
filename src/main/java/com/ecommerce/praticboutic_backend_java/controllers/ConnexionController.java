@@ -58,12 +58,6 @@ public class ConnexionController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
         Map<String, Object> response;
         try {
-            // Vérifier si la session est active
-            /*String sessionId = request.getSessionid();
-            if (sessionId != null && !sessionService.isSessionValid(sessionId)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Session expirée"));
-            }*/
-
             // Vérifier les tentatives de connexion
             String ip = httpRequest.getRemoteAddr();
             int attemptCount = (int) countLoginAttempts(ip);
@@ -118,10 +112,6 @@ public class ConnexionController {
             response.put("customer", userData.get("customer"));
             response.put("stripecustomerid", stripecustomerid);
             response.put("subscriptionstatus", subscriptionstatus);
-            //response.put("sessionid", sessionId);
-
-            //return ResponseEntity.status(HttpStatus.OK).body(Map.of(response));
-
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error","error :" + e.getMessage()));
         }
@@ -177,22 +167,6 @@ public class ConnexionController {
     @PostMapping("/google-signin")
     public ResponseEntity<?> googleSignIn(@RequestBody GoogleSignInRequest request, HttpServletRequest httpRequest) {
         try {
-            // Vérifier si la session est active
-            /*String sessionId = request.getSessionid();
-            if (sessionId != null && !sessionService.isSessionValid(sessionId)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Session expirée"));
-            }*/
-
-            // Vérifier le token Google
-            /*GoogleIdToken idToken = verifyGoogleToken(request.getIdToken());
-            if (idToken == null) {
-                return createErrorResponse("Token Google invalide", HttpStatus.UNAUTHORIZED);
-            }
-
-            // Récupérer les informations du compte Google
-            GoogleIdToken.Payload payload = idToken.getPayload();
-            String email = payload.getEmail();*/
-
             // Vérifier si l'utilisateur existe dans la base de données
             List<Map<String, Object>> results = jdbcTemplate.queryForList(
                     "SELECT c.pass, cu.customid, cu.customer, c.stripe_customer_id " +
@@ -209,11 +183,8 @@ public class ConnexionController {
                 response.put("subscriptionstatus", "KO");
                 response.put("status", "KO");
                 response.put("password", "");
-                //response.put("sessionid", "");
-
                 // Enregistrer l'email vérifié pour un usage ultérieur
                 sessionService.setAttribute("verify_email", request.getEmail());
-
                 return ResponseEntity.ok(response);
             }
 
@@ -246,7 +217,6 @@ public class ConnexionController {
             response.put("subscriptionstatus", subscriptionStatus);
             response.put("status", "OK");
             response.put("password", userData.get("pass"));  // Attention: à ne pas envoyer en production
-            //response.put("sessionId", sessionId);
 
             return ResponseEntity.ok(response);
 

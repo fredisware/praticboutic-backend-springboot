@@ -54,26 +54,13 @@ public class PDFQRCodeController {
      */
     @GetMapping(value = "/pdfqrcode")
     public ResponseEntity<?> generateQRCodePDF(
-            @RequestParam("sessionid") String sessionId,
             @RequestParam("bouticid") int bouticId,
             @RequestParam("methv") int methV,
             @RequestParam("nbtable") int nbTable,
             @RequestParam("nbex") int nbEx) {
         
         try {
-            // Vérifier si la session est active
-            /*if (!sessionService.isSessionValid(sessionId)) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error","Session expirée"));
-            }
 
-            // Vérifier l'authentification
-            Boolean authStatus = sessionService.isAuthenticated();
-            if (authStatus == null || authStatus != true) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error","Non autorisé"));
-            }*/
-            
             // Récupérer le nom du boutic
             String boutic = getBouticName(bouticId);
             if (boutic == null) {

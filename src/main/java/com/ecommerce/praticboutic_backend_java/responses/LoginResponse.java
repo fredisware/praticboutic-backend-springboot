@@ -5,8 +5,7 @@ public class LoginResponse {
     private String customer;
     private String stripecustomerid;
     private String subscriptionstatus;
-    private String sessionid;
-    
+
     // Getters and Setters
     public Integer getCustomerId() {
         return bouticid;
@@ -39,12 +38,5 @@ public class LoginResponse {
     public void setSubscriptionStatus(String subscriptionstatus) {
         this.subscriptionstatus = subscriptionstatus;
     }
-    
-    public String getSessionId() {
-        return sessionid;
-    }
-    
-    public void setSessionId(String sessionId) {
-        this.sessionid = sessionId;
-    }
+
 }

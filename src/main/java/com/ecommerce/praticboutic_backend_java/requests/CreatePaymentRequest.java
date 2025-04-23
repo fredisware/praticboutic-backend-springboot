@@ -7,21 +7,11 @@ package com.ecommerce.praticboutic_backend_java.requests;
 import java.util.List;
 
 public class CreatePaymentRequest {
-    private String sessionid;
     private String boutic;
     private List<Item> items;
     private String model;
     private Double fraislivr;
     private String codepromo;
-
-    // Getters et Setters
-    public String getSessionid() {
-        return sessionid;
-    }
-
-    public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
-    }
 
     public String getBoutic() {
         return boutic;

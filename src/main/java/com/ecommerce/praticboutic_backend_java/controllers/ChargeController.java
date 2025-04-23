@@ -35,28 +35,6 @@ public class ChargeController {
     @PostMapping("/check-stripe-account")
     public ResponseEntity<?> checkStripeAccount(@RequestBody ChargeRequest request, HttpSession session) {
         try {
-            // Vérifier si une session ID a été fournie et la définir
-            //if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
-            //    sessionService.setSessionId(request.getSessionId());
-            //}
-
-            // Vérifier si la session est active
-            /*if (!sessionService.hasAttribute("last_activity")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ErrorResponse("Session expirée"));
-            }
-
-            // Vérifier si la session a expiré
-            Long lastActivity = (Long) sessionService.getAttribute("last_activity");
-            if (Duration.between(Instant.ofEpochSecond(lastActivity), Instant.now())
-                    .getSeconds() > sessionMaxLifetime) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ErrorResponse("Session expirée"));
-            }
-
-            // Mettre à jour l'horodatage de la dernière activité
-            sessionService.setAttribute("last_activity", Instant.now().getEpochSecond());*/
-
             // Vérifier l'authentification
             if (!sessionService.isAuthenticated()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

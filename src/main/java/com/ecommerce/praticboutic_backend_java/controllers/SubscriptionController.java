@@ -658,11 +658,6 @@ public class SubscriptionController {
     @PostMapping("/check-subscription")
     public ResponseEntity<?> checkSubscription(@RequestBody Map<String, Object> input, HttpSession session) {
         try {
-            // Gérer le sessionId si fourni
-            if (input.containsKey("sessionid")) {
-                String sessionId = (String) input.get("sessionid");
-                // Note: Dans Spring, on ne peut pas directement modifier l'ID de session comme en PHP
-            }
 
             // Configuration de Stripe
             Stripe.apiKey = stripeSecretKey;

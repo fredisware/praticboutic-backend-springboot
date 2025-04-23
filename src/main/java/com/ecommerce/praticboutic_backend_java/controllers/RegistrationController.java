@@ -30,22 +30,11 @@ public class RegistrationController {
     public ResponseEntity<?> registerMobile(@RequestBody RegistrationRequest input,
                                             HttpSession session) {
         try {
-            // Vérification de la session
-            /*Long lastActivity = (Long) session.getAttribute("last_activity");
-            if (lastActivity == null ||
-                    (Instant.now().getEpochSecond() - lastActivity > sessionMaxLifetime)) {
-                throw new Exception("Session expirée");
-            }
-
-            // Mise à jour du timestamp de dernière activité
-            session.setAttribute("last_activity", Instant.now().getEpochSecond());*/
-
             // Vérification de l'email
             String verifyEmail = (String) session.getAttribute("verify_email");
             if (verifyEmail == null || verifyEmail.isEmpty()) {
                 throw new Exception("Courriel non vérifié");
             }
-
             // Enregistrement des données dans la session
             session.setAttribute("registration_pass", input.pass);
             session.setAttribute("registration_qualite", input.qualite);
@@ -56,10 +45,8 @@ public class RegistrationController {
             session.setAttribute("registration_cp", input.cp);
             session.setAttribute("registration_ville", input.ville);
             session.setAttribute("registration_tel", input.tel);
-
             // Configuration Stripe
             Stripe.apiKey = stripeSecretKey;
-
             // Création du client Stripe
             CustomerCreateParams params = CustomerCreateParams.builder()
                     .setAddress(

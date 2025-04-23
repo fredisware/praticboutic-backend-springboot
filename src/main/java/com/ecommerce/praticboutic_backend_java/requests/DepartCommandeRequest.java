@@ -17,7 +17,6 @@ public class DepartCommandeRequest {
     private List<Item> items;
     private Double remise;
     private Double fraislivr;
-    private String sessionid;
 
     // Getter et Setter pour method
     public String getNom() {
@@ -134,15 +133,6 @@ public class DepartCommandeRequest {
 
     public void setPaiement(String paiement) {
         this.paiement = paiement;
-    }
-
-    // Getter et Setter pour method
-    public String getSessionid() {
-        return sessionid;
-    }
-
-    public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
     }
 
     // Méthodes utilitaires additionnelles pour la liste (optionnelles)

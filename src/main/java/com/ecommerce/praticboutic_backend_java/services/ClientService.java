@@ -161,7 +161,7 @@ public class ClientService {
         client.setStripeCustomerId(sessionService.getSessionAttributeAsString(session, "registration_stripe_customer_id"));
         client.setActif(1);
         client.setDeviceId(Utils.sanitizeInput(input.getDeviceId()));
-        client.setDeviceType(Utils.sanitizeInput(input.getDeviceType().toString()));
+        client.setDevice_type(Utils.sanitizeInput(input.getDeviceType().toString()));
 
         try {
             return clientRepository.save(client);

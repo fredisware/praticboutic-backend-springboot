@@ -54,20 +54,20 @@ public class NotificationService {
     /**
      * Envoie une notification push à un appareil spécifique en utilisant Firebase Cloud Messaging API v1
      *
-     * @param deviceId L'identifiant unique de l'appareil destinataire
+     * @param deviceId L'identifiant unique de l'appareil destinataire (token FCM)
      * @param title Titre de la notification
      * @param body Corps du message de la notification
      * @return L'ID du message envoyé ou null en cas d'échec
      */
     public String sendPushNotification(String deviceId, String title, String body) {
         try {
-            // Récupérer le token FCM associé au deviceId depuis votre base de données
-            String token = getTokenFromDeviceId(deviceId);
-
-            if (token == null || token.isEmpty()) {
-                logger.error("Impossible d'envoyer la notification: aucun token FCM trouvé pour le deviceId: {}", deviceId);
+            if (deviceId == null || deviceId.isEmpty()) {
+                logger.error("Impossible d'envoyer la notification: deviceId est null ou vide");
                 return null;
             }
+
+            // Pour FCM, le deviceId est directement utilisé comme token
+            String token = deviceId;
 
             // Créer l'objet Notification avec titre et corps
             Notification notification = Notification.builder()
@@ -76,26 +76,31 @@ public class NotificationService {
                     .build();
 
             // Construire le message avec les données et la notification
-            Message.Builder messageBuilder = Message.builder()
+            Message message = Message.builder()
                     .setToken(token)
-                    .setNotification(notification);
+                    .setNotification(notification)
+                    .build();
 
             // Envoyer le message et récupérer l'ID du message
-            String messageId = FirebaseMessaging.getInstance().send(messageBuilder.build());
+            String messageId = FirebaseMessaging.getInstance().send(message);
             logger.info("Notification envoyée avec succès à deviceId: {}, messageId: {}", deviceId, messageId);
             return messageId;
 
         } catch (FirebaseMessagingException e) {
             logger.error("Erreur lors de l'envoi de notification à deviceId: {}", deviceId, e);
+
             // Gérer les erreurs spécifiques comme token invalide, quota dépassé, etc.
-            handleFCMError(deviceId, e);
+            if (e.getMessagingErrorCode() == MessagingErrorCode.INVALID_ARGUMENT ||
+                    e.getMessagingErrorCode() == MessagingErrorCode.UNREGISTERED) {
+                // Token invalide ou appareil désinscrit
+                logger.warn("Token FCM invalide détecté pour deviceId: {}", deviceId);
+            }
+
             return null;
-        } catch (FirebaseAuthException e) {
-            logger.error("Impossible d'envoyer la notification: token FCM invalide pour le deviceId: {}", deviceId);
+        } catch (Exception e) {
+            logger.error("Exception inattendue lors de l'envoi de notification à deviceId: {}", deviceId, e);
             return null;
         }
-
-
     }
 
     /**

@@ -4,7 +4,6 @@ package com.ecommerce.praticboutic_backend_java.requests;
 public class LiensRequest {
     private String action;
     private String login;
-    private String sessionid;
 
     // Getters
     public String getAction() {
@@ -13,10 +12,6 @@ public class LiensRequest {
 
     public String getLogin() {
         return login;
-    }
-
-    public String getSessionid() {
-        return sessionid;
     }
 
     // Setters
@@ -28,7 +23,4 @@ public class LiensRequest {
         this.login = login;
     }
 
-    public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
-    }
 }

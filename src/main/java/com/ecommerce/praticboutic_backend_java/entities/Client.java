@@ -40,9 +40,9 @@ public class Client extends BaseEntity {
     @Column(name = "actif")
     private Integer actif;
     @Column(name = "device_id")
-    private String deviceId;
+    private String device_id;
     @Column(name = "device_type")
-    private String deviceType;
+    private String device_type;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Customer> customers;
@@ -69,11 +69,11 @@ public class Client extends BaseEntity {
      * @param stripeCustomerId l'identifiant Stripe du client
      * @param actif l'état d'activation du compte client
      * @param deviceId l'identifiant de l'appareil du client
-     * @param deviceType le type d'appareil du client
+     * @param device_type le type d'appareil du client
      */
     public Client(String email, String pass, String qualite, String nom, String prenom, String adr1,
                   String adr2, String cp, String ville, String tel, String stripeCustomerId,
-                  Integer actif, String deviceId, String deviceType) {
+                  Integer actif, String deviceId, String device_type) {
         this.email = email;
         this.pass = pass;
         this.qualite = qualite;
@@ -86,8 +86,8 @@ public class Client extends BaseEntity {
         this.tel = tel;
         this.stripeCustomerId = stripeCustomerId;
         this.actif = actif;
-        this.deviceId = deviceId;
-        this.deviceType = deviceType;
+        this.device_id = device_id;
+        this.device_type = device_type;
     }
 
     /**
@@ -230,19 +230,19 @@ public class Client extends BaseEntity {
     }
 
     public String getDeviceId() {
-        return deviceId;
+        return device_id;
     }
 
     public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
+        this.device_id = deviceId;
     }
 
-    public String getDeviceType() {
-        return deviceType;
+    public String getDevice_type() {
+        return device_type;
     }
 
-    public void setDeviceType(String deviceType) {
-        this.deviceType = deviceType;
+    public void setDevice_type(String device_type) {
+        this.device_type = device_type;
     }
 
     public List<Customer> getCustomers() {

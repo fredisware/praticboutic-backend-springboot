@@ -38,13 +38,6 @@ public class CheckVersionController {
     @PostMapping("/check")
     public ResponseEntity<?> checkVersion(@RequestBody SessionRequest request) {
         try {
-            // Vérifier si une session ID a été fournie et la définir
-            //if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
-            //    sessionService.setSessionId(request.getSessionId());
-            //}
-            
-            // Démarrer la session (ceci est géré automatiquement par Spring)
-
             // Lire le fichier d'autorisation
             Path path = Paths.get(authorizationFilePath);
             

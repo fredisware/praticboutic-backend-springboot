@@ -78,20 +78,7 @@ public class FrontQueryController {
         
         try {
             HttpSession session = request.getSession();
-            
-            // Gestion de la session personnalisée si un sessionId est fourni
-            /*if (input.getSessionid() != null) {
-                // Dans un environnement réel, vous devrez implémenter une gestion de session personnalisée
-                // car Spring gère automatiquement les sessions
-            }*/
-            
-            if ("initSession".equals(input.getRequete())) {
-                session.setAttribute("last_activity", System.currentTimeMillis());
-            }
 
-            // Vérification de l'expiration de la session
-            //verifierExpirationSession(session);
-            
             List<?> result;
             
             // Traitement des différentes requêtes
@@ -152,23 +139,8 @@ public class FrontQueryController {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
-    private void verifierExpirationSession(HttpSession session) throws SessionExpiredException {
-        Long lastActivity = (Long) session.getAttribute("last_activity");
 
-        if (lastActivity == null) {
-            throw new SessionExpiredException("Session expirée");
-        }
 
-        if (System.currentTimeMillis() - lastActivity > maxLifetime * 1000L) {
-            // La session a expiré
-            throw new SessionExpiredException("Session expirée");
-        } else {
-            // La session est toujours active, met à jour le timestamp de la dernière activité
-            session.setAttribute("last_activity", System.currentTimeMillis());
-        }
-    }
-    
     private List<?> initSession(HttpSession session, FrontQueryRequest input) {
         session.setAttribute("customer", input.getCustomer());
         session.setAttribute(input.getCustomer() + "_mail", "non");

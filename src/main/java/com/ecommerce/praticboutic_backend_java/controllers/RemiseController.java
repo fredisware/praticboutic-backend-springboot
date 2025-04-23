@@ -28,16 +28,6 @@ public class RemiseController {
     public ResponseEntity<?> calculateRemise(@RequestBody RemiseRequest input,
                                              HttpSession session) {
         try {
-            // Vérification de la session
-            /*Long lastActivity = (Long) session.getAttribute("last_activity");
-            if (lastActivity == null ||
-                    (Instant.now().getEpochSecond() - lastActivity > sessionMaxLifetime)) {
-                throw new RuntimeException("Session expirée");
-            }
-
-            // Mise à jour du timestamp de dernière activité
-            session.setAttribute("last_activity", Instant.now().getEpochSecond());*/
-
             // Vérification des données de session
             String customer = (String) session.getAttribute("customer");
             if (customer == null || customer.isEmpty()) {

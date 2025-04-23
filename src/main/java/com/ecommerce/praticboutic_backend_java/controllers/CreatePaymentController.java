@@ -41,28 +41,6 @@ public class CreatePaymentController {
     @PostMapping("/create")
     public ResponseEntity<?> createPaymentIntent(@RequestBody CreatePaymentRequest request) {
         try {
-            // Vérifier si une session ID a été fournie et la définir
-            /*if (request.getSessionid() != null && !request.getSessionid().isEmpty()) {
-                sessionService.setSessionId(request.getSessionid());
-            }
-
-            // Vérifier si la session est active
-            if (!sessionService.hasAttribute("last_activity")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ErrorResponse("Session expirée"));
-            }
-
-            // Vérifier si la session a expiré
-            Long lastActivity = (Long) sessionService.getAttribute("last_activity");
-            if (Duration.between(Instant.ofEpochSecond(lastActivity), Instant.now())
-                    .getSeconds() > sessionMaxLifetime) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ErrorResponse("Session expirée"));
-            }
-
-            // Mettre à jour l'horodatage de la dernière activité
-            sessionService.setAttribute("last_activity", Instant.now().getEpochSecond());*/
-
             // Vérifier si customer est défini dans la session
             if (!sessionService.hasAttribute("customer")) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -131,16 +109,10 @@ public class CreatePaymentController {
                                     .build()
                     );
 
-            // Paramètres supplémentaires pour le compte connecté
-            //Map<String, Object> stripeOptions = new HashMap<>();
-            //stripeOptions.put("stripe_account", stripeAccountId);
-
-
             // Configurer les options de requête pour le compte connecté
             RequestOptions requestOptions = RequestOptions.builder()
                     .setStripeAccount(stripeAccountId)
                     .build();
-
 
             // Créer l'intention de paiement
             PaymentIntent paymentIntent = PaymentIntent.create(paramsBuilder.build(), requestOptions);

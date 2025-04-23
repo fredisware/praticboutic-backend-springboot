@@ -1,7 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.requests;
 
 public class RegistrationRequest {
-    public String sessionid;
     public String pass;
     public String qualite;
     public String nom;

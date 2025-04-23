@@ -32,6 +32,12 @@ public class FileUploadController {
     public ResponseEntity<?> uploadFile(@RequestParam(value = "file", required = false) MultipartFile file,
                                         HttpSession session) {
 
+        // Vérifier si l'email est vérifié
+        String verifyEmail = (String)session.getAttribute("verify_email");
+        if (verifyEmail == null || verifyEmail.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
+        }
+
         if (file == null || file.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de fichier");
         }
@@ -90,14 +96,7 @@ public class FileUploadController {
 
     @PostMapping("/boupload")
     public ResponseEntity<?> uploadFiles(@RequestParam(value = "file[]", required = false) MultipartFile[] files,
-                                         @RequestParam(value = "sessionid", required = false) String sessionId,
                                          HttpSession session) {
-
-        // Set session ID if provided
-        /*if (sessionId != null && !sessionId.isEmpty()) {
-            // Note: Direct session ID manipulation might require custom configuration in Spring
-            // This is a placeholder for the PHP session_id() equivalent
-        }*/
 
         if (files == null || files.length == 0) {
             return ResponseEntity.ok().body(new ArrayList<>());

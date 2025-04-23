@@ -22,18 +22,6 @@ public class SessionController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // Gérer l'identifiant de session fourni dans l'entrée JSON
-            //if (input != null && input.containsKey("sessionid")) {
-            //    session.setAttribute("sessionid", input.get("sessionid").toString());
-            //}
-
-            // Stocker l'activité récente dans la session
-            //session.setAttribute("last_activity", System.currentTimeMillis());
-
-            // Construire une réponse avec l'ID de la session
-            //List<String> sessionData = new ArrayList<>();
-            //sessionData.add(session.getId());  // Ajoute l'ID de la session active
-            //response.put("sessionid", session.getId());
 
         } catch (Exception e) {
             // Gestion des erreurs
@@ -49,13 +37,6 @@ public class SessionController {
         Map<String, Object> response = new HashMap<>();
 
         try {
-            // Vérifie et met à jour l'identifiant de session si fourni
-             //if (input != null && input.containsKey("sessionid")) {
-             //   session.setAttribute("sessionid", input.get("sessionid").toString());
-            //}
-
-            // Met à jour l'heure de l'activité récente
-            //session.setAttribute("last_activity", System.currentTimeMillis());
 
             // Vérifie l'état "active" de la session et prépare la réponse
             Integer test = (Integer) session.getAttribute("active");
@@ -80,15 +61,6 @@ public class SessionController {
     public ResponseEntity<Map<String, String>> createSession(@RequestBody(required = false) Map<String, Object> input,
                                                              HttpSession session) {
         try {
-            // Si une session ID est fournie dans l'input, on pourrait la récupérer ici
-            // Mais Spring Boot gère les sessions différemment de PHP
-            // Donc cette partie est plutôt informative
-            //if (input != null && input.containsKey("sessionid")) {
-                // Note: Spring n'offre pas directement la possibilité de définir l'ID de session
-                // On pourrait utiliser d'autres mécanismes pour maintenir cette logique
-            //    String sessionId = (String) input.get("sessionid");
-                // Logique pour gérer l'ID de session si nécessaire
-            //}
 
             // Initialisation des attributs de session
             session.setAttribute("active", 0);

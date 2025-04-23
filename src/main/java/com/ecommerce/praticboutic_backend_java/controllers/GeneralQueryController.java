@@ -27,12 +27,6 @@ public class GeneralQueryController {
     @PostMapping("/genquery")
     public ResponseEntity<?> processGenQuery(@RequestBody(required = false) Map<String, Object> input, HttpSession session) {
         try {
-            // Gestion de la session
-            /*if (input.containsKey("sessionid")) {
-                // Dans Spring, la session est gérée automatiquement
-                // Nous n'avons pas besoin de définir manuellement l'ID de session
-                // Cette partie est donc simplifiée par rapport au code PHP
-            }*/
 
             String action = (String) input.get("action");
 

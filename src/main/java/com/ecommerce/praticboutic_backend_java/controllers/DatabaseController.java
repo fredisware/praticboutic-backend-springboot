@@ -6,12 +6,12 @@ import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import com.ecommerce.praticboutic_backend_java.models.ColumnData;
 import com.ecommerce.praticboutic_backend_java.repositories.*;
+import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
 import com.ecommerce.praticboutic_backend_java.services.*;
 import com.stripe.exception.StripeException;
 import jakarta.transaction.Transactional;
 import com.ecommerce.praticboutic_backend_java.entities.*;
 import com.ecommerce.praticboutic_backend_java.requests.*;
-import com.ecommerce.praticboutic_backend_java.responses.ApiResponse;
 import com.ecommerce.praticboutic_backend_java.utils.Utils;
 
 import java.util.*;
@@ -84,16 +84,20 @@ public class DatabaseController {
     //public DatabaseController() {}
 
     @PostMapping("/count-elements")
-    public Map<String, Object> countElementsInTable(@RequestBody VueTableRequest input) {
+    public ResponseEntity<?> countElementsInTable(@RequestBody VueTableRequest input) {
         Map<String, Object> response = new HashMap<>();
+        // Vérifier l'authentification
+        if (!sessionService.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error","Non authentifié"));
+        }
         try {
             String strTable = input.getTable(); Integer iBouticid = input.getBouticid();
             String strSelcol = input.getSelcol(); Integer iSelid = input.getSelid();
             Integer iLimit = input.getLimite(); Integer iOffset = input.getOffset();
             // Vérification si le nom de la table est fourni
             if (strTable == null || strTable.isEmpty()) {
-                response.put("error", "Le nom de la table est vide.");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Le nom de la table est vide."));
             }
             Class<?> entityClass;
             try {
@@ -123,17 +127,24 @@ public class DatabaseController {
         } catch (Exception e) {
             response.put("error", "Erreur lors de l'exécution : " + e.getMessage());
         }
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/vue-table")
-    public Map<String, Object> vueTable(@RequestBody VueTableRequest input) {
+    public ResponseEntity<?> vueTable(@RequestBody VueTableRequest input) {
         Map<String, Object> response = new HashMap<>();
+        if (!sessionService.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Non authentifié"));
+        }
         try {
             // Variables d'entrée
-           String strTable = input.getTable(); Integer iBouticid = input.getBouticid();
-            String strSelcol = input.getSelcol(); Integer iSelid = input.getSelid();
-            Integer iLimit = input.getLimite(); Integer iOffset = input.getOffset();
+            String strTable = input.getTable();
+            Integer iBouticid = input.getBouticid();
+            String strSelcol = input.getSelcol();
+            Integer iSelid = input.getSelid();
+            Integer iLimit = input.getLimite();
+            Integer iOffset = input.getOffset();
             // Validation des données d'entrée
             if (strTable == null || strTable.isEmpty()) {
                 throw new IllegalArgumentException("Le nom de la table est vide.");
@@ -161,8 +172,7 @@ public class DatabaseController {
             queryBuilder.append(" LIMIT ").append(iLimit).append(" OFFSET ").append(iOffset);
 
             Query query = entityManager.createNativeQuery(queryBuilder.toString());
-            for(Object primaryKey : query.getResultList())
-            {
+            for (Object primaryKey : query.getResultList()) {
                 Object entityInstance = entityManager.find(entityClass, primaryKey);
                 Object ret = entityClass.getDeclaredMethod("getDisplayData").invoke(entityInstance);
                 data.add(ret);
@@ -171,18 +181,20 @@ public class DatabaseController {
             response.put("data", data);
             response.put("count", data.size());
             response.put("status", "success");
-        }
-        catch(Exception e2)
-        {
+        } catch (Exception e2) {
             response.put("error", "Erreur lors de l'exécution : " + e2.getMessage());
         }
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/remplir-options")
-    public Map<String, Object> remplirOption(@RequestBody RemplirOptionTableRequest input)
+    public ResponseEntity<?> remplirOption(@RequestBody RemplirOptionTableRequest input)
     {
         Map<String, Object> response = new HashMap<>();
+        if (!sessionService.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Non authentifié"));
+        }
         try {
             String strClePrimaire = null;
             // Variables d'entrée
@@ -190,7 +202,7 @@ public class DatabaseController {
             // Validation des données d'entrée
             if (tableName == null || tableName.isEmpty()) {
                 response.put("error", "Le nom de la table est vide.");
-                return response;
+                return ResponseEntity.ok(response);
             }
             Class<?> entityClass;
             try {
@@ -224,7 +236,7 @@ public class DatabaseController {
             response.put("error", "Erreur lors de l'exécution : " + e2.getMessage());
         }
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -235,24 +247,26 @@ public class DatabaseController {
      */
     @PostMapping("/insert-row")
     @Transactional
-    public Map<String, Object> insertRow(@RequestBody InsertRowRequest input) {
+    public ResponseEntity<?> insertRow(@RequestBody InsertRowRequest input) {
         Map<String, Object> response = new HashMap<>();
-
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             // Validation de l'entrée
             if (input.getTable() == null || input.getTable().isEmpty()) {
                 response.put("error", "Le nom de la table est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             if (input.getRow() == null || input.getRow().isEmpty()) {
                 response.put("error", "Les données à insérer sont requises");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
-
             // Construction dynamique de la classe d'entité
             Class<?> entityClass;
             try {
@@ -261,7 +275,7 @@ public class DatabaseController {
                 entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
             } catch (ClassNotFoundException ex) {
                 response.put("error", "L'entité spécifiée n'existe pas : " + input.getTable());
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             // Vérifier les contraintes d'unicité
@@ -286,19 +300,6 @@ public class DatabaseController {
                     continue;
                 }
             }
-
-            // Préparation des données pour l'insertion
-            /*Map<String, Object> columnValues = new HashMap<>();
-            columnValues.put("customid", input.getBouticid());
-
-            for (ColumnData column : input.getRow()) {
-                Object value = column.getValeur();
-                if ("pass".equals(column.getType())) {
-                    value = new BCryptPasswordEncoder().encode(column.getValeur());
-                }
-                columnValues.put(column.getNom(), value);
-            }*/
-
             // Utiliser une requête native pour l'insertion
             StringBuilder columns = new StringBuilder("customid");
             StringBuilder placeholders = new StringBuilder("?");
@@ -336,7 +337,7 @@ public class DatabaseController {
             response.put("error", e.getMessage());
         }
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -347,30 +348,34 @@ public class DatabaseController {
      */
     @PostMapping("/update-row")
     @Transactional
-    public Map<String, Object> updateRow(@RequestBody UpdateRowRequest input) {
+    public ResponseEntity<?> updateRow(@RequestBody UpdateRowRequest input) {
         Map<String, Object> response = new HashMap<>();
 
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             // Validation de l'entrée
             if (input.getTable() == null || input.getTable().isEmpty()) {
                 response.put("error", "Le nom de la table est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             if (input.getRow() == null || input.getRow().isEmpty()) {
                 response.put("error", "Les données à mettre à jour sont requises");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             if (input.getIdtoup() == null) {
                 response.put("error", "L'ID de l'élément à mettre à jour est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             if (input.getColonne() == null || input.getColonne().isEmpty()) {
                 response.put("error", "Le nom de la colonne d'ID est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             // Construction dynamique de la classe d'entité
@@ -380,7 +385,7 @@ public class DatabaseController {
                 entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
             } catch (ClassNotFoundException ex) {
                 response.put("error", "L'entité spécifiée n'existe pas : " + input.getTable());
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             // Vérifier les contraintes d'unicité
@@ -445,7 +450,7 @@ public class DatabaseController {
             response.put("error", e.getMessage());
         }
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -455,21 +460,25 @@ public class DatabaseController {
      * @return Une Map contenant le résultat de l'opération
      */
     @PostMapping("/get-values")
-    public Map<String, Object> getValues(@RequestBody GetValuesRequest input) {
+    public ResponseEntity<?> getValues(@RequestBody GetValuesRequest input) {
         Map<String, Object> response = new HashMap<>();
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             // Validation de l'entrée
             if (input.getTable() == null || input.getTable().isEmpty()) {
                 response.put("error", "Le nom de la table est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             if (input.getIdtoup() == null) {
                 response.put("error", "L'ID de l'élément est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
             // Construction dynamique de la classe d'entité
             Class<?> entityClass;
@@ -478,7 +487,7 @@ public class DatabaseController {
                 entityClass = BaseEntity.getEntityClassFromTableName(sessionFactory, input.getTable());
             } catch (ClassNotFoundException ex) {
                 response.put("error", "L'entité spécifiée n'existe pas : " + input.getTable());
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             String strClePrimaire = BaseEntity.getPrimaryKeyName(sessionFactory, entityManager, input.getTable());
@@ -502,7 +511,7 @@ public class DatabaseController {
         } catch (Exception e) {
             response.put("error", e.getMessage());
         }
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -512,24 +521,28 @@ public class DatabaseController {
      * @return Une Map contenant le résultat de l'opération avec les couleurs
      */
     @PostMapping("/color-row")
-    public Map<String, Object> getOrderColors(@RequestBody ColorRowRequest input) {
+    public ResponseEntity<?> getOrderColors(@RequestBody ColorRowRequest input) {
         Map<String, Object> response = new HashMap<>();
 
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             // Validation de l'entrée
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             if (input.getLimite() == null || input.getLimite() <= 0) {
                 response.put("error", "La limite est requise et doit être positive");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             if (input.getOffset() == null || input.getOffset() < 0) {
                 response.put("error", "L'offset est requis et doit être non négatif");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             // Créer la requête JPQL
@@ -561,7 +574,7 @@ public class DatabaseController {
             response.put("error", e.getMessage());
         }
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -571,19 +584,23 @@ public class DatabaseController {
      * @return Une Map contenant le résultat de l'opération
      */
     @PostMapping("/get-com-data")
-    public Map<String, Object> getOrderData(@RequestBody GetComDataRequest input) {
+    public ResponseEntity<?> getOrderData(@RequestBody GetComDataRequest input) {
         Map<String, Object> response = new HashMap<>();
 
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             // Validation de l'entrée
             if (input.getCmdid() == null) {
                 response.put("error", "L'ID de la commande est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             // Créer la requête JPQL pour récupérer les données
@@ -608,7 +625,7 @@ public class DatabaseController {
                 row = (Object[]) query.getSingleResult();
             } catch (NoResultException e) {
                 response.put("error", "Aucune commande trouvée avec l'ID " + input.getCmdid());
-                return response;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
             // Formater le message en remplaçant les variables
@@ -657,7 +674,7 @@ public class DatabaseController {
             response.put("error", e.getMessage());
         }
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
 
@@ -668,6 +685,10 @@ public class DatabaseController {
         }
 
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             String value = paramService.getValeurParam(request.getParam(), Integer.parseInt(request.getBouticid()),"");
             return ResponseEntity.ok(Collections.singletonMap("value", value));
         } catch (Exception e) {
@@ -682,6 +703,10 @@ public class DatabaseController {
         }
 
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             boolean success = paramService.setValeurParam(request.getParam(), Integer.parseInt(request.getBouticid()), request.getValeur());
             return ResponseEntity.ok(Collections.singletonMap("success", success));
         } catch (Exception e) {
@@ -692,10 +717,14 @@ public class DatabaseController {
      * Récupère une propriété spécifique d'un customer
      */
     @PostMapping("/get-custom-prop")
-    public ResponseEntity<Map<String, Object>> getCustomProperty(@RequestBody CustomPropertyRequest input) {
+    public ResponseEntity<?> getCustomProperty(@RequestBody CustomPropertyRequest input) {
         Map<String, Object> response = new HashMap<>();
 
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             // Validation des paramètres
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
@@ -747,10 +776,14 @@ public class DatabaseController {
 
     @PostMapping("/set-custom-prop")
     @Transactional
-    public ResponseEntity<Map<String, Object>> setCustomProperty(@RequestBody CustomPropertyUpdateRequest input) {
+    public ResponseEntity<?> setCustomProperty(@RequestBody CustomPropertyUpdateRequest input) {
         Map<String, Object> response = new HashMap<>();
 
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             // Validation des paramètres
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
@@ -813,10 +846,14 @@ public class DatabaseController {
      * Récupère une propriété spécifique d'un client associé à un customer
      */
     @PostMapping("/get-client-prop")
-    public ResponseEntity<Map<String, Object>> getClientProperty(@RequestBody ClientPropertyRequest input) {
+    public ResponseEntity<?> getClientProperty(@RequestBody ClientPropertyRequest input) {
         Map<String, Object> response = new HashMap<>();
 
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             // Validation des paramètres
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
@@ -873,10 +910,14 @@ public class DatabaseController {
      */
     @PostMapping("/set-client-prop")
     @Transactional
-    public ResponseEntity<Map<String, Object>> setClientProperty(@RequestBody ClientPropertyUpdateRequest input) {
+    public ResponseEntity<?> setClientProperty(@RequestBody ClientPropertyUpdateRequest input) {
         Map<String, Object> response = new HashMap<>();
 
         try {
+            if (!sessionService.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Non authentifié"));
+            }
             // Validation des paramètres
             if (input.getBouticid() == null) {
                 response.put("error", "L'ID boutic est requis");
@@ -949,11 +990,15 @@ public class DatabaseController {
      */
     @PostMapping("/build-boutic")
     public ResponseEntity<?> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session) {
+        // Vérifier si l'email est vérifié
+
         logger.info("Début de la création d'une nouvelle boutique");
 
         try {
-            // Vérification de la présence des données de session nécessaires
-            //sessionService.validateSessionDataForBuildBoutic(session);
+            String verifyEmail = (String)session.getAttribute("verify_email");
+            if (verifyEmail == null || verifyEmail.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
+            }
 
             // Exécution de la création de boutique dans une transaction
             TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
@@ -1026,7 +1071,7 @@ public class DatabaseController {
      * Méthode pour mettre à jour l'adresse email d'une boutique
      */
     @PostMapping("/radress-boutic")
-    public ResponseEntity<Map<String, Object>> updateBouticEmail(@RequestBody UpdateEmailRequest input, HttpSession session) {
+    public ResponseEntity<?> updateBouticEmail(@RequestBody UpdateEmailRequest input, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -1069,7 +1114,4 @@ public class DatabaseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
-
-
 }

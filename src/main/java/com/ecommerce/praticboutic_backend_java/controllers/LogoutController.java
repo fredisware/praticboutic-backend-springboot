@@ -18,26 +18,9 @@ public class LogoutController {
     @Autowired
     private SessionService sessionService;
 
-    public static class LogoutRequest {
-        private String sessionid;
-
-        public String getSessionid() {
-            return sessionid;
-        }
-
-        public void setSessionid(String sessionid) {
-            this.sessionid = sessionid;
-        }
-    }
-
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody LogoutRequest request, HttpSession currentSession) {
+    public ResponseEntity<?> logout(HttpSession currentSession) {
         try {
-            // Si un ID de session est fourni, utilisez-le
-            /*if (request.getSessionid() != null && !request.getSessionid().isEmpty()) {
-                sessionService.setSessionId(request.getSessionid());
-            }*/
-
             // Réinitialisation des attributs de session (équivalent à ce qui est fait dans le PHP)
             sessionService.setAttribute("active", 0);
             sessionService.setAttribute("last_activity", Instant.now().getEpochSecond());

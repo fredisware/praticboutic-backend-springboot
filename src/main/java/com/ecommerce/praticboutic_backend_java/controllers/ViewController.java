@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ViewController {
 
     @GetMapping("/autoclose")
-    public String showAutoclosePage(@RequestParam String sessionid, Model model) {
-        model.addAttribute("sessionid", sessionid);
+    public String showAutoclosePage(Model model) {
         return "autoclose"; // => templates/autoclose.html
     }
 }

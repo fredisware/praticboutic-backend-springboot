@@ -32,15 +32,7 @@ public class PasswordResetController {
                                           HttpServletRequest httpRequest, HttpServletResponse httpResponse
     ) {
         try {
-            // Si un sessionId est fourni, on l'utilise
-            if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
-                Cookie sessionCookie = new Cookie("JSESSIONID", request.getSessionId());
-                sessionCookie.setPath("/");
-                sessionCookie.setMaxAge(-1); // Cookie de session
-                httpResponse.addCookie(sessionCookie);
 
-            }
-            
             // Obtenir l'adresse IP du client
             String ipAddress = httpRequest.getRemoteAddr();
             // X-Forwarded-For header pour les clients derrière un proxy

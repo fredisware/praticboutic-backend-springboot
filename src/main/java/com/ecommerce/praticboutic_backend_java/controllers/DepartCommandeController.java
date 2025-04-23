@@ -71,19 +71,6 @@ public class DepartCommandeController {
     public ResponseEntity<List<String>> creerDepartCommande(@RequestBody Map<String, Object> input, HttpSession session) {
         Customer customerInfo;
         try {
-            // Check if session is active
-            /*if (session.getAttribute("last_activity") != null) {
-                long lastActivity = (Long) session.getAttribute("last_activity");
-                int maxLifetime = session.getMaxInactiveInterval();
-                if (System.currentTimeMillis() / 1000 - lastActivity > maxLifetime) {
-                    throw new SessionExpiredException("Session expired");
-                } else {
-                    // Update last activity timestamp
-                    session.setAttribute("last_activity", System.currentTimeMillis() / 1000);
-                }
-            } else {
-                throw new SessionExpiredException("Session expired");
-            }*/
             // Check if customer exists in session
             String customer = (String) session.getAttribute("customer");
             if (customer == null || customer.isEmpty()) {

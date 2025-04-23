@@ -58,11 +58,7 @@ public class LoginLinkController {
     @PostMapping("/login-link")
     public ResponseEntity<?> createLoginLink(@RequestBody LoginLinkRequest request) {
         try {
-            // Vérifier si la session est valide
-            /*if (!sessionService.isSessionValid(request.getSessionid())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Session expirée"));
-            }*/
-            
+
             // Vérifier l'authentification
             if (!sessionService.isAuthenticated()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Non authentifié"));
@@ -111,11 +107,11 @@ public class LoginLinkController {
                     url = loginLink.getUrl();
                 } else {
                     // Compte incomplet, créer un lien d'onboarding
-                    url = createInscription(request.getSessionid(), request.getBouticid(), request.getPlatform());
+                    url = createInscription( request.getBouticid(), request.getPlatform());
                 }
             } else {
                 // Aucun compte, créer un nouveau
-                url = createInscription(request.getSessionid(), request.getBouticid(), request.getPlatform());
+                url = createInscription(request.getBouticid(), request.getPlatform());
             }
             
             return ResponseEntity.ok(Map.of("result", url));
@@ -125,7 +121,7 @@ public class LoginLinkController {
         }
     }
     
-    private String createInscription(String sessionId, Integer bouticId, String platform) throws StripeException {
+    private String createInscription(Integer bouticId, String platform) throws StripeException {
 
         // Créer un compte Stripe Connect Express
         AccountCreateParams accountParams = AccountCreateParams.builder()
@@ -149,8 +145,8 @@ public class LoginLinkController {
         sessionService.setBoId(bouticId);
         
         // Créer un lien d'onboarding
-        String refreshUrl = baseUrl + "/api/redirect-handler?sessionid=" + sessionId + "&platform=" + platform;
-        String returnUrl = baseUrl + "/api/redirect-handler?sessionid=" + sessionId + "&platform=" + platform;
+        String refreshUrl = baseUrl + "/api/redirect-handler?platform=" + platform;
+        String returnUrl = baseUrl + "/api/redirect-handler?platform=" + platform;
         
         AccountLinkCreateParams linkParams = AccountLinkCreateParams.builder()
                 .setAccount(account.getId())

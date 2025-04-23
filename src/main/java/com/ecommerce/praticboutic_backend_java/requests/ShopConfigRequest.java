@@ -1,20 +1,10 @@
 package com.ecommerce.praticboutic_backend_java.requests;
 
 public class ShopConfigRequest {
-    private String sessionid;
     private String chxmethode;
     private String chxpaie;
     private String mntmincmd;
     private Integer validsms;
-
-    // Getters et Setters
-    public String getSessionid() {
-        return sessionid;
-    }
-
-    public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
-    }
 
     public String getChxmethode() {
         return chxmethode;

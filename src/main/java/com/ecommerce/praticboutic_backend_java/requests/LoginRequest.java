@@ -4,7 +4,6 @@ public class LoginRequest {
 
     private String email;
     private String password;
-    private String sessionid;
 
     // Getters and Setters
     public String getEmail() {
@@ -22,12 +21,6 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    public String getSessionid() {
-        return sessionid;
-    }
-    
-    public void setSessionId(String sessionid) {
-        this.sessionid = this.sessionid;
-    }
+
+
 }
