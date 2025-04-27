@@ -51,6 +51,14 @@ jobs:
           sleep 5
           
           echo "🟢 Checking if backend started:"
-          ps aux | grep praticboutic_backend_java || true
-
+          set +e
+          ps aux | grep praticboutic_backend_java | grep -v grep
+          backend_status=$?
+          set -e
+        
+          if [ "$backend_status" -eq 0 ]; then
+            echo "✅ Backend process detected."
+          else
+            echo "⚠️  Backend process NOT found."
+          fi
 
