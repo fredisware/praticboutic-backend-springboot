@@ -26,11 +26,11 @@ jobs:
 
     - name: Clean FTP directory
       run: |
-        lftp -d -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; rm -f praticboutic_backend_java-0.0.1-SNAPSHOT.jar || echo 'File not found, skipping deletion.'; bye"
+        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; rm -f praticboutic_backend_java-0.0.1-SNAPSHOT.jar || echo 'File not found, skipping deletion.'; bye"
 
     - name: Deploy backend JAR via FTP
       run: |
-        lftp -d -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; mirror -R ./target/ ./; bye"
+        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; mirror -R ./target/ ./; bye"
 
     - name: Restart backend service (using password for SSH)
       uses: appleboy/ssh-action@v0.1.10
