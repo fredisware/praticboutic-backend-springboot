@@ -21,23 +21,23 @@ jobs:
     - name: Build application
       run: mvn clean package -DskipTests
 
-    - name: Deploy application to current FTP directory via SCP
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.FTP_JAVABACKENDSERVER }}
-        username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
-        key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
-        source: "target/praticboutic_backend_java-0.0.1-SNAPSHOT.jar"
-        target: "./"
+    - name: Install lftp
+      run: sudo apt-get update && sudo apt-get install lftp -y
 
-    - name: Restart application on server with dev profile
+    - name: Clean FTP directory
+      run: |
+        lftp -c "set sftp:connect-program 'ssh -a -x'; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; rm -f javabackend.jar; bye"
+
+    - name: Deploy backend JAR via FTP
+      run: |
+        lftp -c "set sftp:connect-program 'ssh -a -x'; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; put target/*.jar -o javabackend.jar; bye"
+
+    - name: Restart backend service (using password for SSH)
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: ${{ secrets.FTP_JAVABACKENDSERVER }}
         username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
-        key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
+        password: ${{ secrets.FTP_JAVABACKENDPASSWORD }}  # Authentification via mot de passe
         script: |
           pkill -f 'java.*praticboutic_backend_java-0.0.1-SNAPSHOT.jar' || true
           nohup java -jar -Dspring.profiles.active=dev ./praticboutic_backend_java-0.0.1-SNAPSHOT.jar > log.txt 2>&1 &
-
-
