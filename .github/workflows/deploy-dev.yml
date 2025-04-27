@@ -62,3 +62,6 @@ jobs:
             echo "⚠️  Backend process NOT found."
           fi
 
+          # ✅ Très important pour GitHub Actions :
+          exit 0
+
