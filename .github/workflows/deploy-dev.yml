@@ -1,0 +1,43 @@
+name: Workflow Praticboutic javabackend DEV
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'  # adapte si besoin
+
+    - name: Build application
+      run: mvn clean package -DskipTests
+
+    - name: Deploy application to current FTP directory via SCP
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.FTP_JAVABACKENDSERVER }}
+        username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
+        key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
+        source: "target/praticboutic_backend_java-0.0.1-SNAPSHOT.jar"
+        target: "./"
+
+    - name: Restart application on server with dev profile
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.FTP_JAVABACKENDSERVER }}
+        username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
+        key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
+        script: |
+          pkill -f 'java.*praticboutic_backend_java-0.0.1-SNAPSHOT.jar' || true
+          nohup java -jar -Dspring.profiles.active=dev ./praticboutic_backend_java-0.0.1-SNAPSHOT.jar > log.txt 2>&1 &
+
+
