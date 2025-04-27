@@ -26,11 +26,11 @@ jobs:
 
     - name: Clean FTP directory
       run: |
-        lftp -c "set sftp:connect-program 'ssh -a -x'; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; rm -f javabackend.jar; bye"
+        lftp -c "set sftp:connect-program 'ssh -a -x'; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; rm -f praticboutic_backend_java-0.0.1-SNAPSHOT.jar; bye"
 
     - name: Deploy backend JAR via FTP
       run: |
-        lftp -c "set sftp:connect-program 'ssh -a -x'; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; put target/*.jar -o javabackend.jar; bye"
+        lftp -c "set sftp:connect-program 'ssh -a -x'; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; put target/*.jar -o praticboutic_backend_java-0.0.1-SNAPSHOT.jar; bye"
 
     - name: Restart backend service (using password for SSH)
       uses: appleboy/ssh-action@v0.1.10
