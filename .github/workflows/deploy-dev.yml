@@ -46,7 +46,6 @@ jobs:
             pkill -f 'java.*praticboutic_backend_java-0.0.1-SNAPSHOT.jar' || true
             echo '🔵 pkill done (even if nothing was running).'
     
-            set -e
             echo '🟠 Starting new backend instance...'
             nohup java -jar -Dspring.profiles.active=dev ./praticboutic_backend_java-0.0.1-SNAPSHOT.jar > log.txt 2>&1 &
             sleep 5
@@ -55,7 +54,6 @@ jobs:
             set +e
             ps aux | grep praticboutic_backend_java | grep -v grep
             backend_status=$?
-            set -e
     
             if [ \"$backend_status\" -eq 0 ]; then
               echo '✅ Backend process detected.'
