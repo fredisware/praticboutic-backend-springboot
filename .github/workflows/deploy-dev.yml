@@ -62,6 +62,9 @@ jobs:
             else
               echo '⚠️  Backend process NOT found.'
             fi
+
+            echo "📄 Dernières lignes de log.txt"
+            tail -n 20 log.txt
     
             exit 0
           "
