@@ -26,10 +26,10 @@ jobs:
 
     - name: Clean FTP directory
       run: |
-        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; rm -f praticboutic_backend_java-0.0.1-SNAPSHOT.jar || echo 'File not found, skipping deletion.'; bye"
+        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; chmod -R -f 777 *; glob -f mrm *; glob -f mrm .*; glob -d rm -rf *; glob -d rm -rf .*; bye"
 
     - name: Deploy backend JAR via FTP
       run: |
-        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; mirror -R ./target/ ./; bye"
+        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; mirror -R ./ ./; bye"
 
 
