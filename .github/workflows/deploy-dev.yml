@@ -32,37 +32,4 @@ jobs:
       run: |
         lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; mirror -R ./target/ ./; bye"
 
-    - name: Restart backend service (using password for SSH)
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: ${{ secrets.FTP_JAVABACKENDSERVER }}
-        username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
-        password: ${{ secrets.FTP_JAVABACKENDPASSWORD }}
-        debug: true
-        script: |
-          bash -c "
-            set +e
-            echo '🔵 Killing old backend process...'
-            pkill -f 'java.*praticboutic_backend_java-0.0.1-SNAPSHOT.jar' || true
-            echo '🔵 pkill done (even if nothing was running).'
-    
-            echo '🟠 Starting new backend instance...'
-            nohup java -jar -Dspring.profiles.active=dev /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/praticboutic_backend_java-0.0.1-SNAPSHOT.jar > log.txt 2>&1 &
-            sleep 5
-    
-            echo '🟢 Checking if backend started:'
-            set +e
-            ps aux | grep praticboutic_backend_java | grep -v grep
-            backend_status=$?
-    
-            if [ \"$backend_status\" -eq 0 ]; then
-              echo '✅ Backend process detected.'
-            else
-              echo '⚠️  Backend process NOT found.'
-            fi
 
-            echo "📄 Dernières lignes de log.txt"
-            tail -n 20 log.txt
-    
-            exit 0
-          "
