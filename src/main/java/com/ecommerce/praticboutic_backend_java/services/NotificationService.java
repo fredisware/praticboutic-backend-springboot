@@ -227,7 +227,7 @@ public class NotificationService {
         String body = "Commande(s) en attente de validation";
         String imageUrl = rootUrlFront + "assets/img/logo-pratic-boutic.png";
 
-        String icon = rootUrlBack + "common/img/pb_notificon.png";
+        String icon = rootUrlBack + "img/pb_notificon.png";
         String link = rootUrlFront + "pushstart";
 
         Message message = null;
