@@ -28,7 +28,7 @@ jobs:
         debug: true
         script: |
           # git pull origin main  # ou "master" selon ta branche
-          # git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr
+          git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr
           # rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/*
           # git clone git@github.com:praticboutic/praticboutic-javabackend.git
           
