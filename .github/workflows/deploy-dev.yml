@@ -27,7 +27,7 @@ jobs:
         port: 22
         debug: true
         script: |
-          rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/*
+          # rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/*
           git clone git@github.com:praticboutic/praticboutic-javabackend.git
           
           cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/src/main/resources/
