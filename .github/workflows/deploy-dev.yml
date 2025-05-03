@@ -30,17 +30,15 @@ jobs:
           rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/{*,.*}
           # git pull origin main  # ou "master" selon ta branche
           git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr
-          # rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/*
-          # git clone git@github.com:praticboutic/praticboutic-javabackend.git
           
-          # cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/src/main/resources/
-          # cp application-dev.properties application.properties
+          cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/src/main/resources/
+          cp application-dev.properties application.properties
 
-          # cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/
+          cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/
           # Stop l'app, nettoie, build avec le profil dev
-          # mvn spring-boot:stop clean install -DskipTests -Dspring-boot.run.profiles=dev
+          mvn spring-boot:stop clean install -DskipTests -Dspring-boot.run.profiles=dev
           # Redémarre l'app avec le bon profil
-          # nohup mvn spring-boot:start -DskipTests -Dspring-boot.run.profiles=dev &
+          nohup mvn spring-boot:start -DskipTests -Dspring-boot.run.profiles=dev &
             
 
 
