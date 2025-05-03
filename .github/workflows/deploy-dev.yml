@@ -26,6 +26,7 @@ jobs:
         key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
         port: 22
         debug: true
+        sync: true
         script: |
           cp -r . /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/
           
