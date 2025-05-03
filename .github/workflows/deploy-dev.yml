@@ -19,7 +19,7 @@ jobs:
         java-version: '21'  # adapte si besoin
 
     - name: Upload tous les fichiers vers le serveur via SCP
-      uses: appleboy/scp-action@v0.1.4
+      uses: appleboy/scp-action@v1.0.0
       with:
         host: ${{ secrets.FTP_JAVABACKENDSERVER }}
         username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
