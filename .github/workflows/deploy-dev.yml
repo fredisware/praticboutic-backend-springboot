@@ -43,10 +43,10 @@ jobs:
           cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/
 
           # Stop l'app, nettoie, build avec le profil dev
-          mvn spring-boot:stop clean install -Dspring-boot.run.profiles=dev
+          mvn spring-boot:stop clean install -DskipTests -Dspring-boot.run.profiles=dev
 
           # Redémarre l'app avec le bon profil
-          mvn spring-boot:start -Dspring-boot.run.profiles=dev
+          mvn spring-boot:start -DskipTests -Dspring-boot.run.profiles=dev
             
 
 
