@@ -28,6 +28,7 @@ jobs:
         source: "."
         target: /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/
         strip_components: 0
+        debug: true
 
     - name: Connexion SSH et déploiement
       uses: appleboy/ssh-action@v1.0.3
