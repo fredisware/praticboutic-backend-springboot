@@ -19,7 +19,7 @@ jobs:
         java-version: '21'  # adapte si besoin
 
     - name: Connexion SSH et déploiement
-      uses: appleboy/ssh-action@v1.0.3
+      uses: appleboy/ssh-action@v1.2.2
       with:
         host: ${{ secrets.FTP_JAVABACKENDSERVER }}
         username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
