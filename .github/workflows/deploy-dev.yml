@@ -26,7 +26,6 @@ jobs:
         key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
         port: 22
         debug: true
-        sync: true
         script: |
           rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/*
           git clone git@github.com:praticboutic/praticboutic-javabackend.git
