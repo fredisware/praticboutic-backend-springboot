@@ -18,16 +18,16 @@ jobs:
         distribution: 'temurin'
         java-version: '21'  # adapte si besoin
 
-    - name: Install lftp
-      run: sudo apt-get update && sudo apt-get install lftp -y
-
-    - name: Clean FTP directory
-      run: |
-        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; chmod -R -f 777 *; glob -f mrm *; glob -f mrm .*; glob -d rm -rf *; glob -d rm -rf .*; bye"
-
-    - name: Deploy backend JAR via FTP
-      run: |
-        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; mirror -R ./ ./; bye"
+    - name: Upload tous les fichiers vers le serveur via SCP
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.FTP_JAVABACKENDSERVER }}
+        username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
+        key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
+        port: 22
+        source: "."
+        target: /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/
+        strip_components: 0
 
     - name: Connexion SSH et déploiement
       uses: appleboy/ssh-action@v1.0.3
