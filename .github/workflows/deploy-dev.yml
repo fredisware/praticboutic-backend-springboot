@@ -18,35 +18,35 @@ jobs:
         distribution: 'temurin'
         java-version: '21'  # adapte si besoin
 
-    - name: Install lftp
-      run: sudo apt-get update && sudo apt-get install lftp -y
-
-    - name: Clean FTP directory
-      run: |
-        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; chmod -R -f 777 *; glob -f mrm *; glob -f mrm .*; glob -d rm -rf *; glob -d rm -rf .*; bye"
-
-    - name: Deploy backend JAR via FTP
-      run: |
-        lftp -c "set sftp:connect-program 'ssh -a -x'; set ssl:verify-certificate false; open ftp://${{ secrets.FTP_JAVABACKENDSERVER }}; user ${{ secrets.FTP_JAVABACKENDUSERNAME }} ${{ secrets.FTP_JAVABACKENDPASSWORD }}; mirror -R ./ ./; bye"
-
     - name: Connexion SSH et déploiement
-      uses: appleboy/ssh-action@v1.0.3
+      uses: appleboy/ssh-action@v1.2.2
       with:
         host: ${{ secrets.FTP_JAVABACKENDSERVER }}
         username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
         key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
         port: 22
+        debug: true
         script: |
+          rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/{*,.*}
+          # git pull origin main  # ou "master" selon ta branche
+          git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr
+          
           cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/src/main/resources/
           cp application-dev.properties application.properties
 
           cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/
-
           # Stop l'app, nettoie, build avec le profil dev
-          mvn spring-boot:stop clean install -Dspring-boot.run.profiles=dev
+          mvn clean install -DskipTests -Dspring-boot.run.profiles=dev
 
-          # Redémarre l'app avec le bon profil
-          mvn spring-boot:start -Dspring-boot.run.profiles=dev
+          # Trouve le fichier JAR
+          JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
+          
+          # Arrête l'application précédente s'il y en a une
+          pkill -f $(basename "$JAR_FILE") || true
+          
+          # Démarre la nouvelle version en arrière-plan
+          nohup java -jar "$JAR_FILE" --spring.profiles.active=dev > /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/log.out 2>&1 &
+        
             
 
 
