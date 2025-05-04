@@ -12,6 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${app.root.url.front}")
     private String fronturl;
 
+    @Value("${file.upload.location}")
+    private String upLoadPath;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Apply CORS to all endpoints
@@ -28,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
                 .addResourceHandler("/upload/**")
-                .addResourceLocations("file:/var/www/praticboutic_backend_java/upload/");
+                .addResourceLocations(upLoadPath);
         // Par ex. : "file:/home/fred/uploads/"
     }
 
