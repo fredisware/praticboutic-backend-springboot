@@ -64,4 +64,4 @@ Ce projet est actuellement privé. Pour plus d’informations, veuillez contacte
 
 🙋‍♂️ Auteur
 Développé par Frédéric Legrand.
-Contact : flegrnd;info@gmail.com
+Contact : flegrnd.info@gmail.com
