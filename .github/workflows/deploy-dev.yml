@@ -27,6 +27,18 @@ jobs:
         port: 22
         debug: true
         script: |
+          # 🛑 Étape 1 : tuer tout processus Java écoutant sur le port 8444
+          PID=$(lsof -i :8444 -sTCP:LISTEN -t) && if [ -n "$PID" ]; then
+          echo "Processus Java trouvé sur le port 8444 (PID: $PID), arrêt en cours..."
+          kill "$PID"
+          sleep 2
+          if ps -p "$PID" > /dev/null; then
+            echo "Forçage du processus (kill -9)..."
+            kill -9 "$PID"
+          fi
+          else
+            echo "Aucun processus Java sur le port 8444."
+          fi
           rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/{*,.*}
           # git pull origin main  # ou "master" selon ta branche
           git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr
