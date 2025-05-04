@@ -40,18 +40,18 @@ jobs:
           fi
           rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/{*,.*}
           # git pull origin main  # ou "master" selon ta branche
-          git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr
+          sudo -u qruser git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr
 
           cd /var/www/vhosts/praticboutic.fr/
           chown -R qruser:psaserv javabackdev.praticboutic.fr/
           chmod -R 777 javabackdev.praticboutic.fr/
           
           cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/src/main/resources/
-          cp application-dev.properties application.properties
+          sudo -u qruser cp application-dev.properties application.properties
 
           cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/
           # Stop l'app, nettoie, build avec le profil dev
-          mvn clean install -DskipTests -Dspring-boot.run.profiles=dev
+          sudo -u qruser mvn clean install -DskipTests -Dspring-boot.run.profiles=dev
 
           # Trouve le fichier JAR
           JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
@@ -60,7 +60,7 @@ jobs:
           pkill -f $(basename "$JAR_FILE") || true
           
           # Démarre la nouvelle version en arrière-plan
-          nohup java -jar "$JAR_FILE" --spring.profiles.active=dev > /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/log.out 2>&1 &
+          sudo -u qruser nohup java -jar "$JAR_FILE" --spring.profiles.active=dev > /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/log.out 2>&1 &
         
             
 
