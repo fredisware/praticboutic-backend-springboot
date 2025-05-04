@@ -25,7 +25,6 @@ jobs:
         username: ${{ secrets.FTP_JAVABACKENDUSERNAME }}
         key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
         port: 22
-        debug: true
         script: |
           # 🛑 Étape 1 : tuer tout processus Java écoutant sur le port 8444
           PID=$(lsof -i :8444 -sTCP:LISTEN -t) && if [ -n "$PID" ]; then
