@@ -503,7 +503,8 @@ public class DatabaseController {
             }
             sbQuerySelect.append(" FROM `").append(input.getTable()).append("` WHERE ");
             sbQuerySelect.append(strClePrimaire).append(" = ").append(input.getIdtoup());
-            sbQuerySelect.append(" AND ").append("customid = ").append(input.getBouticid());
+            if (input.getIdtoup() > 0)
+                sbQuerySelect.append(" AND customid = ").append(input.getBouticid());
             Query qSelect = entityManager.createNativeQuery(sbQuerySelect.toString());
             Object result = qSelect.getSingleResult();
             response.put("values", result);
