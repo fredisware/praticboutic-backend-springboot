@@ -505,10 +505,17 @@ public class DatabaseController {
             sbQuerySelect.append(strClePrimaire).append(" = ").append(input.getIdtoup());
             sbQuerySelect.append(" AND ").append("customid = ").append(input.getBouticid());
             Query qSelect = entityManager.createNativeQuery(sbQuerySelect.toString());
-            Object result = qSelect.getSingleResult();
-            response.put("values", result);
+
+            List<?> results = qSelect.getResultList();
+
+            if (!results.isEmpty()) {
+                response.put("values", results.get(0)); // ou `results` si tu veux tout renvoyer
+            } else {
+                response.put("values", Collections.emptyList());
+            }
             response.put("success", true);
         } catch (Exception e) {
+
             response.put("error", e.getMessage());
         }
         return ResponseEntity.ok(response);
