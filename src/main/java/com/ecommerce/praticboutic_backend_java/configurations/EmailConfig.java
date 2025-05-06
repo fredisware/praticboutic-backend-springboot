@@ -12,25 +12,25 @@ import java.util.Properties;
 @Configuration
 public class EmailConfig {
 
-    @Value("${mail.host}")
+    @Value("${spring.mail.host}")
     private String host;
 
-    @Value("${mail.port}")
+    @Value("${spring.mail.port}")
     private int port;
 
-    @Value("${mail.username}")
+    @Value("${spring.mail.username}")
     private String username;
 
-    @Value("${mail.password}")
+    @Value("${spring.mail.password}")
     private String password;
 
-    @Value("${mail.smtp.auth}")
+    @Value("${spring.mail.smtp.auth}")
     private boolean auth;
 
-    @Value("${mail.smtp.starttls.enable}")
+    @Value("${spring.mail.smtp.starttls.enable}")
     private boolean starttls;
 
-    @Value("${mail.debug}")
+    @Value("${spring.mail.debug}")
     private boolean debug;
 
     @Bean
