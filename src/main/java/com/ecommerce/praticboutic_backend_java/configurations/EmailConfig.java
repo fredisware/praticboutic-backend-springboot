@@ -24,13 +24,13 @@ public class EmailConfig {
     @Value("${spring.mail.password}")
     private String password;
 
-    @Value("${spring.mail.smtp.auth}")
+    @Value("${spring.mail.properties.mail.smtp.auth}")
     private boolean auth;
 
-    @Value("${spring.mail.smtp.starttls.enable}")
+    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
     private boolean starttls;
 
-    @Value("${spring.mail.debug}")
+    @Value("${spring.mail.properties.mail.debug}")
     private boolean debug;
 
     @Bean
