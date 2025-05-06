@@ -61,6 +61,8 @@ jobs:
           
           # Démarre la nouvelle version en arrière-plan
           sudo -u qruser nohup java -jar "$JAR_FILE" --spring.profiles.active=dev > /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/log.out 2>&1 &
+          chown qruser:psaserv log.out
+
         
             
 
