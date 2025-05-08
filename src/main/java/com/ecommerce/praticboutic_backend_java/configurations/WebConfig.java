@@ -18,7 +18,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Apply CORS to all endpoints
-                .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .exposedHeaders("Content-Length", "X-JSON") // Optional, expose specific headers
                 .allowedHeaders("Content-Type", "Authorization", "Accept", "Accept-Language", "X-Authorization")
