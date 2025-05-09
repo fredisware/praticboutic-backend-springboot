@@ -39,16 +39,14 @@ public class CheckVersionController {
     public ResponseEntity<?> checkVersion(@RequestBody SessionRequest request) {
         try {
             // Lire le fichier d'autorisation
-            Path path = Paths.get(authorizationFilePath);
-            
-            if (!Files.exists(path)) {
+            InputStream is = getClass().getClassLoader().getResourceAsStream(authorizationFilePath);
+            if (is == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponse("Fichier d'autorisation non trouvé"));
             }
             
             // Lire le contenu JSON du fichier
-            String content = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-            JsonNode authorizationData = objectMapper.readTree(content);
+            JsonNode authorizationData = objectMapper.readTree(is);
             
             return ResponseEntity.ok(authorizationData);
         } catch (Exception e) {
