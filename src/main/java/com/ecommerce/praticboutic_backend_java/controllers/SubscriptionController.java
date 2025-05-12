@@ -658,6 +658,7 @@ public class SubscriptionController {
     @PostMapping("/check-subscription")
     public ResponseEntity<?> checkSubscription(@RequestBody Map<String, Object> input, HttpSession session) {
         try {
+            Map<String, Object> response = new HashMap<>();
 
             // Configuration de Stripe
             Stripe.apiKey = stripeSecretKey;
@@ -680,14 +681,13 @@ public class SubscriptionController {
             // Requête pour obtenir les abonnements
             SubscriptionCollection subscriptions = com.stripe.model.Subscription.list(params);
 
-            String output;
             if (!subscriptions.getData().isEmpty()) {
-                output = "OK";
+                response.put("result", "OK");
             } else {
-                output = "KO";
+                response.put("result", "KO");
             }
 
-            return ResponseEntity.ok(output);
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();

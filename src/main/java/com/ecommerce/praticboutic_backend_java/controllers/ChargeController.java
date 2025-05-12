@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.Duration;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -42,7 +43,7 @@ public class ChargeController {
             }
 
             // Récupérer l'ID de boutique
-            Integer bouticId = request.getBouticId();
+            Integer bouticId = request.getBouticid();
             if (bouticId == null) {
                 return ResponseEntity.badRequest().body(new ErrorResponse("ID de boutique manquant"));
             }
@@ -50,7 +51,7 @@ public class ChargeController {
             // Récupérer l'ID du compte Stripe
             String stripeAccountId = parameterService.getParameterValue("STRIPE_ACCOUNT_ID", bouticId);
             if (stripeAccountId == null || stripeAccountId.isEmpty()) {
-                return ResponseEntity.ok("KO");
+                return ResponseEntity.ok(Map.of("result","KO"));
             }
 
             // Configurer Stripe
@@ -60,7 +61,7 @@ public class ChargeController {
             Account account = Account.retrieve(stripeAccountId);
             String result = account.getChargesEnabled() ? "OK" : "KO";
 
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(Map.of("result",result));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
