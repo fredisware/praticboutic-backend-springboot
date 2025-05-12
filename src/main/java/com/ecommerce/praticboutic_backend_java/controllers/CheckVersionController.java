@@ -38,20 +38,20 @@ public class CheckVersionController {
     @PostMapping("/check")
     public ResponseEntity<?> checkVersion(@RequestBody SessionRequest request) {
         try {
-            // Lire le fichier d'autorisation
-            InputStream is = getClass().getClassLoader().getResourceAsStream(authorizationFilePath);
-            if (is == null) {
+            Resource resource = resourceLoader.getResource("classpath:" + authorizationFilePath);
+            if (!resource.exists()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse("Fichier d'autorisation non trouvé"));
+                        .body(new ErrorResponse("Fichier d'autorisation non trouvé"));
             }
-            
-            // Lire le contenu JSON du fichier
-            JsonNode authorizationData = objectMapper.readTree(is);
-            
-            return ResponseEntity.ok(authorizationData);
+
+            try (InputStream is = resource.getInputStream()) {
+                JsonNode authorizationData = objectMapper.readTree(is);
+                return ResponseEntity.ok(authorizationData);
+            }
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(e.getMessage()));
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
     
