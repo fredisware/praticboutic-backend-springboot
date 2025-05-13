@@ -12,13 +12,13 @@ public class ArtListImg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "artlistimgid")
-    private Integer artListImgId;
+    private Integer artlistimgid;
 
     @Column(name = "customid")
-    private Integer customId;
+    private Integer customid;
 
     @Column(name = "artid")
-    private Integer artId;
+    private Integer artid;
 
     @Column(name = "image", length = 255)
     private String image;
@@ -33,9 +33,9 @@ public class ArtListImg {
     public ArtListImg() {
     }
 
-    public ArtListImg(Integer customId, Integer artId, String image, Integer favori, Integer visible) {
-        this.customId = customId;
-        this.artId = artId;
+    public ArtListImg(Integer customid, Integer artId, String image, Integer favori, Integer visible) {
+        this.customid = customid;
+        this.artid = artId;
         this.image = image;
         this.favori = favori;
         this.visible = visible;
@@ -43,27 +43,27 @@ public class ArtListImg {
 
     // Getters et Setters
     public Integer getArtListImgId() {
-        return artListImgId;
+        return artlistimgid;
     }
 
-    public void setArtListImgId(Integer artListImgId) {
-        this.artListImgId = artListImgId;
+    public void setArtListImgId(Integer artlistimgid) {
+        this.artlistimgid = this.artlistimgid;
     }
 
-    public Integer getCustomId() {
-        return customId;
+    public Integer getCustomid() {
+        return customid;
     }
 
-    public void setCustomId(Integer customId) {
-        this.customId = customId;
+    public void setCustomid(Integer customid) {
+        this.customid = customid;
     }
 
-    public Integer getArtId() {
-        return artId;
+    public Integer getArtid() {
+        return artid;
     }
 
-    public void setArtId(Integer artId) {
-        this.artId = artId;
+    public void setArtId(Integer artid) {
+        this.artid = artid;
     }
 
     public String getImage() {
@@ -93,9 +93,9 @@ public class ArtListImg {
     @Override
     public String toString() {
         return "ArtListImg{" +
-                "artListImgId=" + artListImgId +
-                ", customId=" + customId +
-                ", artId=" + artId +
+                "artlistimgid=" + artlistimgid +
+                ", customid=" + customid +
+                ", artid=" + artid +
                 ", image='" + image + '\'' +
                 ", favori=" + favori +
                 ", visible=" + visible +
@@ -106,7 +106,7 @@ public class ArtListImg {
     {
         List<Object> row = new ArrayList<>();
         row.add(getArtListImgId());
-        row.add(getCustomId());
+        row.add(getCustomid());
         row.add(getImage());
         row.add(getFavori());
         row.add(getVisible());
