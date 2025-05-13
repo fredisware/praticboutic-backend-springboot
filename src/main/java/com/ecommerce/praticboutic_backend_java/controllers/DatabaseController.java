@@ -770,7 +770,7 @@ public class DatabaseController {
             List<Object> values = new ArrayList<>();
             values.add(result);
 
-            response.put("values", values);
+            response.put("value", values);
             response.put("success", true);
 
             return ResponseEntity.ok(response);
@@ -900,7 +900,7 @@ public class DatabaseController {
             List<Object> values = new ArrayList<>();
             values.add(result);
 
-            response.put("values", values);
+            response.put("value", values);
             response.put("success", true);
 
             return ResponseEntity.ok(response);
