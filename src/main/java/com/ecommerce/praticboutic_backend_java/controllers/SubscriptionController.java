@@ -517,7 +517,7 @@ public class SubscriptionController {
             Subscription subscription = Subscription.create(subscriptionParams);
 
             // Enregistrer l'abonnement dans la base de données
-            int bouticId = (Integer) session.getAttribute("bo_id");
+            Integer bouticId = Integer.parseInt(session.getAttribute("bo_id").toString());
             String subscriptionId = subscription.getId();
 
             jdbcTemplate.update(
