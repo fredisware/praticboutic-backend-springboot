@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 
+import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
 import com.ecommerce.praticboutic_backend_java.services.EmailService;
 import com.ecommerce.praticboutic_backend_java.utils.Utils;
 import com.ecommerce.praticboutic_backend_java.entities.Identifiant;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.Cipher;
@@ -30,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -40,6 +43,9 @@ public class SendCodeController {
 
     @Autowired
     IdentifiantRepository identifiantRepository;
+
+    @Autowired
+    ClientRepository clientRepository;
 
     @Value("${application.url}")
     private String applicationUrl;
@@ -59,38 +65,51 @@ public class SendCodeController {
     @PostMapping("/send-code")
     public ResponseEntity<?> sendVerificationCode(@RequestBody SendCodeRequest request) {
         try {
-            // Generate random code
+            // Vérifier que l'e-mail n'existe pas déjà dans la table client
+
+            if (clientRepository.existsByEmail(request.getEmail())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(List.of("error", "Le courriel " + request.getEmail() + " est déjà attribué à un client. Impossible de continuer."));
+            }
+
+            // Générer un code à 6 chiffres
             SecureRandom secureRandom = new SecureRandom();
             int verificationCode = secureRandom.nextInt(999999);
             String formattedCode = String.format("%06d", verificationCode);
 
+            // Générer un hash aléatoire (comme le md5 dans PHP)
+            String hash = DigestUtils.md5DigestAsHex(
+                    (System.nanoTime() * 100000 + "").getBytes(StandardCharsets.UTF_8)
+            );
+
+            // Stocker en base : email + hash + actif = 0
+            Identifiant identifiant = new Identifiant(request.getEmail(), hash, 0);
+            identifiantRepository.save(identifiant);
+
+            // Chiffrer le code avec AES-256-CBC
             byte[] iv = new byte[16];
             secureRandom.nextBytes(iv);
             IvParameterSpec ivSpec = new IvParameterSpec(iv);
 
-
-            byte[] keyBytes = Hex.decodeHex(idkey); // "2190..." → 16 octets
+            byte[] keyBytes = Hex.decodeHex(idkey); // doit être 32 octets pour AES-256
             SecretKeySpec secretKey = new SecretKeySpec(keyBytes, "AES");
 
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
 
             byte[] encrypted = cipher.doFinal(formattedCode.getBytes(StandardCharsets.UTF_8));
             String encryptedCode = Base64.getEncoder().encodeToString(encrypted);
             String encodedIv = Base64.getEncoder().encodeToString(iv);
 
-            // Save to database
-            Identifiant identifiant = new Identifiant(request.getEmail(), encryptedCode, 0);
-            identifiantRepository.save(identifiant);
-
-            // Send email
+            // Envoyer le code en clair par e-mail
             sendEmail(request.getEmail(), formattedCode);
 
+            // Retourner le code chiffré + IV (comme en PHP)
             return ResponseEntity.ok(new String[]{encryptedCode, encodedIv});
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse(e.getMessage()));
+                    .body(List.of("error", e.getMessage()));
         }
     }
 
