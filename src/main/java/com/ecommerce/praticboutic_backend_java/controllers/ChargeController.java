@@ -61,7 +61,7 @@ public class ChargeController {
             Account account = Account.retrieve(stripeAccountId);
             String result = account.getChargesEnabled() ? "OK" : "KO";
 
-            return ResponseEntity.ok(Map.of("result",result));
+            return ResponseEntity.ok(Map.of("result", result));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
