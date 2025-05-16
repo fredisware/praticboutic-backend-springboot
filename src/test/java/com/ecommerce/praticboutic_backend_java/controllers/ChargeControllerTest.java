@@ -37,7 +37,7 @@ public class ChargeControllerTest {
     public void testCheckStripeAccount_authenticatedAndChargesEnabled_returnsOK() throws Exception {
         // Arrange
         ChargeRequest request = new ChargeRequest();
-        request.setBouticId(1);
+        request.setBouticid(1);
 
         when(sessionService.isAuthenticated()).thenReturn(true);
         when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 1)).thenReturn("acct_test_123");
@@ -89,7 +89,7 @@ public class ChargeControllerTest {
     public void testCheckStripeAccount_accountIdNotFound_returnsKO() {
         // Arrange
         ChargeRequest request = new ChargeRequest();
-        request.setBouticId(2);
+        request.setBouticid(2);
 
         when(sessionService.isAuthenticated()).thenReturn(true);
         when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 2)).thenReturn(null);
