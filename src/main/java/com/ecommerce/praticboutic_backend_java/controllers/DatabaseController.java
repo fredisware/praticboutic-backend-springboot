@@ -86,18 +86,17 @@ public class DatabaseController {
     @PostMapping("/count-elements")
     public ResponseEntity<?> countElementsInTable(@RequestBody VueTableRequest input) {
         Map<String, Object> response = new HashMap<>();
-        // Vérifier l'authentification
-        if (!sessionService.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error","Non authentifié"));
-        }
         try {
+            // Vérifier l'authentification
+            if (!sessionService.isAuthenticated()) {
+                throw new Exception("Non authentifié");
+            }
             String strTable = input.getTable(); Integer iBouticid = input.getBouticid();
             String strSelcol = input.getSelcol(); Integer iSelid = input.getSelid();
             Integer iLimit = input.getLimite(); Integer iOffset = input.getOffset();
             // Vérification si le nom de la table est fourni
             if (strTable == null || strTable.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Le nom de la table est vide."));
+                throw new Exception("Le nom de la table est vide.");
             }
             Class<?> entityClass;
             try {
@@ -201,8 +200,7 @@ public class DatabaseController {
             String tableName = input.getTable(); Long idBoutic = input.getBouticid(); String strColonne = input.getColonne();
             // Validation des données d'entrée
             if (tableName == null || tableName.isEmpty()) {
-                response.put("error", "Le nom de la table est vide.");
-                return ResponseEntity.ok(response);
+                throw new Exception("Le nom de la table est vide.");
             }
             Class<?> entityClass;
             try {
@@ -251,21 +249,17 @@ public class DatabaseController {
         Map<String, Object> response = new HashMap<>();
         try {
             if (!sessionService.isAuthenticated()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Non authentifié"));
+                throw new Exception("Non authentifié");
             }
             // Validation de l'entrée
             if (input.getTable() == null || input.getTable().isEmpty()) {
-                response.put("error", "Le nom de la table est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("Le nom de la table est requis");
             }
             if (input.getBouticid() == null) {
-                response.put("error", "L'ID boutic est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("L'ID boutic est requis");
             }
             if (input.getRow() == null || input.getRow().isEmpty()) {
-                response.put("error", "Les données à insérer sont requises");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception( "Les données à insérer sont requises");
             }
             // Construction dynamique de la classe d'entité
             Class<?> entityClass;
@@ -353,29 +347,23 @@ public class DatabaseController {
 
         try {
             if (!sessionService.isAuthenticated()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Non authentifié"));
+                throw new Exception( "Non authentifié");
             }
             // Validation de l'entrée
             if (input.getTable() == null || input.getTable().isEmpty()) {
-                response.put("error", "Le nom de la table est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("Le nom de la table est requis");
             }
             if (input.getBouticid() == null) {
-                response.put("error", "L'ID boutic est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("L'ID boutic est requis");
             }
             if (input.getRow() == null || input.getRow().isEmpty()) {
-                response.put("error", "Les données à mettre à jour sont requises");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("Les données à mettre à jour sont requises");
             }
             if (input.getIdtoup() == null) {
-                response.put("error", "L'ID de l'élément à mettre à jour est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("L'ID de l'élément à mettre à jour est requis");
             }
             if (input.getColonne() == null || input.getColonne().isEmpty()) {
-                response.put("error", "Le nom de la colonne d'ID est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("Le nom de la colonne d'ID est requis");
             }
 
             // Construction dynamique de la classe d'entité
@@ -464,21 +452,17 @@ public class DatabaseController {
         Map<String, Object> response = new HashMap<>();
         try {
             if (!sessionService.isAuthenticated()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Non authentifié"));
+                throw new Exception("Non authentifié");
             }
             // Validation de l'entrée
             if (input.getTable() == null || input.getTable().isEmpty()) {
-                response.put("error", "Le nom de la table est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("Le nom de la table est requis");
             }
             if (input.getBouticid() == null) {
-                response.put("error", "L'ID boutic est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("L'ID boutic est requis");
             }
             if (input.getIdtoup() == null) {
-                response.put("error", "L'ID de l'élément est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("L'ID de l'élément est requis");
             }
             // Construction dynamique de la classe d'entité
             Class<?> entityClass;
@@ -533,23 +517,19 @@ public class DatabaseController {
 
         try {
             if (!sessionService.isAuthenticated()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Non authentifié"));
+                throw new Exception("Non authentifié");
             }
             // Validation de l'entrée
             if (input.getBouticid() == null) {
-                response.put("error", "L'ID boutic est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("L'ID boutic est requis");
             }
 
             if (input.getLimite() == null || input.getLimite() <= 0) {
-                response.put("error", "La limite est requise et doit être positive");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("La limite est requise et doit être positive");
             }
 
             if (input.getOffset() == null || input.getOffset() < 0) {
-                response.put("error", "L'offset est requis et doit être non négatif");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("L'offset est requis et doit être non négatif");
             }
 
             // Créer la requête JPQL
@@ -596,18 +576,15 @@ public class DatabaseController {
 
         try {
             if (!sessionService.isAuthenticated()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Non authentifié"));
+                throw new Exception("Non authentifié");
             }
             // Validation de l'entrée
             if (input.getCmdid() == null) {
-                response.put("error", "L'ID de la commande est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("L'ID de la commande est requis");
             }
 
             if (input.getBouticid() == null) {
-                response.put("error", "L'ID boutic est requis");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                throw new Exception("L'ID boutic est requis");
             }
 
             // Créer la requête JPQL pour récupérer les données
@@ -729,18 +706,15 @@ public class DatabaseController {
 
         try {
             if (!sessionService.isAuthenticated()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Non authentifié"));
+                throw new Exception("Non authentifié");
             }
             // Validation des paramètres
             if (input.getBouticid() == null) {
-                response.put("error", "L'ID boutic est requis");
-                return ResponseEntity.badRequest().body(response);
+                throw new Exception("L'ID boutic est requis");
             }
 
             if (input.getProp() == null || input.getProp().isEmpty()) {
-                response.put("error", "La propriété à récupérer est requise");
-                return ResponseEntity.badRequest().body(response);
+                throw new Exception("La propriété à récupérer est requise");
             }
 
             // Vérification pour éviter l'injection SQL

@@ -43,8 +43,7 @@ public class CreatePaymentController {
         try {
             // Vérifier si customer est défini dans la session
             if (!sessionService.hasAttribute("customer")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ErrorResponse("Pas de boutic"));
+                throw new Exception("Pas de boutic");
             }
 
             String customer = (String) sessionService.getAttribute("customer");
@@ -54,14 +53,12 @@ public class CreatePaymentController {
             // Vérifier si le courriel est défini
             String mailKey = customer + "_mail";
             if (!sessionService.hasAttribute(mailKey)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ErrorResponse("Pas de courriel"));
+                throw new Exception("Pas de courriel");
             }
 
             // Vérifier si le courriel a déjà été envoyé
             if ("oui".equals(sessionService.getAttribute(mailKey))) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ErrorResponse("Courriel déjà envoyé"));
+                throw new Exception("Courriel déjà envoyé");
             }
 
             // Récupérer le nom de la boutique depuis la requête
@@ -80,8 +77,7 @@ public class CreatePaymentController {
             }
 
             if (customid == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ErrorResponse("Boutique non trouvée"));
+                throw new Exception("Boutique non trouvée");
             }
 
             // Récupérer le compte Stripe connecté

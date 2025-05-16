@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,7 +70,7 @@ public class DepartCommandeController {
     private static final Logger logger = LoggerFactory.getLogger(DepartCommandeController.class);
 
     @PostMapping("/depart-commande")
-    public ResponseEntity<List<String>> creerDepartCommande(@RequestBody Map<String, Object> input, HttpSession session) {
+    public ResponseEntity<?> creerDepartCommande(@RequestBody Map<String, Object> input, HttpSession session) {
         Customer customerInfo;
         try {
             // Check if customer exists in session
@@ -127,10 +129,8 @@ public class DepartCommandeController {
             String validSms = paramService.getParameterValue("VALIDATION_SMS", customerInfo.getCustomId());
             smsService.sendOrderSms(validSms, cmdId, customerInfo.getCustomId(), input.get("telephone").toString());
             session.setAttribute(customer + "_mail", "oui");
-        } catch (SessionExpiredException e) {
-            logger.error("Erreur d'initialisation: {}", e.getMessage(), e);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
         }
         return ResponseEntity.ok(Collections.singletonList("OK"));
     }

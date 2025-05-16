@@ -33,6 +33,7 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -69,7 +70,7 @@ public class SendCodeController {
 
             if (clientRepository.existsByEmail(request.getEmail())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(List.of("error", "Le courriel " + request.getEmail() + " est déjà attribué à un client. Impossible de continuer."));
+                        .body(Map.of("error", "Le courriel " + request.getEmail() + " est déjà attribué à un client. Impossible de continuer."));
             }
 
             // Générer un code à 6 chiffres
@@ -109,7 +110,7 @@ public class SendCodeController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(List.of("error", e.getMessage()));
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 

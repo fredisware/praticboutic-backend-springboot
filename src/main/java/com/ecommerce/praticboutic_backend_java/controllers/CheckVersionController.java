@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -40,18 +41,17 @@ public class CheckVersionController {
         try {
             Resource resource = resourceLoader.getResource("classpath:" + authorizationFilePath);
             if (!resource.exists()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ErrorResponse("Fichier d'autorisation non trouvé"));
+                throw new Exception("Fichier d'autorisation non trouvé");
             }
 
             try (InputStream is = resource.getInputStream()) {
                 JsonNode authorizationData = objectMapper.readTree(is);
-                return ResponseEntity.ok(authorizationData);
+                return ResponseEntity.ok(Map.of("result", authorizationData));
             }
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse(e.getMessage()));
+                    .body(Map.of("error", e.getMessage()));
         }
     }
     
@@ -68,18 +68,17 @@ public class CheckVersionController {
             Resource resource = resourceLoader.getResource("classpath:mobileapp/authorisation.json");
             
             if (!resource.exists()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse("Fichier d'autorisation non trouvé"));
+                throw new Exception("Fichier d'autorisation non trouvé");
             }
             
             // Lire le contenu JSON du fichier
             try (InputStream inputStream = resource.getInputStream()) {
                 JsonNode authorizationData = objectMapper.readTree(inputStream);
-                return ResponseEntity.ok(authorizationData);
+                return ResponseEntity.ok(Map.of("result", authorizationData));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(e.getMessage()));
+                .body(Map.of("error", e.getMessage()));
         }
     }
 

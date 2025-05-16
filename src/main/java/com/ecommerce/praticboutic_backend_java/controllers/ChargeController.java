@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,14 +39,13 @@ public class ChargeController {
         try {
             // Vérifier l'authentification
             if (!sessionService.isAuthenticated()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ErrorResponse("Non authentifié"));
+                throw new Exception("Non authentifié");
             }
 
             // Récupérer l'ID de boutique
             Integer bouticId = request.getBouticid();
             if (bouticId == null) {
-                return ResponseEntity.badRequest().body(new ErrorResponse("ID de boutique manquant"));
+                throw new Exception("ID de boutique manquant");
             }
 
             // Récupérer l'ID du compte Stripe
@@ -65,7 +65,7 @@ public class ChargeController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse(e.getMessage()));
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 

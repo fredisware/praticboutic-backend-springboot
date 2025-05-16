@@ -33,8 +33,7 @@ public class CodePostalZoneController {
 
             // Vérifier si customer est défini dans la session
             if (!sessionService.hasAttribute("customer")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error","Pas de boutic"));
+                throw new Exception("Pas de boutic");
             }
 
             String customer = (String) sessionService.getAttribute("customer");
@@ -44,14 +43,12 @@ public class CodePostalZoneController {
             // Vérifier si le courriel est défini
             String mailKey = customer + "_mail";
             if (!sessionService.hasAttribute(mailKey)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error","Pas de courriel"));
+                throw new Exception("Pas de courriel");
             }
 
             // Vérifier si le courriel a déjà été envoyé
             if ("oui".equals(sessionService.getAttribute(mailKey))) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error","Courriel déjà envoyé"));
+                throw new Exception("Courriel déjà envoyé");
             }
 
             // Récupérer customer de la requête et échapper les caractères spéciaux
