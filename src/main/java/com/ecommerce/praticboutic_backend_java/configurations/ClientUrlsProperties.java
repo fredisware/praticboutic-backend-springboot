@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-@ConfigurationProperties(prefix = "allowed.client.url")
+@ConfigurationProperties(prefix = "allowed.client")
 public class ClientUrlsProperties {
 
     private List<String> clientUrls;
