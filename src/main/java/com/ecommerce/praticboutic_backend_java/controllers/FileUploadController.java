@@ -1,11 +1,16 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 
+
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-        import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 import java.io.File;
@@ -15,11 +20,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+
 @RestController
 @RequestMapping("/api")
 public class FileUploadController {
 
-    @Value("${file.upload.directory:upload}")
+    @Value("${file.upload.location}")
     private String uploadDirectory;
 
     @Value("${file.upload.maxSize:5242880}")  // Default 5MB
@@ -27,6 +33,9 @@ public class FileUploadController {
 
     private final List<String> ALLOWED_EXTENSIONS = Arrays.asList(".png", ".gif", ".jpg", ".jpeg");
     private final List<String> ALLOWED_MIME_TYPES = Arrays.asList("image/gif", "image/png", "image/jpeg");
+
+    private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
+
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam(value = "file", required = false) MultipartFile file,
@@ -43,8 +52,9 @@ public class FileUploadController {
         }
 
         try {
-            // Create directory if it doesn't exist
             Path uploadPath = Paths.get(uploadDirectory).toAbsolutePath().normalize();
+            logger.info("UPLOAD PATH = {}", uploadPath);
+
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
@@ -105,7 +115,6 @@ public class FileUploadController {
         List<String> uploadedFiles = new ArrayList<>();
 
         try {
-            // Create upload directory if it doesn't exist
             Path uploadPath = Paths.get(uploadDirectory).toAbsolutePath().normalize();
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
