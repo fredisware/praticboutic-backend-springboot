@@ -44,7 +44,7 @@ public class FileUploadController {
 
         try {
             // Create directory if it doesn't exist
-            Path uploadPath = Paths.get(uploadDirectory);
+            Path uploadPath = Paths.get(uploadDirectory).toAbsolutePath().normalize();
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
@@ -106,7 +106,7 @@ public class FileUploadController {
 
         try {
             // Create upload directory if it doesn't exist
-            Path uploadPath = Paths.get(uploadDirectory);
+            Path uploadPath = Paths.get(uploadDirectory).toAbsolutePath().normalize();
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
