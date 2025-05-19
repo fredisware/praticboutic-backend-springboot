@@ -9,6 +9,7 @@ import com.ecommerce.praticboutic_backend_java.repositories.*;
 import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
 import com.ecommerce.praticboutic_backend_java.services.*;
 import com.stripe.exception.StripeException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import com.ecommerce.praticboutic_backend_java.entities.*;
 import com.ecommerce.praticboutic_backend_java.requests.*;
@@ -84,7 +85,7 @@ public class DatabaseController {
     //public DatabaseController() {}
 
     @PostMapping("/count-elements")
-    public ResponseEntity<?> countElementsInTable(@RequestBody VueTableRequest input) {
+    public ResponseEntity<?> countElementsInTable(@RequestBody VueTableRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
         try {
             // Vérifier l'authentification
@@ -130,7 +131,7 @@ public class DatabaseController {
     }
 
     @PostMapping("/vue-table")
-    public ResponseEntity<?> vueTable(@RequestBody VueTableRequest input) {
+    public ResponseEntity<?> vueTable(@RequestBody VueTableRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
         if (!sessionService.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -187,7 +188,7 @@ public class DatabaseController {
     }
 
     @PostMapping("/remplir-options")
-    public ResponseEntity<?> remplirOption(@RequestBody RemplirOptionTableRequest input)
+    public ResponseEntity<?> remplirOption(@RequestBody RemplirOptionTableRequest input, HttpServletRequest httpRequest)
     {
         Map<String, Object> response = new HashMap<>();
         if (!sessionService.isAuthenticated()) {
@@ -245,7 +246,7 @@ public class DatabaseController {
      */
     @PostMapping("/insert-row")
     @Transactional
-    public ResponseEntity<?> insertRow(@RequestBody InsertRowRequest input) {
+    public ResponseEntity<?> insertRow(@RequestBody InsertRowRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
         try {
             if (!sessionService.isAuthenticated()) {
@@ -342,7 +343,7 @@ public class DatabaseController {
      */
     @PostMapping("/update-row")
     @Transactional
-    public ResponseEntity<?> updateRow(@RequestBody UpdateRowRequest input) {
+    public ResponseEntity<?> updateRow(@RequestBody UpdateRowRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -448,7 +449,7 @@ public class DatabaseController {
      * @return Une Map contenant le résultat de l'opération
      */
     @PostMapping("/get-values")
-    public ResponseEntity<?> getValues(@RequestBody GetValuesRequest input) {
+    public ResponseEntity<?> getValues(@RequestBody GetValuesRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
         try {
             if (!sessionService.isAuthenticated()) {
@@ -512,7 +513,7 @@ public class DatabaseController {
      * @return Une Map contenant le résultat de l'opération avec les couleurs
      */
     @PostMapping("/color-row")
-    public ResponseEntity<?> getOrderColors(@RequestBody ColorRowRequest input) {
+    public ResponseEntity<?> getOrderColors(@RequestBody ColorRowRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -571,7 +572,7 @@ public class DatabaseController {
      * @return Une Map contenant le résultat de l'opération
      */
     @PostMapping("/get-com-data")
-    public ResponseEntity<?> getOrderData(@RequestBody GetComDataRequest input) {
+    public ResponseEntity<?> getOrderData(@RequestBody GetComDataRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -663,7 +664,7 @@ public class DatabaseController {
 
 
     @PostMapping("/get-param")
-    public ResponseEntity<?> getParam(@RequestBody ParamRequest request) {
+    public ResponseEntity<?> getParam(@RequestBody ParamRequest request, HttpServletRequest httpRequest) {
         if (request.getParam() == null || request.getBouticid() == null) {
             return ResponseEntity.badRequest().body("Missing parameters");
         }
@@ -681,7 +682,7 @@ public class DatabaseController {
     }
 
     @PostMapping("/set-param")
-    public ResponseEntity<?> setParam(@RequestBody ParamRequest request) {
+    public ResponseEntity<?> setParam(@RequestBody ParamRequest request, HttpServletRequest httpRequest) {
         if (request.getParam() == null || request.getValeur() == null || request.getBouticid() == null) {
             return ResponseEntity.badRequest().body("Missing parameters");
         }
@@ -701,7 +702,7 @@ public class DatabaseController {
      * Récupère une propriété spécifique d'un customer
      */
     @PostMapping("/get-custom-prop")
-    public ResponseEntity<?> getCustomProperty(@RequestBody CustomPropertyRequest input) {
+    public ResponseEntity<?> getCustomProperty(@RequestBody CustomPropertyRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -757,7 +758,7 @@ public class DatabaseController {
 
     @PostMapping("/set-custom-prop")
     @Transactional
-    public ResponseEntity<?> setCustomProperty(@RequestBody CustomPropertyUpdateRequest input) {
+    public ResponseEntity<?> setCustomProperty(@RequestBody CustomPropertyUpdateRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -827,7 +828,7 @@ public class DatabaseController {
      * Récupère une propriété spécifique d'un client associé à un customer
      */
     @PostMapping("/get-client-prop")
-    public ResponseEntity<?> getClientProperty(@RequestBody ClientPropertyRequest input) {
+    public ResponseEntity<?> getClientProperty(@RequestBody ClientPropertyRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -891,7 +892,7 @@ public class DatabaseController {
      */
     @PostMapping("/set-client-prop")
     @Transactional
-    public ResponseEntity<?> setClientProperty(@RequestBody ClientPropertyUpdateRequest input) {
+    public ResponseEntity<?> setClientProperty(@RequestBody ClientPropertyUpdateRequest input, HttpServletRequest httpRequest) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -970,7 +971,7 @@ public class DatabaseController {
      * @return ResponseEntity contenant le résultat de l'opération
      */
     @PostMapping("/build-boutic")
-    public ResponseEntity<?> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session) {
+    public ResponseEntity<?> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session, HttpServletRequest httpRequest) {
         // Vérifier si l'email est vérifié
 
         logger.info("Début de la création d'une nouvelle boutique");
