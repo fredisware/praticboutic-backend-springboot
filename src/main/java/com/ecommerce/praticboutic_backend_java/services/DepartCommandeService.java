@@ -228,30 +228,30 @@ public class DepartCommandeService {
         if (!input.get("vente").equals("LIVRER")) {
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Remise : ")
                     .append(formatter.format(-Double.parseDouble(input.get("remise").toString())))
-                    .append("&euro; <br></p>");
+                    .append("€ <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\"><b>Total Commande : ")
                     .append(formatter.format(sum[0] - Double.parseDouble(input.get("remise").toString())))
-                    .append("&euro; </b><br></p>");
+                    .append("€ </b><br></p>");
         } else {
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Sous-total Commande : ")
                     .append(formatter.format(sum[0]))
-                    .append(Utils.sanitizeInput("&euro;"))
+                    .append(Utils.sanitizeInput("€"))
                     .append(" <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Remise : ")
                     .append(formatter.format(-Double.parseDouble(input.get("remise").toString())))
-                    .append(Utils.sanitizeInput("&euro;"))
+                    .append(Utils.sanitizeInput("€"))
                     .append(" <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Frais de Livraison : ")
                     .append(formatter.format(Double.parseDouble(input.get("fraislivr").toString())))
-                    .append(Utils.sanitizeInput("&euro;"))
+                    .append(Utils.sanitizeInput("€"))
                     .append(" <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\"><b>Total Commande : ")
                     .append(formatter.format(sum[0] - Double.parseDouble(input.get("remise").toString()) + Double.parseDouble(input.get("fraislivr").toString())))
-                    .append(Utils.sanitizeInput("&euro;"))
+                    .append(Utils.sanitizeInput("€"))
                     .append(" </b><br></p>");
         }
 
