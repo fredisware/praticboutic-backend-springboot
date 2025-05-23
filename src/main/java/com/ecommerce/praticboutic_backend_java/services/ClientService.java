@@ -184,8 +184,8 @@ public class ClientService {
 
     public String getValeur(String paramName, Integer bouticId) {
         // Création de la requête JPQL
-        String sql = "SELECT cl." + paramName + " FROM Customer c " +
-                "JOIN Client cl ON c.cltid = cl.cltid " +
+        String sql = "SELECT cl." + paramName + " FROM customer c " +
+                "JOIN client cl ON c.cltid = cl.cltid " +
                 "WHERE c.customid = ?";
 
         List<String> result = jdbcTemplate.query(
