@@ -68,7 +68,7 @@ public class DepartCommandeService {
 
     public void sendEmail(String recipientEmail, String subject, String compteurCommande, Map<String, Object> input , Double[] sum, HttpSession session) throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(fromEmail, fromName);
         helper.setTo(recipientEmail);
         helper.setSubject(subject);
@@ -237,12 +237,12 @@ public class DepartCommandeService {
         } else {
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Sous-total Commande : ")
                     .append(formatter.format(sum[0]))
-                    .append(Utils.sanitizeInput("€"))
+                    .append("€")
                     .append(" <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Remise : ")
                     .append(formatter.format(-Double.parseDouble(input.get("remise").toString())))
-                    .append(Utils.sanitizeInput("€"))
+                    .append("€")
                     .append(" <br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\">Frais de Livraison : ")
@@ -252,7 +252,7 @@ public class DepartCommandeService {
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-size:130%;font-family: 'Sans'\"><b>Total Commande : ")
                     .append(formatter.format(sum[0] - Double.parseDouble(input.get("remise").toString()) + Double.parseDouble(input.get("fraislivr").toString())))
-                    .append(Utils.sanitizeInput("€"))
+                    .append("€")
                     .append(" </b><br></p>");
         }
 

@@ -128,7 +128,7 @@ public class SendCodeController {
             logger.error("InputStream est null !");
         }
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         String subject = "Votre code confidentiel";
         String htmlContent = "<!DOCTYPE html>" +
