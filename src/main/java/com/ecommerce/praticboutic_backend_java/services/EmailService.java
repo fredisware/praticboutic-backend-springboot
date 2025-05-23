@@ -83,6 +83,7 @@ public class EmailService
         content.append("<!DOCTYPE html>");
         content.append("<html>");
         content.append("<head>");
+        content.append("<meta charset=\"UTF-8\">");
         content.append("<link href='https://fonts.googleapis.com/css?family=Public+Sans' rel='stylesheet'>");
         content.append("</head>");                
         content.append("<body>");

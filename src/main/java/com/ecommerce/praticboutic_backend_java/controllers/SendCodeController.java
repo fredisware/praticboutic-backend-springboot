@@ -131,12 +131,17 @@ public class SendCodeController {
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         String subject = "Votre code confidentiel";
-        String htmlContent = "<html>" +
+        String htmlContent = "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "<meta charset=\"UTF-8\">" +
+                "<link href='https://fonts.googleapis.com/css?family=Public+Sans' rel='stylesheet'>" +
+                "</head>" +
                 "<body>" +
                 logopb +
                 "<p>Bonjour,</p>" +
-                "<p>Voici le code de v&eacute;rification : " + verificationCode + "</p>" +
-                "<p>Cordialement,<br>L'&eacute;quipe Praticboutic</p>" +
+                "<p>Voici le code de vérification : " + verificationCode + "</p>" +
+                "<p>Cordialement,<br>L'équipe Praticboutic</p>" +
                 "</body>" +
                 "</html>";
 

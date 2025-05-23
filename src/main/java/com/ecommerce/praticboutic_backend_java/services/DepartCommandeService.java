@@ -101,6 +101,7 @@ public class DepartCommandeService {
         text.append("<!DOCTYPE html>");
         text.append("<html>");
         text.append("<head>");
+        text.append("<meta charset=\"UTF-8\">");
         text.append("<link href='https://fonts.googleapis.com/css?family=Public+Sans' rel='stylesheet'>");
         text.append("</head>");
         text.append("<body>");
