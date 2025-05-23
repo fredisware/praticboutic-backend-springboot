@@ -68,7 +68,7 @@ public class Client extends BaseEntity {
      * @param tel le numéro de téléphone du client
      * @param stripeCustomerId l'identifiant Stripe du client
      * @param actif l'état d'activation du compte client
-     * @param deviceId l'identifiant de l'appareil du client
+     * @param device_id l'identifiant de l'appareil du client
      * @param device_type le type d'appareil du client
      */
     public Client(String email, String pass, String qualite, String nom, String prenom, String adr1,
