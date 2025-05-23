@@ -190,8 +190,8 @@ public class ClientService {
 
         List<String> result = jdbcTemplate.query(
                 sql,
-                new Object[]{paramName, bouticId},
-                (rs, rowNum) -> rs.getString("valeur")
+                new Object[]{bouticId}, // uniquement le paramètre pour customid
+                (rs, rowNum) -> rs.getString(paramName) // récupérer la colonne dynamique
         );
 
         if (!result.isEmpty()) {
