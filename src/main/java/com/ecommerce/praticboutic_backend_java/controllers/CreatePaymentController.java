@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -119,10 +120,10 @@ public class CreatePaymentController {
 
         } catch (StripeException e) {
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                    .body(new ErrorResponse("Erreur Stripe: " + e.getMessage()));
+                    .body(Map.of("error","Erreur Stripe: " + e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse(e.getMessage()));
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 
@@ -168,14 +169,19 @@ public class CreatePaymentController {
 
         // Calcul du coût de livraison
         if ("LIVRER".equals(model)) {
-            Double fraisCalcules = jdbcTemplate.queryForObject(
-                    "SELECT surcout FROM barlivr WHERE customid = ? AND valminin <= ? " +
-                            "AND (valmaxex > ? OR valminin >= valmaxex) AND actif = 1",
-                    Double.class,
-                    customid,
-                    price,
-                    price
-            );
+            Double fraisCalcules;
+            try {
+                fraisCalcules = jdbcTemplate.queryForObject(
+                        "SELECT surcout FROM barlivr WHERE customid = ? AND valminin <= ? " +
+                                "AND (valmaxex > ? OR valminin >= valmaxex) AND actif = 1",
+                        Double.class,
+                        customid,
+                        price,
+                        price
+                );
+            } catch (EmptyResultDataAccessException e) {
+                fraisCalcules = 0.0;
+            }
 
             // Si pas de frais trouvés, on utilise 0
             surcout = (fraisCalcules != null) ? fraisCalcules : 0.0;
