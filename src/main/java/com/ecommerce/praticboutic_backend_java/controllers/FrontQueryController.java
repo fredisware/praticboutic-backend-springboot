@@ -126,7 +126,11 @@ public class FrontQueryController {
                 case "getparam":
                     result = Collections.singletonList(paramService.getValeur(input.getParam(), input.getBouticid()));
                     break;
-                    
+
+                case "getclientprop":
+                    result = Collections.singletonList(clientService.getValeur(input.getParam(), input.getBouticid()));
+                    break;
+
                 default:
                     return new ResponseEntity<>("Requête non supportée", HttpStatus.BAD_REQUEST);
             }

@@ -21,9 +21,9 @@ public class NotificationTestController {
     public ResponseEntity<NotificationResponse> sendTestNotification(
             @RequestBody NotificationRequest request) {
 
-        logger.info("Demande d'envoi de notification de test reçue pour deviceId: {}", request.getDeviceId());
+        logger.info("Demande d'envoi de notification de test reçue pour deviceId: {}", request.getDevice_id());
 
-        if (request.getDeviceId() == null || request.getDeviceId().isEmpty()) {
+        if (request.getDevice_id() == null || request.getDevice_id().isEmpty()) {
             return ResponseEntity
                     .badRequest()
                     .body(new NotificationResponse(false, "Le deviceId est requis", null));
@@ -31,7 +31,7 @@ public class NotificationTestController {
 
         try {
             String messageId = notificationService.sendPushNotification(
-                    request.getDeviceId(),
+                    request.getDevice_id(),
                     request.getTitle() != null ? request.getTitle() : "Notification de test",
                     request.getBody() != null ? request.getBody() : "Ceci est une notification de test"
             );
@@ -98,11 +98,11 @@ public class NotificationTestController {
         }
 
         // Getters et Setters
-        public String getDeviceId() {
+        public String getDevice_id() {
             return deviceId;
         }
 
-        public void setDeviceId(String deviceId) {
+        public void setDevice_id(String deviceId) {
             this.deviceId = deviceId;
         }
 

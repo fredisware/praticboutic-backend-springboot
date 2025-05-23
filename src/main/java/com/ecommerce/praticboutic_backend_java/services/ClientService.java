@@ -1,5 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.services;
 
+import com.ecommerce.praticboutic_backend_java.requests.ClientPropertyRequest;
 import com.ecommerce.praticboutic_backend_java.utils.Utils;
 import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
@@ -7,21 +8,28 @@ import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
 import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
 import com.ecommerce.praticboutic_backend_java.requests.BuildBouticRequest;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.Query;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
+import java.util.*;
 
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Service
@@ -39,6 +47,9 @@ public class ClientService {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     // Déclarez le logger en tant que champ statique en haut de votre classe
     private static final Logger logger = LoggerFactory.getLogger(ClientService.class);
@@ -160,7 +171,7 @@ public class ClientService {
         client.setTel(sessionService.getSessionAttributeAsString(session, "registration_tel"));
         client.setStripeCustomerId(sessionService.getSessionAttributeAsString(session, "registration_stripe_customer_id"));
         client.setActif(1);
-        client.setDeviceId(Utils.sanitizeInput(input.getDeviceId()));
+        client.setDevice_id(Utils.sanitizeInput(input.getDeviceId()));
         client.setDevice_type(Utils.sanitizeInput(input.getDeviceType().toString()));
 
         try {
@@ -168,6 +179,25 @@ public class ClientService {
         } catch (DataAccessException e) {
             logger.error("Erreur lors de la sauvegarde du client", e);
             throw new DataAccessException("Erreur lors de la sauvegarde du client", e) {};
+        }
+    }
+
+    public String getValeur(String paramName, Integer bouticId) {
+        // Création de la requête JPQL
+        String sql = "SELECT cl.? FROM Customer c " +
+                "JOIN Client cl ON c.cltid = cl.cltid " +
+                "WHERE c.customid = ?";
+
+        List<String> result = jdbcTemplate.query(
+                sql,
+                new Object[]{paramName, bouticId},
+                (rs, rowNum) -> rs.getString("valeur")
+        );
+
+        if (!result.isEmpty()) {
+            return result.get(0);
+        } else {
+            return "";
         }
     }
 }

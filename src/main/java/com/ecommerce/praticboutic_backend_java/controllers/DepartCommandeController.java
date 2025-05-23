@@ -2,10 +2,8 @@ package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
-import com.ecommerce.praticboutic_backend_java.exceptions.SessionExpiredException;
 import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
-import com.ecommerce.praticboutic_backend_java.requests.DepartCommandeRequest;
 import com.ecommerce.praticboutic_backend_java.services.*;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -13,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -112,7 +108,7 @@ public class DepartCommandeController {
             Integer cmptneworder = Integer.valueOf(paramService.getParameterValue("NEW_ORDER", customerInfo.getCustomId()));
             paramService.setValeurParam("NEW_ORDER", customerInfo.getCustomId(), (++cmptneworder).toString());
             // Envoyer la notification
-            notificationService.sendPushNotification(clientInfo.get().getDeviceId(),
+            notificationService.sendPushNotification(clientInfo.get().getDevice_id(),
                     "Nouvelle(s) commande(s) dans votre Praticboutic",
                     "Commande(s) en attente de validation");
             // Comptabiliser la tansaction sur stripe
