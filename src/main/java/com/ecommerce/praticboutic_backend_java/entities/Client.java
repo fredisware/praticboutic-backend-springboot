@@ -73,7 +73,7 @@ public class Client extends BaseEntity {
      */
     public Client(String email, String pass, String qualite, String nom, String prenom, String adr1,
                   String adr2, String cp, String ville, String tel, String stripeCustomerId,
-                  Integer actif, String deviceId, String device_type) {
+                  Integer actif, String device_id, String device_type) {
         this.email = email;
         this.pass = pass;
         this.qualite = qualite;
@@ -233,8 +233,8 @@ public class Client extends BaseEntity {
         return device_id;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.device_id = deviceId;
+    public void setDeviceId(String device_id) {
+        this.device_id = device_id;
     }
 
     public String getDevice_type() {
