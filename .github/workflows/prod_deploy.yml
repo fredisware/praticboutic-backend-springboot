@@ -1,4 +1,4 @@
-name: Workflow Praticboutic javabackend PROD
+name: PROD Praticboutic javabackend Workflow
 on:
   workflow_dispatch:
 
