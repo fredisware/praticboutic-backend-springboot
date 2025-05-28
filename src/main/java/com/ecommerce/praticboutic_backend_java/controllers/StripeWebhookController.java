@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -51,34 +52,32 @@ public class StripeWebhookController {
     @PostMapping("/stripe")
     public ResponseEntity<?> handleStripeWebhook(@RequestBody String payload) {
         try {
-            // Parse the webhook event
+            // Parse JSON
             Event event = Event.GSON.fromJson(payload, Event.class);
 
-            // Verify the event by retrieving it from Stripe
-            event = Event.retrieve(event.getId());
-
-            // Process subscription events
+            // On récupère les infos directement du payload comme en PHP
             if ("customer.subscription.deleted".equals(event.getType()) ||
                     "customer.subscription.created".equals(event.getType())) {
 
-                Subscription subscription = (Subscription) event.getDataObjectDeserializer().getObject().get();
-                updateCustomerSubscription(subscription);
+                Optional<?> objectOptional = event.getDataObjectDeserializer().getObject();
+
+                if (objectOptional.isPresent() && objectOptional.get() instanceof Subscription) {
+                    Subscription subscription = (Subscription) objectOptional.get();
+                    updateCustomerSubscription(subscription);
+                } else {
+                    logger.warn("Impossible de désérialiser l'objet du webhook pour l'événement : {}", event.getType());
+                }
             }
 
             return ResponseEntity.ok().build();
 
-        } catch (StripeException e) {
-            logger.error("Stripe error: {}", e.getMessage());
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            logger.error("Error processing webhook: {}", e.getMessage());
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            logger.error("Erreur traitement webhook: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
 
     private void updateCustomerSubscription(Subscription subscription) {
         try {
@@ -112,7 +111,7 @@ public class StripeWebhookController {
             }
 
             // Update customer active status based on subscription status
-            boolean hasActiveSubscription = subscriptions.getData().size() > 0;
+            boolean hasActiveSubscription = !subscriptions.getData().isEmpty();
             String query = "UPDATE customer SET actif = ? WHERE customid = ?";
 
             int updated = jdbcTemplate.update(query, hasActiveSubscription ? 1 : 0, bouticId);
