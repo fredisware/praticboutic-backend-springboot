@@ -1,10 +1,13 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.stripe.Stripe;
+import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Event;
+import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.Subscription;
 import com.stripe.model.SubscriptionCollection;
+import com.stripe.net.ApiResource;
 import com.stripe.net.Webhook;
 import com.stripe.param.SubscriptionListParams;
 
@@ -57,27 +60,42 @@ public class StripeWebhookController {
     public ResponseEntity<?> handleStripeWebhook(@RequestBody String payload,
                                                  @RequestHeader("Stripe-Signature") String sigHeader) {
         try {
-            // Parse JSON
-            Event event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
+            // Vérification de la signature
+            Event event = Webhook.constructEvent(
+                    payload, sigHeader, endpointSecret
+            );
 
-            // On récupère les infos directement du payload comme en PHP
+            // Log de l’événement
+            logger.info("Webhook Stripe reçu : type={}, id={}", event.getType(), event.getId());
+
+            // On s'intéresse aux abonnements créés ou supprimés
             if ("customer.subscription.deleted".equals(event.getType()) ||
                     "customer.subscription.created".equals(event.getType())) {
 
-                Optional<?> objectOptional = event.getDataObjectDeserializer().getObject();
+                EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
 
-                if (objectOptional.isPresent() && objectOptional.get() instanceof Subscription) {
-                    Subscription subscription = (Subscription) objectOptional.get();
-                    updateCustomerSubscription(subscription);
+                Subscription subscription;
+
+                if (deserializer.getObject().isPresent()) {
+                    subscription = (Subscription) deserializer.getObject().get();
                 } else {
-                    logger.warn("Impossible de désérialiser l'objet du webhook pour l'événement : {}", event.getType());
+                    // Fallback si la désérialisation automatique échoue
+                    String rawJson = deserializer.getRawJson();
+                    subscription = ApiResource.GSON.fromJson(rawJson, Subscription.class);
                 }
+
+                // Traitement de l'abonnement
+                updateCustomerSubscription(subscription);
             }
 
             return ResponseEntity.ok().build();
 
+        } catch (SignatureVerificationException e) {
+            logger.error("Signature Stripe invalide", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Signature invalide");
+
         } catch (Exception e) {
-            logger.error("Erreur traitement webhook: {}", e.getMessage(), e);
+            logger.error("Erreur dans le traitement du webhook", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", e.getMessage()));
         }
