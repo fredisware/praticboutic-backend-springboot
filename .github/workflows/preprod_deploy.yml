@@ -42,7 +42,7 @@ jobs:
           git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/
           
           cd /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/src/main/resources/
-          cp application-prod.properties application.properties
+          cp application-preprod.properties application.properties
 
           cd /var/www/vhosts/praticboutic.fr/
           chown -R qruser:psaserv preback.praticboutic.fr/
@@ -50,7 +50,7 @@ jobs:
 
           cd /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/
           # Stop l'app, nettoie, build avec le profil prod
-          sudo -u qruser mvn clean install -DskipTests -Dspring-boot.run.profiles=prod
+          sudo -u qruser mvn clean install -DskipTests -Dspring-boot.run.profiles=preprod
 
           # Trouve le fichier JAR
           JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
@@ -59,7 +59,7 @@ jobs:
           pkill -f $(basename "$JAR_FILE") || true
           
           # Démarre la nouvelle version en arrière-plan
-          sudo -u qruser nohup java -jar "$JAR_FILE" --spring.profiles.active=prod > /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/log.out 2>&1 &
+          sudo -u qruser nohup java -jar "$JAR_FILE" --spring.profiles.active=preprod > /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/log.out 2>&1 &
           chown qruser:psaserv log.out
 
         
