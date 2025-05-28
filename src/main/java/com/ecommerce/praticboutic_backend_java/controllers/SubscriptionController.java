@@ -678,10 +678,21 @@ public class SubscriptionController {
                     .setStatus(SubscriptionListParams.Status.ACTIVE)
                     .build();
 
-            // Requête pour obtenir les abonnements
             SubscriptionCollection subscriptions = com.stripe.model.Subscription.list(params);
 
-            if (!subscriptions.getData().isEmpty()) {
+            // Vérifie la boutique active dans la base de données
+            Integer actif = jdbcTemplate.queryForObject(
+                    "SELECT customer.actif FROM customer " +
+                            "JOIN client ON client.cltid = customer.cltid " +
+                            "WHERE client.stripe_customer_id = ?",
+                    new Object[]{stripeCustomerId},
+                    Integer.class
+            );
+
+            boolean hasStripeSub = !subscriptions.getData().isEmpty();
+            boolean isBoutiqueActive = (actif != null && actif == 1);
+
+            if (hasStripeSub && isBoutiqueActive) {
                 response.put("result", "OK");
             } else {
                 response.put("result", "KO");
