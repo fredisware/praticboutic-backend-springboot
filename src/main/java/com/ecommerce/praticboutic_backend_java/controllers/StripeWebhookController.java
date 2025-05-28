@@ -5,6 +5,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Event;
 import com.stripe.model.Subscription;
 import com.stripe.model.SubscriptionCollection;
+import com.stripe.net.Webhook;
 import com.stripe.param.SubscriptionListParams;
 
 import org.slf4j.Logger;
@@ -34,6 +35,9 @@ public class StripeWebhookController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Value("${stripe.webhook.secret}")
+    private String endpointSecret;
+
     @PostConstruct
     public void init() {
         // Initialize Stripe configuration
@@ -50,10 +54,11 @@ public class StripeWebhookController {
     }
 
     @PostMapping("/stripe")
-    public ResponseEntity<?> handleStripeWebhook(@RequestBody String payload) {
+    public ResponseEntity<?> handleStripeWebhook(@RequestBody String payload,
+                                                 @RequestHeader("Stripe-Signature") String sigHeader) {
         try {
             // Parse JSON
-            Event event = Event.GSON.fromJson(payload, Event.class);
+            Event event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
 
             // On récupère les infos directement du payload comme en PHP
             if ("customer.subscription.deleted".equals(event.getType()) ||
