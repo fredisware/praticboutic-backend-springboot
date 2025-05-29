@@ -26,7 +26,7 @@ import static org.apache.catalina.webresources.TomcatURLStreamHandlerFactory.dis
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**", "/actuator/**").permitAll()
+                        .requestMatchers("/api/**", "/actuator/**", "/praticboutic-backend/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
