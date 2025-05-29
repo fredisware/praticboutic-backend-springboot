@@ -12,10 +12,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cloud.config.server.EnableConfigServer;
 
 @SpringBootApplication
 @RestController
 @EnableConfigurationProperties(ClientUrlsProperties.class)
+@EnableConfigServer
 public class PraticbouticBackendJavaApplication {
 
 	public static void main(String[] args) {

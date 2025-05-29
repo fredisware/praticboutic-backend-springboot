@@ -20,7 +20,7 @@ import java.util.Map;
 @RefreshScope
 @Service
 public class ExecMacroService {
-    @Value("${raz.boutic.enabled:true}")
+    @Value("${raz.boutic.enabled}")
     private boolean enabled;
 
     @Autowired
@@ -54,7 +54,7 @@ public class ExecMacroService {
                 updateCustomerActiveStatus(customId, actif);
             }
 
-            return 0;
+             return 0;
 
         } catch (Exception e) {
             logger.error("Error during macro execution: {}", e.getMessage());
