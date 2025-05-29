@@ -20,7 +20,7 @@ import java.util.Map;
 @RefreshScope
 @Service
 public class ExecMacroService {
-    @Value("${raz.boutic.enabled:true}")
+    @Value("${raz.boutic.enabled}")
     private boolean enabled;
 
     @Autowired
