@@ -21,5 +21,18 @@ import static org.apache.catalina.webresources.TomcatURLStreamHandlerFactory.dis
             return new BCryptPasswordEncoder();
         }
 
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/**", "/actuator/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .logout(LogoutConfigurer::permitAll);
+        return http.build();
+    }
+
 }
 
