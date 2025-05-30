@@ -26,8 +26,7 @@ import static org.apache.catalina.webresources.TomcatURLStreamHandlerFactory.dis
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**", "/actuator/**").permitAll()
-                        .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .logout(LogoutConfigurer::permitAll);
