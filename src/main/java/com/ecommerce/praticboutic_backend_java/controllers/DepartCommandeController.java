@@ -69,63 +69,87 @@ public class DepartCommandeController {
     public ResponseEntity<?> creerDepartCommande(@RequestBody Map<String, Object> input, HttpSession session) {
         Customer customerInfo;
         try {
+            logger.info("==== Début de traitement /depart-commande ====");
+            logger.info("Données reçues : {}", input);
+
             // Check if customer exists in session
             String customer = (String) session.getAttribute("customer");
+            logger.info("Customer dans la session : {}", customer);
             if (customer == null || customer.isEmpty()) {
-                throw new IllegalStateException("No boutic");
+                throw new IllegalStateException("Aucun 'customer' dans la session");
             }
+
             String method = (String) session.getAttribute("method");
             String table = (String) session.getAttribute("table");
-            // Check if email already sent
+            logger.info("Méthode : {}, Table : {}", method, table);
+
             String emailStatus = (String) session.getAttribute(customer + "_mail");
+            logger.info("Statut email pour customer '{}': {}", customer, emailStatus);
             if (emailStatus == null) {
-                throw new IllegalStateException("No email");
+                throw new IllegalStateException("Aucun envoi d'email n'a encore eu lieu");
             }
             if ("oui".equals(emailStatus)) {
-                throw new IllegalStateException("Email already sent");
+                throw new IllegalStateException("Email déjà envoyé pour ce customer");
             }
-            // Get customer information
+
             customerInfo = customerRepository.findByCustomer(customer);
             if (customerInfo == null) {
-                throw new IllegalStateException("Could not find customer info");
+                throw new IllegalStateException("Informations du customer introuvables en base");
             }
-            // Get client device information
+            logger.info("Customer info : {}", customerInfo);
+
             Optional<Client> clientInfo = clientRepository.findClientById(customerInfo.getCltid());
-            System.out.println("Client retourné : " + clientInfo); // Pour voir si l'objet est null ou vide
-            System.out.println("ID recherché : " + customerInfo.getCltid());
+            logger.info("Client ID recherché : {}, Client info trouvé : {}", customerInfo.getCltid(), clientInfo);
             if (clientInfo.isEmpty()) {
-                throw new IllegalStateException("Could not find client info");
+                throw new IllegalStateException("Client introuvable avec l'ID donné");
             }
+
             Integer compteur = parseInt(paramService.getParameterValue("CMPT_CMD", customerInfo.getCustomId()));
             String compteurCommande = String.format("%010d", compteur);
+            logger.info("Compteur actuel : {}, Commande générée : {}", compteur, compteurCommande);
             paramService.setValeurParam("CMPT_CMD", customerInfo.getCustomId(), (++compteur).toString());
+
             String subject = paramService.getParameterValue("Subject_mail", customerInfo.getCustomId());
             Double[] sum = new Double[]{0.0};
-            // Send email
+
+            logger.info("Envoi d'email à : {}, sujet : {}", customerInfo.getCourriel(), subject);
             departCommandeService.sendEmail(customerInfo.getCourriel(), subject, compteurCommande, input, sum, session);
-            // enregistre la commande
+
             Integer cmdId = departCommandeService.enregistreCommande(compteurCommande, input, sum, session);
+            logger.info("Commande enregistrée avec ID : {}", cmdId);
+
             Integer cmptneworder = Integer.valueOf(paramService.getParameterValue("NEW_ORDER", customerInfo.getCustomId()));
             paramService.setValeurParam("NEW_ORDER", customerInfo.getCustomId(), (++cmptneworder).toString());
-            // Envoyer la notification
-            notificationService.sendPushNotification(clientInfo.get().getDevice_id(),
+
+            logger.info("Envoi de notification push au device : {}", clientInfo.get().getDevice_id());
+            notificationService.sendPushNotification(
+                    clientInfo.get().getDevice_id(),
                     "Nouvelle(s) commande(s) dans votre Praticboutic",
                     "Commande(s) en attente de validation");
-            // Comptabiliser la tansaction sur stripe
+
+            double remise = Double.parseDouble(input.get("remise").toString());
+            double fraisLivraison = Double.parseDouble(input.get("fraislivr").toString());
+            logger.info("Enregistrement sur Stripe - remise : {}, frais livraison : {}, total : {}", remise, fraisLivraison, sum[0]);
+
             boolean usageRecordCreated = stripeService.recordSubscriptionUsage(
-                    customerInfo.getCustomId(), sum[0], Double.parseDouble(input.get("remise").toString()), Double.parseDouble(input.get("fraislivr").toString()));
-            // Vérification du résultat
+                    customerInfo.getCustomId(), sum[0], remise, fraisLivraison);
+
             if (usageRecordCreated) {
-                logger.info("L'enregistrement d'utilisation a été créé avec succès.");
+                logger.info("L'enregistrement d'utilisation Stripe a été créé avec succès.");
             } else {
-                logger.info("Aucun enregistrement d'utilisation n'a été créé.");
+                logger.warn("Aucun enregistrement Stripe créé.");
             }
-            // Envoyer sms si nécessaire
-            // Get SMS validation parameter
+
             String validSms = paramService.getParameterValue("VALIDATION_SMS", customerInfo.getCustomId());
+            logger.info("Paramètre SMS : {}, numéro : {}", validSms, input.get("telephone").toString());
             smsService.sendOrderSms(validSms, cmdId, customerInfo.getCustomId(), input.get("telephone").toString());
+
             session.setAttribute(customer + "_mail", "oui");
+            logger.info("Email marqué comme envoyé dans la session.");
+            logger.info("==== Fin de traitement /depart-commande ====");
+
         } catch (Exception e) {
+            logger.error("Erreur lors de la création de la commande : {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
         }
         return ResponseEntity.ok(Collections.singletonList("OK"));
