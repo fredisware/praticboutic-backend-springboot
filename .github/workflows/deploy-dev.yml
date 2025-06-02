@@ -27,8 +27,8 @@ jobs:
         port: 22
         script: |
           # 🛑 Étape 1 : tuer tout processus Java écoutant sur le port 8444
-          PID=$(lsof -i :8444 -sTCP:LISTEN -t) && if [ -n "$PID" ]; then
-          echo "Processus Java trouvé sur le port 8444 (PID: $PID), arrêt en cours..."
+          PID=$(lsof -i :8446 -sTCP:LISTEN -t) && if [ -n "$PID" ]; then
+          echo "Processus Java trouvé sur le port 8446 (PID: $PID), arrêt en cours..."
           kill "$PID"
           sleep 2
           if ps -p "$PID" > /dev/null; then
@@ -36,7 +36,7 @@ jobs:
             kill -9 "$PID"
           fi
           else
-            echo "Aucun processus Java sur le port 8444."
+            echo "Aucun processus Java sur le port 8446."
           fi
           rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/{*,.*}
           # git pull origin main  # ou "master" selon ta branche
