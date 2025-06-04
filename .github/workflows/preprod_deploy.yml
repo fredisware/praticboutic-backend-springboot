@@ -55,8 +55,11 @@ jobs:
           # Trouve le fichier JAR
           JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
           
-          # Arrête l'application précédente s'il y en a une
-          pkill -f $(basename "$JAR_FILE") || true
+          PID=$(lsof -i :8445 -sTCP:LISTEN -t)
+          if [ -n "$PID" ]; then
+            echo "Arrêt du processus Java sur le port 8445 (PID: $PID)"
+            kill "$PID" || kill -9 "$PID"
+          fi
           
           # Démarre la nouvelle version en arrière-plan
           sudo -u qruser nohup java -jar "$JAR_FILE" --spring.profiles.active=preprod > /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/log.out 2>&1 &
