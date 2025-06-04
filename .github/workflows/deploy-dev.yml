@@ -53,11 +53,11 @@ jobs:
           # Stop l'app, nettoie, build avec le profil dev
           sudo -u qruser mvn clean install -DskipTests -Dspring-boot.run.profiles=dev
 
-          # Trouve le fichier JAR
-          JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
-          
-          # Arrête l'application précédente s'il y en a une
-          pkill -f $(basename "$JAR_FILE") || true
+          PID=$(lsof -i :8446 -sTCP:LISTEN -t)
+          if [ -n "$PID" ]; then
+            echo "Arrêt du processus Java sur le port 8446 (PID: $PID)"
+            kill "$PID" || kill -9 "$PID"
+          fi
           
           # Démarre la nouvelle version en arrière-plan
           sudo -u qruser nohup java -jar "$JAR_FILE" --spring.profiles.active=dev > /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/log.out 2>&1 &
