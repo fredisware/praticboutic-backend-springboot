@@ -26,7 +26,7 @@ jobs:
         key: ${{ secrets.FTP_JAVABACKENDSSH_KEY }}
         port: 22
         script: |
-          # 🛑 Étape 1 : tuer tout processus Java écoutant sur le port 8444
+          # 🛑 Étape 1 : tuer tout processus Java écoutant sur le port 8446
           PID=$(lsof -i :8446 -sTCP:LISTEN -t) && if [ -n "$PID" ]; then
           echo "Processus Java trouvé sur le port 8446 (PID: $PID), arrêt en cours..."
           kill "$PID"
@@ -54,7 +54,7 @@ jobs:
           sudo -u qruser mvn clean install -DskipTests -Dspring-boot.run.profiles=dev
 
           # Trouve le fichier JAR
-          JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
+          JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
 
           PID=$(lsof -i :8446 -sTCP:LISTEN -t)
           if [ -n "$PID" ]; then
