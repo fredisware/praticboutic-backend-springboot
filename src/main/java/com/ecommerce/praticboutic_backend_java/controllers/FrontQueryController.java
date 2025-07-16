@@ -9,7 +9,6 @@ import com.ecommerce.praticboutic_backend_java.requests.*;
 import com.ecommerce.praticboutic_backend_java.exceptions.SessionExpiredException;
 import com.ecommerce.praticboutic_backend_java.configurations.StripeConfig;
 
-import com.stripe.model.StripeCollectionInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,8 +22,7 @@ import com.stripe.model.SubscriptionCollection;
 import com.stripe.param.SubscriptionListParams;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+
 import java.util.*;
 
 @RestController
@@ -73,11 +71,10 @@ public class FrontQueryController {
 
     @PostMapping("/front")
     public ResponseEntity<?> handleRequest(@RequestBody FrontQueryRequest input,
-                                          HttpServletRequest request,
-                                          HttpServletResponse response) {
+                                          HttpServletRequest request, @RequestHeader("Authorization") String authHeader) {
         
         try {
-            HttpSession session = request.getSession();
+
 
             List<?> result;
             
@@ -116,11 +113,11 @@ public class FrontQueryController {
                     break;
                     
                 case "initSession":
-                    result = initSession(session, input);
+                    result = Collections.singletonList(initSession(input, authHeader));
                     break;
                     
                 case "getSession":
-                    result = getSession(session);
+                    result = Collections.singletonList(getSession(authHeader));
                     break;
                     
                 case "getparam":
@@ -145,22 +142,40 @@ public class FrontQueryController {
     }
 
 
-    private List<?> initSession(HttpSession session, FrontQueryRequest input) {
-        session.setAttribute("customer", input.getCustomer());
-        session.setAttribute(input.getCustomer() + "_mail", "non");
-        session.setAttribute("method", input.getMethod() != null ? input.getMethod() : "3");
-        session.setAttribute("table", input.getTable() != null ? input.getTable() : "0");
-        
-        return Collections.singletonList("OK");
+    private ResponseEntity<?> initSession(FrontQueryRequest input, @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
+        payload.put("customer", input.getCustomer());
+        payload.put(input.getCustomer() + "_mail", "non");
+        payload.put("method", input.getMethod() != null ? input.getMethod() : "3");
+        payload.put("table", input.getTable() != null ? input.getTable() : "0");
+
+        String jwt = JwtService.generateToken(payload, "" );
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", jwt);
+
+        return ResponseEntity.ok(response);
     }
     
-    private List<String> getSession(HttpSession session) {
-        String customer = (String) session.getAttribute("customer");
-        String mail = (String) session.getAttribute(customer + "_mail");
-        String method = (String) session.getAttribute("method");
-        String table = (String) session.getAttribute("table");
-        
-        return Arrays.asList(customer, mail, method, table);
+    private ResponseEntity<?> getSession(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
+        String customer = payload.get("customer").toString();
+        String mail = payload.get(customer + "_mail").toString();
+        String method = payload.get("method").toString();
+        String table = payload.get("table").toString();
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("customer", customer);
+        response.put(customer + "_mail", mail);
+        response.put("method", method);
+        response.put("table", table);
+
+        return ResponseEntity.ok(response);
     }
     
     private Boolean getAbonnementsActifs(Integer bouticid) throws StripeException {

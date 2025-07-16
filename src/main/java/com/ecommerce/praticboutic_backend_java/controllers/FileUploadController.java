@@ -4,6 +4,7 @@ package com.ecommerce.praticboutic_backend_java.controllers;
 
 
 
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,11 +39,12 @@ public class FileUploadController {
 
 
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadFile(@RequestParam(value = "file", required = false) MultipartFile file,
-                                        HttpSession session) {
+    public ResponseEntity<?> uploadFile(@RequestParam(value = "file", required = false) MultipartFile file, @RequestHeader("Authorization") String authHeader) {
 
         // Vérifier si l'email est vérifié
-        String verifyEmail = (String)session.getAttribute("verify_email");
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+        String verifyEmail = payload.get("verify_email").toString();
         if (verifyEmail == null || verifyEmail.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
         }
@@ -93,9 +95,13 @@ public class FileUploadController {
             Files.copy(file.getInputStream(), filePath);
 
             // Store filename in session
-            session.setAttribute("initboutic_logo", newFilename);
+            payload.put("initboutic_logo", newFilename);
+            String jwt = JwtService.generateToken(payload, "" );
+            Map<String, Object> response = new HashMap<>();
+            response.put("result", newFilename);
+            response.put("token", jwt);
 
-            return ResponseEntity.ok().body(Map.of("result", newFilename));
+            return ResponseEntity.ok(response);
 
         } catch (IOException e) {
             return ResponseEntity
@@ -105,8 +111,7 @@ public class FileUploadController {
     }
 
     @PostMapping("/boupload")
-    public ResponseEntity<?> uploadFiles(@RequestParam(value = "file[]", required = false) MultipartFile[] files,
-                                         HttpSession session) {
+    public ResponseEntity<?> uploadFiles(@RequestParam(value = "file[]", required = false) MultipartFile[] files) {
 
         if (files == null || files.length == 0) {
             return ResponseEntity.ok().body(new ArrayList<>());

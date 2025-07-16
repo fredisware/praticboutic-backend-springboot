@@ -66,14 +66,15 @@ public class DepartCommandeService {
 
 
 
-    public void sendEmail(String recipientEmail, String subject, String compteurCommande, Map<String, Object> input , Double[] sum, HttpSession session) throws MessagingException, UnsupportedEncodingException {
+    public void sendEmail(String recipientEmail, String subject, String compteurCommande, Map<String, Object> input , Double[] sum, String token) throws MessagingException, UnsupportedEncodingException {
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(fromEmail, fromName);
         helper.setTo(recipientEmail);
         helper.setSubject(subject);
 
-        String strContent = generateEmailContent(compteurCommande, input, sum, session);
+        String strContent = generateEmailContent(compteurCommande, input, sum, token);
 
         helper.setText(strContent, true);
 
@@ -81,8 +82,8 @@ public class DepartCommandeService {
     }
 
 
-    public String generateEmailContent(String compteurCommande, Map<String, Object> input, Double[] sum, HttpSession session) {
-
+    public String generateEmailContent(String compteurCommande, Map<String, Object> input, Double[] sum, String token) {
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         StringBuilder text = new StringBuilder();
         InputStream inputStream = EmailService.class.getClassLoader().getResourceAsStream("./static/logopbsvg.html");
@@ -110,16 +111,16 @@ public class DepartCommandeService {
         text.append("<p style=\"font-family: 'Sans'\"><b>R&eacute;f&eacute;rence commande: </b> ").append(compteurCommande).append("<br></p>");
         text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
 
-        if (Integer.parseInt(session.getAttribute("method").toString()) == 2) {
+        if (Integer.parseInt(payload.get("method").toString()) == 2) {
             text.append("<p style=\"font-family: 'Sans'\"><b>Vente : </b>Consomation sur place<br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
-            text.append("<p style=\"font-family: 'Sans'\"><b>Commande table num&eacute;ro : </b> ").append(session.getAttribute("table")).append("<br></p>");
+            text.append("<p style=\"font-family: 'Sans'\"><b>Commande table num&eacute;ro : </b> ").append(payload.get("table")).append("<br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
             text.append("<p style=\"font-family: 'Sans'\"><b>T&eacute;l&eacute;phone : </b>").append(input.get("telephone")).append("<br></p>");
             text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
         }
 
-        if (Integer.parseInt(session.getAttribute("method").toString()) == 3) {
+        if (Integer.parseInt(payload.get("method").toString()) == 3) {
             if (input.get("vente").equals("EMPORTER")) {
                 text.append("<p style=\"font-family: 'Sans'\"><b>Vente : </b> A emporter<br></p>");
                 text.append("<hr style=\"width:50%;text-align:left;margin-left:0\">");
@@ -263,10 +264,12 @@ public class DepartCommandeService {
 
     }
 
-    public Integer enregistreCommande(String compteurCommande, Map<String, Object> input, Double[] sum, HttpSession session)
+    public Integer enregistreCommande(String compteurCommande, Map<String, Object> input, Double[] sum, String token)
     {
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
         // Enregistrer la commande dans la base de données
-        Customer custo = customerRepository.findByCustomer(session.getAttribute("customer").toString());
+        Customer custo = customerRepository.findByCustomer(payload.get("customer").toString());
 
         Commande order = new Commande();
         order.setNumRef(compteurCommande);
@@ -290,7 +293,7 @@ public class DepartCommandeService {
         order.setCommentaire(input.get("infosup").toString());
 
         // Convertir la méthode de commande en chaîne de caractères
-        String methodStr = switch ((String)session.getAttribute("method")) {
+        String methodStr = switch (payload.get("method").toString()) {
             case "2" -> "ATABLE";
             case "3" -> "CLICKNCOLLECT";
             default -> "INCONNU";
@@ -298,7 +301,7 @@ public class DepartCommandeService {
         order.setMethod(methodStr);
 
         // Convertir la valeur de la table en Integer
-        String tableValue = session.getAttribute("table").toString();
+        String tableValue = payload.get("table").toString();
         if (tableValue != null && !tableValue.isEmpty()) {
             order.setTable(Integer.parseInt(tableValue));
         }

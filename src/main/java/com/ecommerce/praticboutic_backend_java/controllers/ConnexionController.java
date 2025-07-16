@@ -3,6 +3,7 @@ package com.ecommerce.praticboutic_backend_java.controllers;
 import com.ecommerce.praticboutic_backend_java.requests.GoogleSignInRequest;
 import com.ecommerce.praticboutic_backend_java.requests.LoginRequest;
 import com.ecommerce.praticboutic_backend_java.responses.LoginResponse;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -35,9 +36,6 @@ public class ConnexionController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     
-    @Autowired
-    private SessionService sessionService;
-    
     @Value("${stripe.secret.key}")
     private String stripeSecretKey;
     
@@ -55,9 +53,12 @@ public class ConnexionController {
 
 
     @PostMapping("/authorize")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest, @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response;
         try {
+            String token = authHeader.replace("Bearer ", "");
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
             // Vérifier les tentatives de connexion
             String ip = httpRequest.getRemoteAddr();
             int attemptCount = (int) countLoginAttempts(ip);
@@ -99,15 +100,18 @@ public class ConnexionController {
             sessionData.put("active", 1);
 
             // Mettre à jour la session ou en créer une nouvelle
-            sessionService.updateSession(sessionData);
+            //sessionService.updateSession(sessionData);
+            payload.putAll(sessionData);
 
             // Vérifier l'abonnement Stripe
             String stripecustomerid = (String) userData.get("stripe_customer_id");
             String subscriptionstatus = checkStripeSubscription(stripecustomerid);
-            sessionData.put("bo_abo", subscriptionstatus.equals("OK") ? "oui" : "non");
+            payload.put("bo_abo", subscriptionstatus.equals("OK") ? "oui" : "non");
+            String jwt = JwtService.generateToken(payload, "" );
 
             // Créer la réponse
             response = new HashMap<>();
+            response.put("token", jwt);
             response.put("bouticid", Integer.parseInt(userData.get("customid").toString()));
             response.put("customer", userData.get("customer"));
             response.put("stripecustomerid", stripecustomerid);
@@ -165,8 +169,10 @@ public class ConnexionController {
     }
 
     @PostMapping("/google-signin")
-    public ResponseEntity<?> googleSignIn(@RequestBody GoogleSignInRequest request, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> googleSignIn(@RequestBody GoogleSignInRequest request, HttpServletRequest httpRequest, @RequestHeader("Authorization") String authHeader) {
         try {
+            String token = authHeader.replace("Bearer ", "");
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérifier si l'utilisateur existe dans la base de données
             List<Map<String, Object>> results = jdbcTemplate.queryForList(
                     "SELECT c.pass, cu.customid, cu.customer, c.stripe_customer_id " +
@@ -184,7 +190,8 @@ public class ConnexionController {
                 response.put("status", "KO");
                 response.put("password", "");
                 // Enregistrer l'email vérifié pour un usage ultérieur
-                sessionService.setAttribute("verify_email", request.getEmail());
+                //sessionService.setAttribute("verify_email", request.getEmail());
+                payload.put("verify_email", request.getEmail());
                 return ResponseEntity.ok(response);
             }
 
@@ -202,15 +209,18 @@ public class ConnexionController {
             sessionData.put("active", 1);
 
             // Mettre à jour la session
-            sessionService.updateSession(sessionData);
+            //sessionService.updateSession(sessionData);
+            payload.putAll(sessionData);
 
             // Vérifier l'abonnement Stripe
             String stripeCustomerId = (String) userData.get("stripe_customer_id");
             String subscriptionStatus = checkStripeSubscription(stripeCustomerId);
             sessionData.put("bo_abo", subscriptionStatus.equals("OK") ? "oui" : "non");
+            String jwt = JwtService.generateToken(payload, "" );
 
             // Créer la réponse au format attendu par le front-end
             Map<String, Object> response = new HashMap<>();
+            response.put("token", jwt);
             response.put("bouticid", userData.get("customid"));
             response.put("customer", userData.get("customer"));
             response.put("stripecustomerid", stripeCustomerId);

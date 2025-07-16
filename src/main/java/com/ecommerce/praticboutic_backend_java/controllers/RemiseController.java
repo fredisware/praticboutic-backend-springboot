@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.RemiseRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -26,15 +27,18 @@ public class RemiseController {
 
     @PostMapping("/calcul-remise")
     public ResponseEntity<?> calculateRemise(@RequestBody RemiseRequest input,
-                                             HttpSession session) {
+            @RequestHeader("Authorization") String authHeader) {
         try {
+            String token = authHeader.replace("Bearer ", "");
+
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérification des données de session
-            String customer = (String) session.getAttribute("customer");
+            String customer = payload.get("customer").toString();
             if (customer == null || customer.isEmpty()) {
                 throw new RuntimeException("Pas de boutic");
             }
 
-            String customerMail = (String) session.getAttribute(customer + "_mail");
+            String customerMail = payload.get(customer + "_mail").toString();
             if (customerMail == null || customerMail.isEmpty()) {
                 throw new RuntimeException("Pas de courriel");
             }

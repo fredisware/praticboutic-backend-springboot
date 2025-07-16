@@ -2,6 +2,7 @@ package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.configurations.DatabaseConfig;
 import com.ecommerce.praticboutic_backend_java.requests.BouticRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,10 +37,14 @@ public class ShopController {
 
 
     @PostMapping("/register-boutic")
-    public ResponseEntity<?> checkAliasAvailability(@RequestBody BouticRequest request, HttpSession session) {
+    public ResponseEntity<?> checkAliasAvailability(@RequestBody BouticRequest request,
+                                                    @RequestHeader("Authorization") String authHeader) {
         try {
+            String token = authHeader.replace("Bearer ", "");
+
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérifier si l'email est vérifié
-            String verifyEmail = (String)session.getAttribute("verify_email");
+            String verifyEmail = payload.get("verify_email").toString();
             if (verifyEmail == null || verifyEmail.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
             }
@@ -57,12 +62,13 @@ public class ShopController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error","Alias de boutic déjà utilisé"));
             }
             // Enregistrer les informations dans la session
-            session.setAttribute("initboutic_aliasboutic", request.getAliasboutic());
-            session.setAttribute("initboutic_nom", request.getNom());
-            session.setAttribute("initboutic_logo", request.getLogo());
-            session.setAttribute("initboutic_email", request.getEmail());
+            payload.put("initboutic_aliasboutic", request.getAliasboutic());
+            payload.put("initboutic_nom", request.getNom());
+            payload.put("initboutic_logo", request.getLogo());
+            payload.put("initboutic_email", request.getEmail());
+            String jwt = JwtService.generateToken(payload, "" );
 
-            return ResponseEntity.ok(Map.of("result","OK"));
+            return ResponseEntity.ok(Map.of("token", jwt));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur: " + e.getMessage());

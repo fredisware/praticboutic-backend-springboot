@@ -4,6 +4,7 @@ import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
 import com.ecommerce.praticboutic_backend_java.requests.LoginLinkRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.ParameterService;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.stripe.Stripe;
@@ -45,22 +46,29 @@ public class LoginLinkController {
     private CustomerRepository customerRepository;
     
     @Autowired
-    private SessionService sessionService;
-    
-    @Autowired
     private ParameterService paramService;
 
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    protected JwtService jwtService;
+
 
 
     @PostMapping("/login-link")
-    public ResponseEntity<?> createLoginLink(@RequestBody LoginLinkRequest request) {
+    public ResponseEntity<?> createLoginLink(@RequestBody LoginLinkRequest request, @RequestHeader("Authorization") String authHeader) {
         try {
+            String token = authHeader.replace("Bearer ", "");
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
             // Vérifier l'authentification
-            if (!sessionService.isAuthenticated()) {
+            //if (!sessionService.isAuthenticated()) {
+            //    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Non authentifié"));
+            //}
+
+            // Vérifier l'authentification
+            if (!jwtService.isAuthenticated(payload)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Non authentifié"));
             }
 
@@ -73,7 +81,8 @@ public class LoginLinkController {
             );
             
             // Récupérer l'ID client Stripe
-            String userEmail = sessionService.getUserEmail();
+            //String userEmail = sessionService.getUserEmail();
+            String userEmail = payload.get("bo_email").toString();
             Optional<Client> client = clientRepository.findByEmailAndActif(userEmail, 1);
             if (client.isEmpty())
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Pas de client avec courriel " + userEmail));
@@ -96,6 +105,8 @@ public class LoginLinkController {
             // Récupérer ou créer un compte Stripe Connect
             String stripeAccountId = paramService.getValeur("STRIPE_ACCOUNT_ID", request.getBouticid());
             String url;
+            Map<String, Object> response = new HashMap<>();
+
 
             if (stripeAccountId != null && !stripeAccountId.isEmpty()) {
                 // Le compte existe déjà
@@ -104,30 +115,32 @@ public class LoginLinkController {
                 if (account.getDetailsSubmitted()) {
                     LoginLinkCreateOnAccountParams params = LoginLinkCreateOnAccountParams.builder().build();
                     LoginLink loginLink = LoginLink.createOnAccount(stripeAccountId, params);
-                    url = loginLink.getUrl();
+                    String jwt = JwtService.generateToken(payload, "" );
+                    response.put("token", jwt);
+                    response.put( "url", loginLink.getUrl());
                 } else {
+                    response = createInscription(request.getBouticid(), request.getPlatform(), payload);
                     // Compte incomplet, créer un lien d'onboarding
-                    url = createInscription( request.getBouticid(), request.getPlatform());
                 }
             } else {
                 // Aucun compte, créer un nouveau
-                url = createInscription(request.getBouticid(), request.getPlatform());
+                response = createInscription(request.getBouticid(), request.getPlatform(), payload);
             }
-            
-            return ResponseEntity.ok(Map.of("result", url));
+
+            return ResponseEntity.ok(response);
             
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
         }
     }
     
-    private String createInscription(Integer bouticId, String platform) throws StripeException {
+    private Map<String, Object> createInscription(Integer bouticId, String platform, Map <java.lang.String, java.lang.Object> payload) throws StripeException {
 
         // Créer un compte Stripe Connect Express
         AccountCreateParams accountParams = AccountCreateParams.builder()
                 .setType(AccountCreateParams.Type.EXPRESS)
                 .setCountry("FR")
-                .setEmail(sessionService.getUserEmail())
+                .setEmail(payload.get("bo_email").toString())
                 .setCapabilities(
                         AccountCreateParams.Capabilities.builder()
                                 .setCardPayments(AccountCreateParams.Capabilities.CardPayments.builder().setRequested(true).build())
@@ -142,7 +155,8 @@ public class LoginLinkController {
         paramService.setValeur("STRIPE_ACCOUNT_ID", account.getId(), bouticId);
         
         // Stocker l'ID de boutique dans la session
-        sessionService.setBoId(bouticId);
+        //sessionService.setBoId(bouticId);
+        payload.put("bo_id", bouticId);
         
         // Créer un lien d'onboarding
         String refreshUrl = baseUrl + "/api/redirect-handler?platform=" + platform;
@@ -156,8 +170,13 @@ public class LoginLinkController {
                 .build();
                 
         AccountLink accountLink = AccountLink.create(linkParams);
+
+        String jwt = JwtService.generateToken(payload, "" );
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", jwt);
+        response.put("url", accountLink.getUrl());
         
-        return accountLink.getUrl();
+        return response;
     }
     
 }

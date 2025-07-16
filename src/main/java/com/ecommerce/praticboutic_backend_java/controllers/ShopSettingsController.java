@@ -3,6 +3,7 @@ package com.ecommerce.praticboutic_backend_java.controllers;
 
 
 import com.ecommerce.praticboutic_backend_java.requests.ShopConfigRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,19 +17,25 @@ import java.util.Map;
 public class ShopSettingsController {
 
     @PostMapping("/boutic-configure")
-    public ResponseEntity<?> configureShop(@RequestBody ShopConfigRequest request, HttpSession session) {
+    public ResponseEntity<?> configureShop(@RequestBody ShopConfigRequest request, @RequestHeader("Authorization") String authHeader) {
         try {
+
+            String token = authHeader.replace("Bearer ", "");
+
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérifier si l'email est vérifié
-            String verifyEmail = (String)session.getAttribute("verify_email");
+            String verifyEmail = payload.get("verify_email").toString();
             if (verifyEmail == null || verifyEmail.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
             }
             // Enregistrer les configurations dans la session
-            session.setAttribute("confboutic_chxmethode", request.getChxmethode());
-            session.setAttribute("confboutic_chxpaie", request.getChxpaie());
-            session.setAttribute("confboutic_mntmincmd", request.getMntmincmd());
-            session.setAttribute("confboutic_validsms", request.getValidsms());
-            return ResponseEntity.ok(Map.of("result","OK"));
+            payload.put("confboutic_chxmethode", request.getChxmethode());
+            payload.put("confboutic_chxpaie", request.getChxpaie());
+            payload.put("confboutic_mntmincmd", request.getMntmincmd());
+            payload.put("confboutic_validsms", request.getValidsms());
+            String jwt = JwtService.generateToken(payload, "" );
+
+            return ResponseEntity.ok(Map.of("token", jwt));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error","Erreur: " + e.getMessage()));

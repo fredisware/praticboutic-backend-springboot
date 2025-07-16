@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.SessionRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class CheckVersionController {
 
     @Autowired
-    private SessionService sessionService;
+    private JwtService jwtService;
 
     @Autowired
     private ResourceLoader resourceLoader;
@@ -59,11 +60,7 @@ public class CheckVersionController {
     @PostMapping("/check-alt")
     public ResponseEntity<?> checkVersionAlt(@RequestBody SessionRequest request) {
         try {
-            // Vérifier si une session ID a été fournie et la définir
-            if (request.getSessionId() != null && !request.getSessionId().isEmpty()) {
-                sessionService.setSessionId(request.getSessionId());
-            }
-            
+
             // Lire le fichier d'autorisation depuis les ressources
             Resource resource = resourceLoader.getResource("classpath:mobileapp/authorisation.json");
             

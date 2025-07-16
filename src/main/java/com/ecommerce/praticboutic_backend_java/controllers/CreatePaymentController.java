@@ -4,6 +4,7 @@ import com.ecommerce.praticboutic_backend_java.requests.CreatePaymentRequest;
 
 import com.ecommerce.praticboutic_backend_java.requests.Item;
 import com.ecommerce.praticboutic_backend_java.responses.CreatePaymentResponse;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -20,15 +21,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
 public class CreatePaymentController {
-
-    @Autowired
-    private SessionService sessionService;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -40,25 +40,29 @@ public class CreatePaymentController {
     private Long sessionMaxLifetime;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createPaymentIntent(@RequestBody CreatePaymentRequest request) {
+    public ResponseEntity<?> createPaymentIntent(@RequestBody CreatePaymentRequest request, @RequestHeader("Authorization") String authHeader ) {
         try {
+
+            String token = authHeader.replace("Bearer ", "");
+
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérifier si customer est défini dans la session
-            if (!sessionService.hasAttribute("customer")) {
+            if (Objects.equals(payload.get("customer").toString(), "")) {
                 throw new Exception("Pas de boutic");
             }
 
-            String customer = (String) sessionService.getAttribute("customer");
-            String method = (String) sessionService.getAttribute("method");
-            String table = (String) sessionService.getAttribute("table");
+            String customer = payload.get("customer").toString();
+            String method = payload.get("method").toString();
+            String table = payload.get("table").toString();
 
             // Vérifier si le courriel est défini
             String mailKey = customer + "_mail";
-            if (!sessionService.hasAttribute(mailKey)) {
+            if (Objects.equals(payload.get(mailKey).toString(), "")) {
                 throw new Exception("Pas de courriel");
             }
 
             // Vérifier si le courriel a déjà été envoyé
-            if ("oui".equals(sessionService.getAttribute(mailKey))) {
+            if (Objects.equals(payload.get(mailKey), "oui")) {
                 throw new Exception("Courriel déjà envoyé");
             }
 
@@ -113,9 +117,11 @@ public class CreatePaymentController {
 
             // Créer l'intention de paiement
             PaymentIntent paymentIntent = PaymentIntent.create(paramsBuilder.build(), requestOptions);
-
+            String jwt = JwtService.generateToken(payload, "" );
             // Renvoyer la clé client
-            CreatePaymentResponse response = new CreatePaymentResponse(paymentIntent.getClientSecret());
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", jwt);
+            response.put("intent", paymentIntent.getClientSecret());
             return ResponseEntity.ok(response);
 
         } catch (StripeException e) {

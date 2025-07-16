@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.CpZoneRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,35 +20,34 @@ import java.util.Map;
 public class CodePostalZoneController {
 
     @Autowired
-    private SessionService sessionService;
-
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Value("${session.max.lifetime}")
     private Long sessionMaxLifetime;
 
     @PostMapping("/check-codepostal")
-    public ResponseEntity<?> checkCpZone(@RequestBody CpZoneRequest request) {
+    public ResponseEntity<?> checkCpZone(@RequestBody CpZoneRequest request, @RequestHeader("Authorization") String authHeader) {
         try {
+            String token = authHeader.replace("Bearer ", "");
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
             // Vérifier si customer est défini dans la session
-            if (!sessionService.hasAttribute("customer")) {
+            if (!payload.containsKey("customer")) {
                 throw new Exception("Pas de boutic");
             }
 
-            String customer = (String) sessionService.getAttribute("customer");
-            String method = (String) sessionService.getAttribute("method");
-            String table = (String) sessionService.getAttribute("table");
+            String customer = payload.get("customer").toString();
+            String method = payload.get("method").toString();
+            String table = payload.get("table").toString();
 
             // Vérifier si le courriel est défini
             String mailKey = customer + "_mail";
-            if (!sessionService.hasAttribute(mailKey)) {
+            if (!payload.containsKey(mailKey)) {
                 throw new Exception("Pas de courriel");
             }
 
             // Vérifier si le courriel a déjà été envoyé
-            if ("oui".equals(sessionService.getAttribute(mailKey))) {
+            if ("oui".equals(payload.get(mailKey).toString())) {
                 throw new Exception("Courriel déjà envoyé");
             }
 

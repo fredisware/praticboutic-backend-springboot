@@ -100,10 +100,12 @@ public class CustomerService {
         return customerRepository.findByActif(1);
     }
 
-    public Customer createAndSaveCustomer(HttpSession session, Client client)
+    public Customer createAndSaveCustomer(Client client, String token)
             throws DatabaseException.InvalidAliasException, DataAccessException {
-        // Validation de l'alias de la boutique
-        String aliasBoutic = sessionService.getSessionAttributeAsString(session, "initboutic_aliasboutic");
+
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
+        String aliasBoutic = payload.get("initboutic_aliasboutic").toString() ;
         if (StringUtils.isEmpty(aliasBoutic)) {
             throw new DatabaseException.InvalidAliasException("L'identifiant de la boutique ne peut pas être vide");
         }
@@ -130,9 +132,9 @@ public class CustomerService {
         Customer customer = new Customer();
         customer.setCltid(client.getCltId());
         customer.setCustomer(aliasBoutic);
-        customer.setNom(sessionService.getSessionAttributeAsString(session, "initboutic_nom"));
-        customer.setLogo(sessionService.getSessionAttributeAsString(session, "initboutic_logo"));
-        customer.setCourriel(sessionService.getSessionAttributeAsString(session, "initboutic_email"));
+        customer.setNom(payload.get("initboutic_nom").toString());
+        customer.setLogo(payload.get("initboutic_logo").toString());
+        customer.setCourriel(payload.get("initboutic_email").toString());
         customer.setActif(1);
 
         try {
