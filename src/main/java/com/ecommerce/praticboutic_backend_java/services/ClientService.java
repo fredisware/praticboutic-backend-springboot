@@ -135,10 +135,12 @@ public class ClientService {
     }
 
 
-    public Client createAndSaveClient(HttpSession session, BuildBouticRequest input)
+    public Client createAndSaveClient(BuildBouticRequest input, String token)
             throws DatabaseException.EmailAlreadyExistsException, DataAccessException {
+
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         // Récupération et validation de l'email
-        String verifyEmail = sessionService.getSessionAttributeAsString(session, "verify_email");
+        String verifyEmail = payload.get("verify_email").toString();
         if (StringUtils.isEmpty(verifyEmail)) {
             throw new DatabaseException.InvalidSessionDataException("L'email ne peut pas être vide");
         }
@@ -153,7 +155,7 @@ public class ClientService {
         Client client = new Client();
         client.setEmail(verifyEmail);
 
-        String password = sessionService.getSessionAttributeAsString(session, "registration_pass");
+        String password = payload.get("registration_pass").toString();
         if (StringUtils.isEmpty(password)) {
             throw new DatabaseException.InvalidSessionDataException("Le mot de passe ne peut pas être vide");
         }
@@ -161,15 +163,15 @@ public class ClientService {
         client.setPass(passwordEncoder.encode(password));
 
         // Remplissage des autres informations client
-        client.setQualite(sessionService.getSessionAttributeAsString(session, "registration_qualite"));
-        client.setNom(sessionService.getSessionAttributeAsString(session, "registration_nom"));
-        client.setPrenom(sessionService.getSessionAttributeAsString(session, "registration_prenom"));
-        client.setAdr1(sessionService.getSessionAttributeAsString(session, "registration_adr1"));
-        client.setAdr2(sessionService.getSessionAttributeAsString(session, "registration_adr2"));
-        client.setCp(sessionService.getSessionAttributeAsString(session, "registration_cp"));
-        client.setVille(sessionService.getSessionAttributeAsString(session, "registration_ville"));
-        client.setTel(sessionService.getSessionAttributeAsString(session, "registration_tel"));
-        client.setStripeCustomerId(sessionService.getSessionAttributeAsString(session, "registration_stripe_customer_id"));
+        client.setQualite(payload.get("registration_qualite").toString());
+        client.setNom(payload.get("registration_nom").toString());
+        client.setPrenom(payload.get("registration_prenom").toString());
+        client.setAdr1(payload.get("registration_adr1").toString());
+        client.setAdr2(payload.get("registration_adr2").toString());
+        client.setCp(payload.get("registration_cp").toString());
+        client.setVille(payload.get("registration_ville").toString());
+        client.setTel(payload.get("registration_tel").toString());
+        client.setStripeCustomerId(payload.get("registration_stripe_customer_id").toString());
         client.setActif(1);
         client.setDevice_id(Utils.sanitizeInput(input.getDeviceId()));
         client.setDevice_type(Utils.sanitizeInput(input.getDeviceType().toString()));

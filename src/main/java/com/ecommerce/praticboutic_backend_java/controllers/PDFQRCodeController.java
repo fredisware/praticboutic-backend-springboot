@@ -40,9 +40,6 @@ public class PDFQRCodeController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private SessionService sessionService;
-
     @Value("${app.root.url.front}")
     private String rootUrlFront;
     

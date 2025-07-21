@@ -67,7 +67,7 @@ public class DatabaseController {
     protected ClientService clientService;
 
     @Autowired
-    protected SessionService sessionService;
+    protected BouticService bouticService;
 
     @Autowired
     protected CustomerService customerService;
@@ -81,15 +81,21 @@ public class DatabaseController {
     @Autowired
     private PlatformTransactionManager transactionManager;
 
+    @Autowired
+    protected JwtService jwtService;
+
 
     //public DatabaseController() {}
 
     @PostMapping("/count-elements")
-    public ResponseEntity<?> countElementsInTable(@RequestBody VueTableRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> countElementsInTable(@RequestBody VueTableRequest input, HttpServletRequest httpRequest, @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
         try {
+            String token = authHeader.replace("Bearer ", "");
+
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérifier l'authentification
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 throw new Exception("Non authentifié");
             }
             String strTable = input.getTable(); Integer iBouticid = input.getBouticid();
@@ -131,9 +137,14 @@ public class DatabaseController {
     }
 
     @PostMapping("/vue-table")
-    public ResponseEntity<?> vueTable(@RequestBody VueTableRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> vueTable(@RequestBody VueTableRequest input, HttpServletRequest httpRequest,
+                                      @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
-        if (!sessionService.isAuthenticated()) {
+        String token = authHeader.replace("Bearer ", "");
+
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
+        if (!jwtService.isAuthenticated(payload)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Non authentifié"));
         }
@@ -188,10 +199,13 @@ public class DatabaseController {
     }
 
     @PostMapping("/remplir-options")
-    public ResponseEntity<?> remplirOption(@RequestBody RemplirOptionTableRequest input, HttpServletRequest httpRequest)
+    public ResponseEntity<?> remplirOption(@RequestBody RemplirOptionTableRequest input, HttpServletRequest httpRequest,
+                                           @RequestHeader("Authorization") String authHeader)
     {
         Map<String, Object> response = new HashMap<>();
-        if (!sessionService.isAuthenticated()) {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+        if (!jwtService.isAuthenticated(payload)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Non authentifié"));
         }
@@ -246,10 +260,13 @@ public class DatabaseController {
      */
     @PostMapping("/insert-row")
     @Transactional
-    public ResponseEntity<?> insertRow(@RequestBody InsertRowRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> insertRow(@RequestBody InsertRowRequest input, HttpServletRequest httpRequest,
+                                       @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 throw new Exception("Non authentifié");
             }
             // Validation de l'entrée
@@ -343,11 +360,14 @@ public class DatabaseController {
      */
     @PostMapping("/update-row")
     @Transactional
-    public ResponseEntity<?> updateRow(@RequestBody UpdateRowRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> updateRow(@RequestBody UpdateRowRequest input, HttpServletRequest httpRequest,
+                                       @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 throw new Exception( "Non authentifié");
             }
             // Validation de l'entrée
@@ -449,10 +469,13 @@ public class DatabaseController {
      * @return Une Map contenant le résultat de l'opération
      */
     @PostMapping("/get-values")
-    public ResponseEntity<?> getValues(@RequestBody GetValuesRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> getValues(@RequestBody GetValuesRequest input, HttpServletRequest httpRequest
+            , @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 throw new Exception("Non authentifié");
             }
             // Validation de l'entrée
@@ -513,11 +536,14 @@ public class DatabaseController {
      * @return Une Map contenant le résultat de l'opération avec les couleurs
      */
     @PostMapping("/color-row")
-    public ResponseEntity<?> getOrderColors(@RequestBody ColorRowRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> getOrderColors(@RequestBody ColorRowRequest input, HttpServletRequest httpRequest,
+                                            @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 throw new Exception("Non authentifié");
             }
             // Validation de l'entrée
@@ -572,11 +598,14 @@ public class DatabaseController {
      * @return Une Map contenant le résultat de l'opération
      */
     @PostMapping("/get-com-data")
-    public ResponseEntity<?> getOrderData(@RequestBody GetComDataRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> getOrderData(@RequestBody GetComDataRequest input, HttpServletRequest httpRequest,
+                                          @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 throw new Exception("Non authentifié");
             }
             // Validation de l'entrée
@@ -664,13 +693,16 @@ public class DatabaseController {
 
 
     @PostMapping("/get-param")
-    public ResponseEntity<?> getParam(@RequestBody ParamRequest request, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> getParam(@RequestBody ParamRequest request, HttpServletRequest httpRequest,
+                                      @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         if (request.getParam() == null || request.getBouticid() == null) {
             return ResponseEntity.badRequest().body("Missing parameters");
         }
 
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "Non authentifié"));
             }
@@ -682,13 +714,16 @@ public class DatabaseController {
     }
 
     @PostMapping("/set-param")
-    public ResponseEntity<?> setParam(@RequestBody ParamRequest request, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> setParam(@RequestBody ParamRequest request, HttpServletRequest httpRequest,
+                                      @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         if (request.getParam() == null || request.getValeur() == null || request.getBouticid() == null) {
             return ResponseEntity.badRequest().body("Missing parameters");
         }
 
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "Non authentifié"));
             }
@@ -702,11 +737,14 @@ public class DatabaseController {
      * Récupère une propriété spécifique d'un customer
      */
     @PostMapping("/get-custom-prop")
-    public ResponseEntity<?> getCustomProperty(@RequestBody CustomPropertyRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> getCustomProperty(@RequestBody CustomPropertyRequest input, HttpServletRequest httpRequest,
+                                               @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 throw new Exception("Non authentifié");
             }
             // Validation des paramètres
@@ -758,11 +796,14 @@ public class DatabaseController {
 
     @PostMapping("/set-custom-prop")
     @Transactional
-    public ResponseEntity<?> setCustomProperty(@RequestBody CustomPropertyUpdateRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> setCustomProperty(@RequestBody CustomPropertyUpdateRequest input, HttpServletRequest httpRequest,
+                                               @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "Non authentifié"));
             }
@@ -828,11 +869,14 @@ public class DatabaseController {
      * Récupère une propriété spécifique d'un client associé à un customer
      */
     @PostMapping("/get-client-prop")
-    public ResponseEntity<?> getClientProperty(@RequestBody ClientPropertyRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> getClientProperty(@RequestBody ClientPropertyRequest input, HttpServletRequest httpRequest,
+                                               @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "Non authentifié"));
             }
@@ -892,11 +936,14 @@ public class DatabaseController {
      */
     @PostMapping("/set-client-prop")
     @Transactional
-    public ResponseEntity<?> setClientProperty(@RequestBody ClientPropertyUpdateRequest input, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> setClientProperty(@RequestBody ClientPropertyUpdateRequest input, HttpServletRequest httpRequest,
+                                               @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         try {
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "Non authentifié"));
             }
@@ -967,17 +1014,20 @@ public class DatabaseController {
      * Méthode pour créer une nouvelle boutique et configurer tous ses paramètres associés
      *
      * @param input   Les données requises pour créer une boutique
-     * @param session La session HTTP contenant les informations temporaires
+
      * @return ResponseEntity contenant le résultat de l'opération
      */
     @PostMapping("/build-boutic")
-    public ResponseEntity<?> buildBoutic(@RequestBody BuildBouticRequest input, HttpSession session, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> buildBoutic(@RequestBody BuildBouticRequest input, HttpServletRequest httpRequest, @RequestHeader("Authorization") String authHeader) {
         // Vérifier si l'email est vérifié
 
         logger.info("Début de la création d'une nouvelle boutique");
 
         try {
-            String verifyEmail = (String)session.getAttribute("verify_email");
+            String token = authHeader.replace("Bearer ", "");
+
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+            String verifyEmail = payload.get("verify_email").toString();
             if (verifyEmail == null || verifyEmail.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
             }
@@ -987,29 +1037,29 @@ public class DatabaseController {
             transactionTemplate.execute(status -> {
                 try {
                     // Étape 1: Création et validation du client
-                    Client client = clientService.createAndSaveClient(session, input);
+                    Client client = clientService.createAndSaveClient(input, token);
                     logger.debug("Client créé avec succès: ID={}", client.getCltId());
 
                     // Étape 2: Création de la boutique
-                    Customer customer = customerService.createAndSaveCustomer(session, client);
+                    Customer customer = customerService.createAndSaveCustomer(client, token);
                     logger.debug("Boutique créée avec succès: ID={}, Alias={}",
                             customer.getCustomId(), customer.getCustomer());
 
                     // Étape 3: Création de l'abonnement
-                    Abonnement abonnement = abonnementService.createAndSaveAbonnement(session, client, customer);
+                    Abonnement abonnement = abonnementService.createAndSaveAbonnement(client, customer, token);
                     logger.debug("Abonnement créé avec succès: ID={}", abonnement.getAboId());
 
                     // Étape 4: Mise à jour des métadonnées Stripe
                     stripeService.updateStripeSubscriptionMetadata(
-                            sessionService.getSessionAttributeAsString(session, "creationabonnement_stripe_subscription_id"),
+                            payload.get("creationabonnement_stripe_subscription_id").toString(),
                             abonnement.getAboId());
 
                     // Étape 5: Configuration des paramètres et statuts par défaut
-                    paramService.createDefaultParameters(customer.getCustomId(), session);
+                    paramService.createDefaultParameters(customer.getCustomId(), token);
                     statutCmdService.createDefaultOrderStatuses(customer.getCustomId());
 
                     // Étape 6: Mise à jour de la session pour l'authentification
-                    sessionService.updateSessionAfterBoutiqueCreation(session, customer);
+                    bouticService.updateSessionAfterBoutiqueCreation(customer, token);
 
                     return null;
                 } catch (Exception e) {
@@ -1053,17 +1103,19 @@ public class DatabaseController {
      * Méthode pour mettre à jour l'adresse email d'une boutique
      */
     @PostMapping("/radress-boutic")
-    public ResponseEntity<?> updateBouticEmail(@RequestBody UpdateEmailRequest input, HttpSession session) {
+    public ResponseEntity<?> updateBouticEmail(@RequestBody UpdateEmailRequest input, @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         try {
             // Vérification de la session
-            if (session.getAttribute("bo_id") == null || session.getAttribute("bo_email") == null) {
+            if (payload.get("bo_id") == null || payload.get("bo_email") == null) {
                 throw new IllegalStateException("Session invalide ou expirée");
             }
 
-            Integer bouticId = Integer.parseInt(session.getAttribute("bo_id").toString());
-            String currentEmail = (String) session.getAttribute("bo_email");
+            Integer bouticId = Integer.parseInt(payload.get("bo_id").toString());
+            String currentEmail = (String) payload.get("bo_email");
 
             // Vérification de l'unicité de l'email
             Long emailCount = clientRepository.countByEmail(currentEmail);
@@ -1080,10 +1132,12 @@ public class DatabaseController {
             clientRepository.updateEmailById(input.getEmail(), customer.getCltid());
 
             // Mise à jour de la session
-            session.setAttribute("bo_email", input.getEmail());
+            payload.put("bo_email", input.getEmail());
+            String jwt = JwtService.generateToken(payload, "" );
 
             response.put("success", true);
             response.put("message", "Adresse email mise à jour avec succès");
+            response.put("token", jwt);
             return ResponseEntity.ok(response);
 
         } catch (IllegalStateException e) {

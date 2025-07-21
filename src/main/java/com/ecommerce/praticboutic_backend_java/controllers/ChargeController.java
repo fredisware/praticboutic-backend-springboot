@@ -2,6 +2,7 @@ package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.ChargeRequest;
 import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.ParameterService;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.stripe.Stripe;
@@ -23,9 +24,6 @@ import java.util.Map;
 public class ChargeController {
 
     @Autowired
-    private SessionService sessionService;
-
-    @Autowired
     private ParameterService parameterService;
 
     @Value("${stripe.secret.key}")
@@ -34,11 +32,17 @@ public class ChargeController {
     @Value("${session.max.lifetime}")
     private Long sessionMaxLifetime;
 
+    @Autowired
+    protected JwtService jwtService;
+
     @PostMapping("/check-stripe-account")
-    public ResponseEntity<?> checkStripeAccount(@RequestBody ChargeRequest request, HttpSession session) {
+    public ResponseEntity<?> checkStripeAccount(@RequestBody ChargeRequest request, @RequestHeader("Authorization") String authHeader) {
         try {
+            String token = authHeader.replace("Bearer ", "");
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
             // Vérifier l'authentification
-            if (!sessionService.isAuthenticated()) {
+            if (!jwtService.isAuthenticated(payload)) {
                 throw new Exception("Non authentifié");
             }
 

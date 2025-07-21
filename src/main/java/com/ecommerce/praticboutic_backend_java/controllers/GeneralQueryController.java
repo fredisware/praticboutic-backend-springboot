@@ -25,7 +25,7 @@ public class GeneralQueryController {
     private EntityManager entityManager;
 
     @PostMapping("/genquery")
-    public ResponseEntity<?> processGenQuery(@RequestBody(required = false) Map<String, Object> input, HttpSession session) {
+    public ResponseEntity<?> processGenQuery(@RequestBody(required = false) Map<String, Object> input) {
         try {
 
             String action = (String) input.get("action");

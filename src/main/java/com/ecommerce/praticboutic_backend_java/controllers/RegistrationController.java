@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.RegistrationRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.stripe.Stripe;
 import com.stripe.model.Customer;
 import com.stripe.param.CustomerCreateParams;
@@ -28,23 +29,25 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public ResponseEntity<?> registerMobile(@RequestBody RegistrationRequest input,
-                                            HttpSession session) {
+                                            @RequestHeader("Authorization") String authHeader) {
         try {
+            String token = authHeader.replace("Bearer ", "");
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérification de l'email
-            String verifyEmail = (String) session.getAttribute("verify_email");
+            String verifyEmail = payload.get("verify_email").toString();
             if (verifyEmail == null || verifyEmail.isEmpty()) {
                 throw new Exception("Courriel non vérifié");
             }
             // Enregistrement des données dans la session
-            session.setAttribute("registration_pass", input.pass);
-            session.setAttribute("registration_qualite", input.qualite);
-            session.setAttribute("registration_nom", input.nom);
-            session.setAttribute("registration_prenom", input.prenom);
-            session.setAttribute("registration_adr1", input.adr1);
-            session.setAttribute("registration_adr2", input.adr2);
-            session.setAttribute("registration_cp", input.cp);
-            session.setAttribute("registration_ville", input.ville);
-            session.setAttribute("registration_tel", input.tel);
+            payload.put("registration_pass", input.pass);
+            payload.put("registration_qualite", input.qualite);
+            payload.put("registration_nom", input.nom);
+            payload.put("registration_prenom", input.prenom);
+            payload.put("registration_adr1", input.adr1);
+            payload.put("registration_adr2", input.adr2);
+            payload.put("registration_cp", input.cp);
+            payload.put("registration_ville", input.ville);
+            payload.put("registration_tel", input.tel);
             // Configuration Stripe
             Stripe.apiKey = stripeSecretKey;
             // Création du client Stripe
@@ -64,9 +67,11 @@ public class RegistrationController {
                     .build();
 
             Customer customer = Customer.create(params);
-            session.setAttribute("registration_stripe_customer_id", customer.getId());
+            payload.put("registration_stripe_customer_id", customer.getId());
 
-            return ResponseEntity.ok(Map.of("result","OK"));
+            String jwt = JwtService.generateToken(payload, "" );
+
+            return ResponseEntity.ok(Map.of("token", jwt));
 
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();

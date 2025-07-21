@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ParameterService {
@@ -108,20 +109,21 @@ public class ParameterService {
     /**
      * Méthode pour créer les paramètres par défaut d'une boutique
      */
-    public void createDefaultParameters(Integer customId, HttpSession session) {
+    public void createDefaultParameters(Integer customId, String token) {
+        Map<String, Object> payload = JwtService.parseToken(token).getClaims();
 
         List<Parametre> parametres = Arrays.asList(
                 new Parametre(customId, "isHTML_mail", "1", "HTML activé pour l'envoi de mail"),
                 new Parametre(customId, "Subject_mail", "Commande Praticboutic", "Sujet du courriel pour l'envoi de mail"),
-                new Parametre(customId, "VALIDATION_SMS", sessionService.getSessionAttributeAsString(session, "confboutic_validsms"), "Commande validée par sms ?"),
+                new Parametre(customId, "VALIDATION_SMS", payload.get("confboutic_validsms").toString(), "Commande validée par sms ?"),
                 new Parametre(customId, "VerifCP", "0", "Activation de la verification des codes postaux"),
-                new Parametre(customId, "Choix_Paiement", sessionService.getSessionAttributeAsString(session, "confboutic_chxpaie"), "COMPTANT ou LIVRAISON ou TOUS"),
+                new Parametre(customId, "Choix_Paiement", payload.get("confboutic_chxpaie").toString(), "COMPTANT ou LIVRAISON ou TOUS"),
                 new Parametre(customId, "MP_Comptant", "Par carte bancaire", "Texte du paiement comptant"),
                 new Parametre(customId, "MP_Livraison", "Moyens conventionnels", "Texte du paiement à la livraison"),
-                new Parametre(customId, "Choix_Method", sessionService.getSessionAttributeAsString(session, "confboutic_chxmethode"), "TOUS ou EMPORTER ou LIVRER"),
+                new Parametre(customId, "Choix_Method", payload.get("confboutic_chxmethode").toString(), "TOUS ou EMPORTER ou LIVRER"),
                 new Parametre(customId, "CM_Livrer", "Vente avec livraison", "Texte de la vente à la livraison"),
                 new Parametre(customId, "CM_Emporter", "Vente avec passage à la caisse", "Texte de la vente à emporter"),
-                new Parametre(customId, "MntCmdMini", sessionService.getSessionAttributeAsString(session, "confboutic_mntmincmd"), "Montant commande minimal"),
+                new Parametre(customId, "MntCmdMini", payload.get("onfboutic_mntmincmd").toString(), "Montant commande minimal"),
                 new Parametre(customId, "SIZE_IMG", "smallimg", "bigimg ou smallimg"),
                 new Parametre(customId, "CMPT_CMD", "1", "Compteur des références des commandes"),
                 new Parametre(customId, "MONEY_SYSTEM", "STRIPE MARKETPLACE", ""),

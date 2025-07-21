@@ -9,6 +9,7 @@ import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
 import com.ecommerce.praticboutic_backend_java.requests.LiensRequest;
 import com.ecommerce.praticboutic_backend_java.requests.LoginRequest;
 import com.ecommerce.praticboutic_backend_java.requests.SubscriptionRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -70,12 +71,13 @@ public class SubscriptionController {
      * @throws Exception Si le client n'est pas authentifié ou n'existe pas
      */
     @PostMapping("/liens-creation-boutic")
-    public ResponseEntity<?> getLiensCreationBoutic(@RequestBody LiensRequest loginRequest,
-                                                            HttpSession session) throws Exception {
+    public ResponseEntity<?> getLiensCreationBoutic(@RequestBody LiensRequest loginRequest, @RequestHeader("Authorization") String authHeader) throws Exception {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         // Vérification de l'authentification
-        if (session.getAttribute("bo_auth") == null || !session.getAttribute("bo_auth").equals("oui")) {
+        if (payload.get("bo_auth") == null || !payload.get("bo_auth").equals("oui")) {
             throw new Exception("Non authentifié");
         }
 
@@ -120,14 +122,17 @@ public class SubscriptionController {
     /**
      * Récupère la configuration Stripe nécessaire pour le frontend
      *
-     * @param session La session HTTP pour vérifier l'état de l'authentification
+
      * @return Un objet contenant la clé publique Stripe et les tarifs disponibles
      * @throws Exception Si l'email n'est pas vérifié
      */
     @PostMapping("/configuration")
-    public Map<String, Object> getConfiguration(HttpSession session) throws Exception {
+    public Map<String, Object> getConfiguration(@RequestHeader("Authorization") String authHeader) throws Exception {
         // Vérifier que l'email a été vérifié
-        if (session.getAttribute("verify_email") == null) {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
+        if (payload.get("verify_email") == null) {
             throw new Exception("Courriel non vérifié");
         }
 
@@ -150,14 +155,16 @@ public class SubscriptionController {
     /**
      * Récupère la configuration Stripe pour l'interface d'administration
      *
-     * @param session La session HTTP pour vérifier l'authentification d'administration
+
      * @return Un objet contenant la clé publique Stripe et les tarifs disponibles
      * @throws Exception Si l'utilisateur n'est pas authentifié en tant qu'administrateur
      */
     @PostMapping("/boconfiguration")
-    public Map<String, Object> getBackOfficeConfiguration(HttpSession session) throws Exception {
+    public Map<String, Object> getBackOfficeConfiguration(@RequestHeader("Authorization") String authHeader) throws Exception {
         // Vérifier l'authentification admin
-        if (session.getAttribute("bo_auth") == null || !"oui".equals(session.getAttribute("bo_auth"))) {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+        if (payload.get("bo_auth") == null || !"oui".equals(payload.get("bo_auth"))) {
             throw new Exception("Non authentifié");
         }
 
@@ -183,22 +190,24 @@ public class SubscriptionController {
      * Crée un abonnement Stripe pour l'utilisateur connecté
      *
      * @param request Objet contenant les paramètres de création d'abonnement
-     * @param session La session HTTP pour vérifier l'authentification
+
      * @return Les informations sur l'abonnement créé
      * @throws Exception Si l'email n'est pas vérifié ou si une erreur survient
      */
     @PostMapping("/creationabonnement")
-    public Map<String, String> createSubscription(@RequestBody SubscriptionRequest request, HttpSession session) throws Exception {
+    public Map<String, String> createSubscription(@RequestBody SubscriptionRequest request, @RequestHeader("Authorization") String authHeader) throws Exception {
         // Vérifier que l'email a été vérifié
-        if (session.getAttribute("verify_email") == null) {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+        if (payload.get("verify_email").toString() == null) {
             throw new Exception("Courriel non vérifié");
         }
 
         // Stocker les informations dans la session
-        session.setAttribute("creationabonnement_priceid", request.getPriceid());
+        payload.put("creationabonnement_priceid", request.getPriceid());
 
         // Récupérer l'ID client Stripe
-        String stripeCustomerId = (String) session.getAttribute("registration_stripe_customer_id");
+        String stripeCustomerId = payload.get("registration_stripe_customer_id").toString();
 
         Stripe.apiKey = stripeSecretKey;
 
@@ -215,7 +224,7 @@ public class SubscriptionController {
         Subscription subscription = Subscription.create(params);
 
         // Stocker l'ID d'abonnement dans la session
-        session.setAttribute("creationabonnement_stripe_subscription_id", subscription.getId());
+        payload.put("creationabonnement_stripe_subscription_id", subscription.getId());
 
         // Construire la réponse
         Map<String, String> output = new HashMap<>();
@@ -224,6 +233,8 @@ public class SubscriptionController {
         // Récupérer le client secret
         Invoice invoice = (Invoice) subscription.getLatestInvoiceObject();
         PaymentIntent intent = (PaymentIntent) invoice.getPaymentIntentObject();
+        String jwt = JwtService.generateToken(payload, "" );
+        output.put("token", jwt);
         output.put("clientSecret", intent.getClientSecret());
 
         return output;
@@ -233,22 +244,24 @@ public class SubscriptionController {
      * Crée un abonnement Stripe depuis l'interface d'administration
      *
      * @param request Objet contenant les paramètres de création d'abonnement
-     * @param session La session HTTP pour vérifier l'authentification d'administration
+
      * @return Les informations sur l'abonnement créé
      * @throws Exception Si l'utilisateur n'est pas authentifié en tant qu'administrateur ou si une erreur survient
      */
     @PostMapping("/bocreationabonnement")
-    public Map<String, String> createBackOfficeSubscription(@RequestBody SubscriptionRequest request, HttpSession session) throws Exception {
+    public Map<String, String> createBackOfficeSubscription(@RequestBody SubscriptionRequest request, @RequestHeader("Authorization") String authHeader) throws Exception {
         // Vérifier l'authentification admin
-        if (session.getAttribute("bo_auth") == null || !"oui".equals(session.getAttribute("bo_auth"))) {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+        if (payload.get("bo_auth") == null || !"oui".equals(payload.get("bo_auth"))) {
             throw new Exception("Non authentifié");
         }
 
         // Stocker les informations dans la session
-        session.setAttribute("bocreationabonnement_priceid", request.getPriceid());
+        payload.put("bocreationabonnement_priceid", request.getPriceid());
 
         // Récupérer l'ID client Stripe
-        String stripeCustomerId = (String) session.getAttribute("bo_stripe_customer_id");
+        String stripeCustomerId = payload.get("bo_stripe_customer_id").toString();
 
         // Vérifier que le client existe en base de données
         Integer clientId = null;
@@ -287,7 +300,7 @@ public class SubscriptionController {
                      "INSERT INTO abonnement(cltid, creationboutic, bouticid, stripe_subscription_id, actif) VALUES (?, 0, ?, ?, 1)",
                      Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, clientId);
-            stmt.setInt(2, (Integer) session.getAttribute("bo_id"));
+            stmt.setInt(2, Integer.parseInt(payload.get("bo_id").toString()));
             stmt.setString(3, subscription.getId());
             stmt.executeUpdate();
 
@@ -309,7 +322,7 @@ public class SubscriptionController {
         Subscription updatedSubscription = subscription.update(updateParams);
 
         // Stocker l'ID d'abonnement dans la session
-        session.setAttribute("bocreationabonnement_stripe_subscription_id", subscription.getId());
+        payload.put("bocreationabonnement_stripe_subscription_id", subscription.getId());
 
         // Construire la réponse
         Map<String, String> output = new HashMap<>();
@@ -318,6 +331,8 @@ public class SubscriptionController {
         // Récupérer le client secret
         Invoice invoice = (Invoice) subscription.getLatestInvoiceObject();
         PaymentIntent intent = (PaymentIntent) invoice.getPaymentIntentObject();
+        String jwt = JwtService.generateToken(payload, "" );
+        output.put("token", jwt);
         output.put("clientSecret", intent.getClientSecret());
 
         return output;
@@ -327,27 +342,30 @@ public class SubscriptionController {
      * Gère la sélection d'un abonnement consommation par l'utilisateur
      *
      * @param requestData Données de la requête contenant l'action et l'ID du prix
-     * @param session La session HTTP de l'utilisateur
+
      * @return Un objet contenant l'ID client et l'ID du prix
      * @throws Exception Si l'utilisateur n'est pas authentifié ou son email non vérifié
      */
     @PostMapping("/conso")
-    public Map<String, Object> handleConsommationSelection(@RequestBody Map<String, Object> requestData,
-                                                           HttpSession session) throws Exception {
+    public Map<String, Object> handleConsommationSelection(@RequestBody Map<String, Object> requestData, @RequestHeader("Authorization") String authHeader) throws Exception {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         if (!"conso".equals(requestData.get("action"))) {
             throw new Exception("Action invalide");
         }
 
-        if (session.getAttribute("verify_email") == null) {
+        if (payload.get("verify_email") == null) {
             throw new Exception("Courriel non vérifié");
         }
 
         String priceId = (String) requestData.get("priceid");
-        session.setAttribute("creationabonnement_priceid", priceId);
+        payload.put("creationabonnement_priceid", priceId);
 
-        String stripeCustomerId = (String) session.getAttribute("registration_stripe_customer_id");
+        String stripeCustomerId = payload.get("registration_stripe_customer_id").toString();
 
         Map<String, Object> output = new HashMap<>();
+        String jwt = JwtService.generateToken(payload, "" );
+        output.put("token", jwt);
         output.put("customerId", stripeCustomerId);
         output.put("priceId", priceId);
 
@@ -358,27 +376,32 @@ public class SubscriptionController {
      * Gère la sélection d'un abonnement consommation par l'administrateur backoffice
      *
      * @param requestData Données de la requête contenant l'action et l'ID du prix
-     * @param session La session HTTP de l'administrateur
+
      * @return Un objet contenant l'ID client et l'ID du prix
      * @throws Exception Si l'administrateur n'est pas authentifié
      */
     @PostMapping("/boconso")
     public Map<String, Object> handleBackOfficeConsommationSelection(@RequestBody Map<String, Object> requestData,
-                                                                     HttpSession session) throws Exception {
+                                                                     @RequestHeader("Authorization") String authHeader) throws Exception {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
         if (!"boconso".equals(requestData.get("action"))) {
             throw new Exception("Action invalide");
         }
 
-        if (session.getAttribute("bo_auth") == null || !"oui".equals(session.getAttribute("bo_auth"))) {
+        if (payload.get("bo_auth").toString() == null || !"oui".equals(payload.get("bo_auth").toString())) {
             throw new Exception("Non authentifié");
         }
 
-        String priceId = (String) requestData.get("priceid");
-        session.setAttribute("bocreationabonnement_priceid", priceId);
+        String priceId = requestData.get("priceid").toString();
+        payload.put("bocreationabonnement_priceid", priceId);
+        String jwt = JwtService.generateToken(payload, "" );
 
-        String stripeCustomerId = (String) session.getAttribute("bo_stripe_customer_id");
+        String stripeCustomerId = payload.get("bo_stripe_customer_id").toString();
 
         Map<String, Object> output = new HashMap<>();
+        output.put("token", jwt);
         output.put("customerId", stripeCustomerId);
         output.put("priceId", priceId);
 
@@ -389,18 +412,20 @@ public class SubscriptionController {
      * Crée un abonnement consommation pour un utilisateur
      *
      * @param requestData Données de la requête avec les informations d'abonnement
-     * @param session La session HTTP de l'utilisateur
+
      * @return L'objet subscription créé dans Stripe
      * @throws Exception Si l'utilisateur n'est pas authentifié ou si la création échoue
      */
     @PostMapping("/consocreationabonnement")
-    ResponseEntity<?> createConsommationSubscription(@RequestBody Map<String, Object> requestData,
-                                                              HttpSession session) throws Exception {
+    ResponseEntity<?> createConsommationSubscription(@RequestBody Map<String, Object> requestData, @RequestHeader("Authorization") String authHeader) throws Exception {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
         if (!"consocreationabonnement".equals(requestData.get("action"))) {
             throw new Exception("Action invalide");
         }
 
-        if (session.getAttribute("verify_email") == null) {
+        if (payload.get("verify_email").toString() == null) {
             throw new Exception("Courriel non vérifié");
         }
 
@@ -408,7 +433,7 @@ public class SubscriptionController {
         String priceId = (String) requestData.get("priceId");
         String paymentMethodId = (String) requestData.get("paymentMethodId");
 
-        session.setAttribute("creationabonnement_priceid", priceId);
+        payload.put("creationabonnement_priceid", priceId);
 
         // Configurer Stripe
         Stripe.apiKey = stripeSecretKey;
@@ -438,14 +463,18 @@ public class SubscriptionController {
 
             Subscription subscription = Subscription.create(subscriptionParams);
 
-            session.setAttribute("creationabonnement_stripe_subscription_id", subscription.getId());
+            payload.put("creationabonnement_stripe_subscription_id", subscription.getId());
 
             // Convertir l'objet Subscription en Map via Gson
             Gson gson = new Gson();
             String jsonString = gson.toJson(subscription);
             Map<String, Object> subscriptionMap = gson.fromJson(jsonString, Map.class);
+            Map<String, Object> output = new HashMap<String, Object>();
+            String jwt = JwtService.generateToken(payload, "" );
+            output.put("token", jwt);
+            output.put("result", subscriptionMap);
 
-            return ResponseEntity.ok(Map.of("result", subscriptionMap));
+            return ResponseEntity.ok(output);
 
         } catch (StripeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
@@ -456,18 +485,18 @@ public class SubscriptionController {
      * Crée un abonnement consommation par l'administrateur backoffice
      *
      * @param requestData Données de la requête avec les informations d'abonnement
-     * @param session La session HTTP de l'administrateur
      * @return L'objet subscription créé dans Stripe
      * @throws Exception Si l'administrateur n'est pas authentifié ou si la création échoue
      */
     @PostMapping("/boconsocreationabonnement")
-    public Map<String, Object> createBackOfficeConsommationSubscription(@RequestBody Map<String, Object> requestData,
-                                                                        HttpSession session) throws Exception {
+    public Map<String, Object> createBackOfficeConsommationSubscription(@RequestBody Map<String, Object> requestData, @RequestHeader("Authorization") String authHeader) throws Exception {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         if (!"boconsocreationabonnement".equals(requestData.get("action"))) {
             throw new Exception("Action invalide");
         }
 
-        if (session.getAttribute("bo_auth") == null || !"oui".equals(session.getAttribute("bo_auth"))) {
+        if (payload.get("bo_auth").toString() == null || !"oui".equals(payload.get("bo_auth").toString())) {
             throw new Exception("Non authentifié");
         }
 
@@ -486,7 +515,7 @@ public class SubscriptionController {
             throw new Exception("Erreur ! Client non trouvé");
         }
 
-        session.setAttribute("bocreationabonnement_priceid", priceId);
+        payload.put("bocreationabonnement_priceid", priceId);
 
         // Configurer Stripe
         Stripe.apiKey = stripeSecretKey;
@@ -517,7 +546,7 @@ public class SubscriptionController {
             Subscription subscription = Subscription.create(subscriptionParams);
 
             // Enregistrer l'abonnement dans la base de données
-            Integer bouticId = Integer.parseInt(session.getAttribute("bo_id").toString());
+            Integer bouticId = Integer.parseInt(payload.get("bo_id").toString());
             String subscriptionId = subscription.getId();
 
             jdbcTemplate.update(
@@ -536,15 +565,19 @@ public class SubscriptionController {
             metadataParams.put("metadata", metadata);
             subscription.update(metadataParams);
 
-            session.setAttribute("bocreationabonnement_stripe_subscription_id", subscription.getId());
+            payload.put("bocreationabonnement_stripe_subscription_id", subscription.getId());
 
             // Convertir l'objet Subscription en Map via Gson
             Gson gson = new Gson();
             String jsonString = gson.toJson(subscription);
             Map<String, Object> subscriptionMap = gson.fromJson(jsonString, Map.class);
+            HashMap<String, Object> output = new HashMap<String, Object>();
+            String jwt = JwtService.generateToken(payload, "" );
+            output.put("token", jwt);
+            output.put("result", subscriptionMap);
 
 
-            return subscriptionMap;
+            return output;
 
         } catch (StripeException e) {
             throw new Exception(e.getMessage());
@@ -552,14 +585,15 @@ public class SubscriptionController {
     }
 
     @PostMapping("/boannulerabonnement")
-    public Map<String, Object> cancelSubscription(@RequestBody Map<String, Object> requestData,
-                                                  HttpSession session) throws Exception {
+    public Map<String, Object> cancelSubscription(@RequestBody Map<String, Object> requestData, @RequestHeader("Authorization") String authHeader) throws Exception {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         if (!"boannulerabonnement".equals(requestData.get("action"))) {
             throw new Exception("Action invalide");
         }
 
         // Vérifier l'authentification admin
-        if (session.getAttribute("bo_auth") == null || !"oui".equals(session.getAttribute("bo_auth"))) {
+        if (payload.get("bo_auth").toString() == null || !"oui".equals(payload.get("bo_auth").toString())) {
             throw new Exception("Non authentifié");
         }
 
@@ -605,19 +639,21 @@ public class SubscriptionController {
      * Réactive un abonnement précédemment annulé
      *
      * @param requestData Données de la requête contenant l'ID de l'abonnement
-     * @param session La session HTTP de l'administrateur
+
      * @return Un objet contenant l'abonnement réactivé
      * @throws Exception Si l'administrateur n'est pas authentifié ou si la réactivation échoue
      */
     @PostMapping("/boactivationabonnement")
-    public Map<String, Object> activateSubscription(@RequestBody Map<String, Object> requestData,
-                                                    HttpSession session) throws Exception {
+    public Map<String, Object> activateSubscription(@RequestBody Map<String, Object> requestData, @RequestHeader("Authorization") String authHeader) throws Exception {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
         if (!"boactivationabonnement".equals(requestData.get("action"))) {
             throw new Exception("Action invalide");
         }
 
         // Vérifier l'authentification admin
-        if (session.getAttribute("bo_auth") == null || !"oui".equals(session.getAttribute("bo_auth"))) {
+        if (payload.get("bo_auth").toString() == null || !"oui".equals(payload.get("bo_auth").toString())) {
             throw new Exception("Non authentifié");
         }
 
@@ -656,7 +692,10 @@ public class SubscriptionController {
     }
 
     @PostMapping("/check-subscription")
-    public ResponseEntity<?> checkSubscription(@RequestBody Map<String, Object> input, HttpSession session) {
+    public ResponseEntity<?> checkSubscription(@RequestBody Map<String, Object> input, @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+
         try {
             Map<String, Object> response = new HashMap<>();
 

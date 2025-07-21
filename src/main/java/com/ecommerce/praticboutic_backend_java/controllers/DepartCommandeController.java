@@ -13,12 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -66,24 +64,26 @@ public class DepartCommandeController {
     private static final Logger logger = LoggerFactory.getLogger(DepartCommandeController.class);
 
     @PostMapping("/depart-commande")
-    public ResponseEntity<?> creerDepartCommande(@RequestBody Map<String, Object> input, HttpSession session) {
+    public ResponseEntity<?> creerDepartCommande(@RequestBody Map<String, Object> input, @RequestHeader("Authorization") String authHeader) {
         Customer customerInfo;
         try {
             logger.info("==== Début de traitement /depart-commande ====");
             logger.info("Données reçues : {}", input);
+            String token = authHeader.replace("Bearer ", "");
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
             // Check if customer exists in session
-            String customer = (String) session.getAttribute("customer");
+            String customer = payload.get("customer").toString();
             logger.info("Customer dans la session : {}", customer);
             if (customer == null || customer.isEmpty()) {
                 throw new IllegalStateException("Aucun 'customer' dans la session");
             }
 
-            String method = (String) session.getAttribute("method");
-            String table = (String) session.getAttribute("table");
+            String method = payload.get("method").toString();
+            String table = payload.get("table").toString();
             logger.info("Méthode : {}, Table : {}", method, table);
 
-            String emailStatus = (String) session.getAttribute(customer + "_mail");
+            String emailStatus = payload.get(customer + "_mail").toString();
             logger.info("Statut email pour customer '{}': {}", customer, emailStatus);
             if (emailStatus == null) {
                 throw new IllegalStateException("Aucun envoi d'email n'a encore eu lieu");
@@ -113,9 +113,9 @@ public class DepartCommandeController {
             Double[] sum = new Double[]{0.0};
 
             logger.info("Envoi d'email à : {}, sujet : {}", customerInfo.getCourriel(), subject);
-            departCommandeService.sendEmail(customerInfo.getCourriel(), subject, compteurCommande, input, sum, session);
+            departCommandeService.sendEmail(customerInfo.getCourriel(), subject, compteurCommande, input, sum, token);
 
-            Integer cmdId = departCommandeService.enregistreCommande(compteurCommande, input, sum, session);
+            Integer cmdId = departCommandeService.enregistreCommande(compteurCommande, input, sum, token);
             logger.info("Commande enregistrée avec ID : {}", cmdId);
 
             Integer cmptneworder = Integer.valueOf(paramService.getParameterValue("NEW_ORDER", customerInfo.getCustomId()));
@@ -144,15 +144,20 @@ public class DepartCommandeController {
             logger.info("Paramètre SMS : {}, numéro : {}", validSms, input.get("telephone").toString());
             smsService.sendOrderSms(validSms, cmdId, customerInfo.getCustomId(), input.get("telephone").toString());
 
-            session.setAttribute(customer + "_mail", "oui");
+            payload.put(customer + "_mail", "oui");
             logger.info("Email marqué comme envoyé dans la session.");
             logger.info("==== Fin de traitement /depart-commande ====");
+            String jwt = JwtService.generateToken(payload, "" );
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", jwt);
+            return ResponseEntity.ok(response);
+
 
         } catch (Exception e) {
             logger.error("Erreur lors de la création de la commande : {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
         }
-        return ResponseEntity.ok(Collections.singletonList("OK"));
+
     }
 }
 

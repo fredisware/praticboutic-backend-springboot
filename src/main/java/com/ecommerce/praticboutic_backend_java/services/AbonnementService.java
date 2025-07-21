@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * Service gérant les opérations liées aux abonnements
@@ -81,9 +82,11 @@ public class AbonnementService {
     /**
      * Crée et sauvegarde un abonnement
      */
-    public Abonnement createAndSaveAbonnement(HttpSession session, Client client, Customer customer)
+    public Abonnement createAndSaveAbonnement( Client client, Customer customer, String token)
             throws DataAccessException {
-        String stripeSubscriptionId = sessionService.getSessionAttributeAsString(session, "creationabonnement_stripe_subscription_id");
+
+        Map<String, Object> payload = JwtService.parseToken(token).getClaims();
+        String stripeSubscriptionId = payload.get("creationabonnement_stripe_subscription_id").toString();
         if (StringUtils.isEmpty(stripeSubscriptionId)) {
             throw new DatabaseException.InvalidSessionDataException("L'ID d'abonnement Stripe ne peut pas être vide");
         }

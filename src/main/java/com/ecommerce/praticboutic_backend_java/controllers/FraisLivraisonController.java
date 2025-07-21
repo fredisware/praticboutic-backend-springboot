@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.entities.*;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 import javax.sql.DataSource;
 
 @RestController
@@ -21,18 +23,21 @@ public class FraisLivraisonController {
     private DataSource dataSource;
 
     @PostMapping("/frais-livr")
-    public ResponseEntity<?> getFraisLivr(@RequestBody ShippingCostRequest request, HttpSession session) {
+    public ResponseEntity<?> getFraisLivr(@RequestBody ShippingCostRequest request, @RequestHeader("Authorization") String authHeader) {
         try {
+            String token = authHeader.replace("Bearer ", "");
+
+            Map<String, Object> payload = JwtService.parseToken(token).getClaims();
 
             // Vérifier si le client existe dans la session
-            String customer = (String) session.getAttribute("customer");
+            String customer = payload.get("customer").toString();
             if (customer == null || customer.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Pas de boutic"));
             }
 
             // Vérifier si l'email est défini
-            String mail = (String) session.getAttribute(customer + "_mail");
+            String mail = payload.get(customer + "_mail").toString();
             if (mail == null || mail.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Pas de courriel"));
