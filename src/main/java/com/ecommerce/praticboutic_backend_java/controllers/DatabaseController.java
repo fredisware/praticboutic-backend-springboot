@@ -1103,17 +1103,19 @@ public class DatabaseController {
      * Méthode pour mettre à jour l'adresse email d'une boutique
      */
     @PostMapping("/radress-boutic")
-    public ResponseEntity<?> updateBouticEmail(@RequestBody UpdateEmailRequest input, HttpSession session) {
+    public ResponseEntity<?> updateBouticEmail(@RequestBody UpdateEmailRequest input, @RequestHeader("Authorization") String authHeader) {
         Map<String, Object> response = new HashMap<>();
+        String token = authHeader.replace("Bearer ", "");
+        Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
         try {
             // Vérification de la session
-            if (session.getAttribute("bo_id") == null || session.getAttribute("bo_email") == null) {
+            if (payload.get("bo_id") == null || payload.get("bo_email") == null) {
                 throw new IllegalStateException("Session invalide ou expirée");
             }
 
-            Integer bouticId = Integer.parseInt(session.getAttribute("bo_id").toString());
-            String currentEmail = (String) session.getAttribute("bo_email");
+            Integer bouticId = Integer.parseInt(payload.get("bo_id").toString());
+            String currentEmail = (String) payload.get("bo_email");
 
             // Vérification de l'unicité de l'email
             Long emailCount = clientRepository.countByEmail(currentEmail);
@@ -1130,10 +1132,12 @@ public class DatabaseController {
             clientRepository.updateEmailById(input.getEmail(), customer.getCltid());
 
             // Mise à jour de la session
-            session.setAttribute("bo_email", input.getEmail());
+            payload.put("bo_email", input.getEmail());
+            String jwt = JwtService.generateToken(payload, "" );
 
             response.put("success", true);
             response.put("message", "Adresse email mise à jour avec succès");
+            response.put("token", jwt);
             return ResponseEntity.ok(response);
 
         } catch (IllegalStateException e) {
