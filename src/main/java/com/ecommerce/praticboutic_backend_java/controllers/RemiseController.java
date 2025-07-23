@@ -33,13 +33,13 @@ public class RemiseController {
 
             Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérification des données de session
-            String customer = payload.get("customer").toString();
-            if (customer == null || customer.isEmpty()) {
+            Object customer = payload.get("customer");
+            if (customer == null || customer.toString().isEmpty()) {
                 throw new RuntimeException("Pas de boutic");
             }
 
-            String customerMail = payload.get(customer + "_mail").toString();
-            if (customerMail == null || customerMail.isEmpty()) {
+            Object customerMail = payload.get(customer + "_mail");
+            if (customerMail == null || customerMail.toString().isEmpty()) {
                 throw new RuntimeException("Pas de courriel");
             }
 
