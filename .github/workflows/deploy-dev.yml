@@ -27,7 +27,7 @@ jobs:
         port: 22
         script: |
           # 🛑 Étape 1 : tuer tout processus Java écoutant sur le port 8446
-          PID=$(lsof -i :8446 -sTCP:LISTEN -t) && if [ -n "$PID" ]; then
+          PID=$(lsof -i :8081 -sTCP:LISTEN -t) && if [ -n "$PID" ]; then
           echo "Processus Java trouvé sur le port 8446 (PID: $PID), arrêt en cours..."
           kill "$PID"
           sleep 2
@@ -36,7 +36,7 @@ jobs:
             kill -9 "$PID"
           fi
           else
-            echo "Aucun processus Java sur le port 8446."
+            echo "Aucun processus Java sur le port 8081."
           fi
           rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/{*,.*}
           # git pull origin main  # ou "master" selon ta branche
@@ -56,9 +56,9 @@ jobs:
           # Trouve le fichier JAR
           JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
 
-          PID=$(lsof -i :8446 -sTCP:LISTEN -t)
+          PID=$(lsof -i :8081 -sTCP:LISTEN -t)
           if [ -n "$PID" ]; then
-            echo "Arrêt du processus Java sur le port 8446 (PID: $PID)"
+            echo "Arrêt du processus Java sur le port 8081 (PID: $PID)"
             kill "$PID" || kill -9 "$PID"
           fi
           
