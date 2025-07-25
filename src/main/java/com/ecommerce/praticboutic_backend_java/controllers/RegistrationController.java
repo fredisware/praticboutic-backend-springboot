@@ -70,8 +70,11 @@ public class RegistrationController {
             payload.put("registration_stripe_customer_id", customer.getId());
 
             String jwt = JwtService.generateToken(payload, "" );
+            Map<String, Object> response = new HashMap<>();
+            response.put("result","OK");
+            response.put("token", jwt);
 
-            return ResponseEntity.ok(Map.of("token", jwt));
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();
