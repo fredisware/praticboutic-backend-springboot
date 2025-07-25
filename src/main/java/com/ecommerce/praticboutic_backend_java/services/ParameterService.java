@@ -123,7 +123,7 @@ public class ParameterService {
                 new Parametre(customId, "Choix_Method", payload.get("confboutic_chxmethode").toString(), "TOUS ou EMPORTER ou LIVRER"),
                 new Parametre(customId, "CM_Livrer", "Vente avec livraison", "Texte de la vente à la livraison"),
                 new Parametre(customId, "CM_Emporter", "Vente avec passage à la caisse", "Texte de la vente à emporter"),
-                new Parametre(customId, "MntCmdMini", payload.get("onfboutic_mntmincmd").toString(), "Montant commande minimal"),
+                new Parametre(customId, "MntCmdMini", payload.get("confboutic_mntmincmd").toString(), "Montant commande minimal"),
                 new Parametre(customId, "SIZE_IMG", "smallimg", "bigimg ou smallimg"),
                 new Parametre(customId, "CMPT_CMD", "1", "Compteur des références des commandes"),
                 new Parametre(customId, "MONEY_SYSTEM", "STRIPE MARKETPLACE", ""),

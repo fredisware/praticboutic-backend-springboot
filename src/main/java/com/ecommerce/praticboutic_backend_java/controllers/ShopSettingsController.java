@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -35,7 +36,11 @@ public class ShopSettingsController {
             payload.put("confboutic_validsms", request.getValidsms());
             String jwt = JwtService.generateToken(payload, "" );
 
-            return ResponseEntity.ok(Map.of("token", jwt));
+            Map<String, Object> response = new HashMap<>();
+            response.put("result", "OK");
+            response.put("token", jwt);
+
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error","Erreur: " + e.getMessage()));
