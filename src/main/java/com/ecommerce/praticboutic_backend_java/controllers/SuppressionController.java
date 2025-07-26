@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.SuppressionRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.ecommerce.praticboutic_backend_java.services.SuppressionService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,12 +20,14 @@ public class SuppressionController {
     private SuppressionService suppressionService;
 
     @Autowired
-    protected SessionService sessionService;
+    protected JwtService jwtService;
 
     @PostMapping("/suppression")
-    public ResponseEntity<?> supprimerCompte(@RequestBody SuppressionRequest request, HttpServletRequest servletRequest) {
+    public ResponseEntity<?> supprimerCompte(@RequestBody SuppressionRequest request, HttpServletRequest servletRequest, @RequestHeader("Authorization") String authHeader) {
         try {
-            if (!sessionService.isAuthenticated()) {
+            String token = authHeader.replace("Bearer ", "");
+            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
+            if (!jwtService.isAuthenticated(payload)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("error", "Non authentifié"));
             }
