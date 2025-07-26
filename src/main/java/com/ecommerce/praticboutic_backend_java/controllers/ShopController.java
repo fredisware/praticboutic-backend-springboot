@@ -16,6 +16,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,8 +68,11 @@ public class ShopController {
             payload.put("initboutic_logo", request.getLogo());
             payload.put("initboutic_email", request.getEmail());
             String jwt = JwtService.generateToken(payload, "" );
+            Map<String, Object> response = new HashMap<>();
+            response.put("result", "OK");
+            response.put("token", jwt);
 
-            return ResponseEntity.ok(Map.of("token", jwt));
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur: " + e.getMessage());

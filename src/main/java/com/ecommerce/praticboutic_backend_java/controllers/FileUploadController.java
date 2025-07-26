@@ -44,7 +44,7 @@ public class FileUploadController {
         // Vérifier si l'email est vérifié
         String token = authHeader.replace("Bearer ", "");
         Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
-        Object verifyEmail = payload.get("verify_email").toString();
+        Object verifyEmail = payload.get("verify_email");
         if (verifyEmail == null || verifyEmail.toString().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
         }
