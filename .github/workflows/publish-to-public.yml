@@ -1,45 +1,48 @@
-name: 🚀 Publish to Public Repo
+name: 📦 Publish Clean Version to Public Repo
 
 on:
   workflow_dispatch:
 
 jobs:
-  publish:
-    name: 📤 Clean & Push to Public Repo
+  publish-clean-version:
     runs-on: ubuntu-latest
+    env:
+      PUBLIC_REPO_URL: https://x-access-token:${{ secrets.GH_PUBLIC_TOKEN }}@github.com/praticbouticpublic/backend.git
 
     steps:
-      - name: 🧽 Checkout Private Repo
+      - name: 🧩 Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: 🧹 Clean Sensitive Files
+      - name: 🧹 Create cleaned folder
         run: |
-          echo "🧹 Removing secrets..."
-          rm -f src/main/resources/application-*.properties
-          mkdir -p src/main/resources/key src/main/resources/ssl-certificate
-          find src/main/resources/key/* ! -type d -exec rm -f {} +
-          find src/main/resources/ssl-certificate/* ! -type d -exec rm -f {} +
-
-      - name: 📁 Copy to Clean Folder
-        run: |
-          echo "📁 Copying to 'cleaned' folder..."
           mkdir cleaned
-          rsync -av --progress . cleaned --exclude .git --exclude cleaned
+          rsync -av --progress ./ cleaned \
+            --exclude='.git' \
+            --exclude='src/test/resources/key/' \
+            --exclude='src/test/resources/application.properties' \
+            --exclude='src/test/resources/application-*.properties' \
+            --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java'
 
-      - name: 🧪 Init & Push to Public Repo
-        working-directory: cleaned
-        env:
-          GH_PUBLIC_TOKEN: ${{ secrets.GH_PUBLIC_TOKEN }}
+      - name: 🔐 Remove hardcoded secrets from copied files
         run: |
-          echo "🔧 Initializing Git..."
+          sed -i '/stripe.secret.key/d' cleaned/src/**/application*.properties || true
+          sed -i '/firebase-adminsdk/d' cleaned/src/**/application*.properties || true
+          sed -i '/AIza/d' cleaned/src/**/application*.properties || true
+          sed -i '/sk_test_/d' cleaned/src/**/application*.properties || true
+          sed -i '/PRIVATE_KEY/d' cleaned/src/**/application*.properties || true
+          sed -i '/google-credentials/d' cleaned/src/**/application*.properties || true
+          find cleaned -type f -name "*.java" -exec sed -i '/sk_test_/d' {} \;
+          find cleaned -type f -name "*.java" -exec sed -i '/AIza/d' {} \;
+
+      - name: 🔧 Initialize Git and push
+        working-directory: cleaned
+        run: |
           git init
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
           git commit -m "🧼 Clean public version without secrets"
           git branch -M main
-          echo "🚀 Pushing to public repo..."
-          git remote add origin https://x-access-token:${GH_PUBLIC_TOKEN}@github.com/praticbouticpublic/backend.git
+          git remote add origin $PUBLIC_REPO_URL
           git push -f origin main
+
