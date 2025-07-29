@@ -29,7 +29,10 @@ jobs:
             --exclude='src/main/resources/application-preprod.properties' \
             --exclude='src/main/resources/application-prod.properties' \
             --exclude='src/test/resources/application.properties.bak' \
-            --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java'
+            --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java' \
+            --exclude='src/main/resources/static/.well-known/PRATICBOUTIC.keystore' \
+            --exclude='src/main/resources/static/.well-known/assetlinks.json' \
+            --exclude='src/main/resources/ssl-certificate/*.p12'
 
       - name: 🔐 Remove hardcoded secrets from copied files
         run: |
