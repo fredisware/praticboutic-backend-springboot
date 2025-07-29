@@ -1,50 +1,44 @@
-name: Publish Clean Public Repo
+name: 🚀 Publish to Public Repo
 
 on:
-  workflow_dispatch:  # ← déclenchement manuel depuis l'interface GitHub
+  workflow_dispatch: # Tu veux le lancer à la mano
 
 jobs:
-  clean-and-push:
+  publish:
+    name: 📤 Clean & Push to Public Repo
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: 🧽 Checkout Private Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Prepare clean version without secrets
-      run: |
-        mkdir cleaned
-        rsync -av --exclude='.git' ./ ./cleaned/
-        
-        # Remove secret files and test files containing secrets
-        rm -f cleaned/src/test/resources/application*.properties
-        rm -f cleaned/src/test/resources/application.properties.bak
-        rm -f cleaned/src/test/java/com/ecommerce/**/PraticbouticBackendJavaApplicationTests.java
-        rm -f cleaned/src/test/resources/key/*.json
-        
-        # Clear key and ssl-certificate folders but keep the folders
-        rm -rf cleaned/src/test/resources/key/*
-        rm -rf cleaned/src/test/resources/ssl-certificate/*
-        mkdir -p cleaned/src/test/resources/key
-        mkdir -p cleaned/src/test/resources/ssl-certificate
-        touch cleaned/src/test/resources/key/.gitkeep
-        touch cleaned/src/test/resources/ssl-certificate/.gitkeep
-        
-        # Remove old Git history in cleaned folder
-        rm -rf cleaned/.git
+      - name: 🏗️ Clean Sensitive Files
+        run: |
+          rm -rf src/test/resources/key/*.json
+          sed -i '/stripe\.secret-key/d' src/test/resources/application*.properties
+          sed -i '/stripe\.test-secret-key/d' src/test/resources/application*.properties
+          sed -i '/GOOGLE_APPLICATION_CREDENTIALS/d' src/test/resources/application*.properties
+          sed -i '/GOOGLE_APPLICATION_CREDENTIALS/d' src/main/resources/application*.properties
+          rm -f src/test/resources/application*.bak
 
-    - name: Push cleaned version to public repo
-      working-directory: cleaned
-      env:
-        REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/praticbouticpublic/backend.git
-      run: |
-        git init
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        git add .
-        git commit -m "🧼 Clean public version without secrets"
-        git branch -M main
-        git remote add origin "$REPO_URL"
-        git push -f origin main
+      - name: 📁 Copy Cleaned Code to Temp Directory
+        run: |
+          mkdir cleaned
+          rsync -av --progress . cleaned --exclude .git --exclude cleaned
 
+      - name: 🧪 Init & Push to Public Repo
+        working-directory: cleaned
+        env:
+          GH_PUBLIC_TOKEN: ${{ secrets.GH_PUBLIC_TOKEN }}
+        run: |
+          git init
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "🧼 Clean public version without secrets"
+          git branch -M main
+          git remote add origin https://x-access-token:${GH_PUBLIC_TOKEN}@github.com/praticbouticpublic/backend.git
+          git push -f origin main
 
