@@ -23,6 +23,11 @@ jobs:
             --exclude='src/test/resources/key/' \
             --exclude='src/test/resources/application.properties' \
             --exclude='src/test/resources/application-*.properties' \
+            --exclude='src/main/resources/application-dev.properties' \
+            --exclude='src/main/resources/application.properties' \
+            --exclude='src/main/resources/application-preprod.properties' \
+            --exclude='src/main/resources/application-prod.properties' \
+            --exclude='src/test/resources/application.properties.bak' \
             --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java'
 
       - name: 🔐 Remove hardcoded secrets from copied files
