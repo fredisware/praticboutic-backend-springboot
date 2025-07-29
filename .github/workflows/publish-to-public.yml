@@ -13,28 +13,28 @@ jobs:
       - name: 🧩 Checkout code
         uses: actions/checkout@v4
 
-- name: 🧹 Create cleaned folder
-  run: |
-    mkdir cleaned
-    rsync -av --progress ./ cleaned \
-      --exclude='.git' \
-      --exclude='src/main/resources/key/**' \
-      --exclude='src/main/resources/praticboutic-*.json' \
-      --exclude='src/test/resources/key/' \
-      --exclude='src/test/resources/application.properties' \
-      --exclude='src/test/resources/application-*.properties' \
-      --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java'
-
-      - name: 🔐 Remove hardcoded secrets from copied files
+      - name: Create cleaned folder
         run: |
-          sed -i '/stripe.secret.key/d' cleaned/src/**/application*.properties || true
-          sed -i '/firebase-adminsdk/d' cleaned/src/**/application*.properties || true
-          sed -i '/AIza/d' cleaned/src/**/application*.properties || true
-          sed -i '/sk_test_/d' cleaned/src/**/application*.properties || true
-          sed -i '/PRIVATE_KEY/d' cleaned/src/**/application*.properties || true
-          sed -i '/google-credentials/d' cleaned/src/**/application*.properties || true
-          find cleaned -type f -name "*.java" -exec sed -i '/sk_test_/d' {} \;
-          find cleaned -type f -name "*.java" -exec sed -i '/AIza/d' {} \;
+          mkdir cleaned
+          rsync -av --progress ./ cleaned \
+            --exclude='.git' \
+            --exclude='src/main/resources/key/**' \
+            --exclude='src/main/resources/praticboutic-*.json' \
+            --exclude='src/test/resources/key/' \
+            --exclude='src/test/resources/application.properties' \
+            --exclude='src/test/resources/application-*.properties' \
+            --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java'
+      
+            - name: 🔐 Remove hardcoded secrets from copied files
+              run: |
+                sed -i '/stripe.secret.key/d' cleaned/src/**/application*.properties || true
+                sed -i '/firebase-adminsdk/d' cleaned/src/**/application*.properties || true
+                sed -i '/AIza/d' cleaned/src/**/application*.properties || true
+                sed -i '/sk_test_/d' cleaned/src/**/application*.properties || true
+                sed -i '/PRIVATE_KEY/d' cleaned/src/**/application*.properties || true
+                sed -i '/google-credentials/d' cleaned/src/**/application*.properties || true
+                find cleaned -type f -name "*.java" -exec sed -i '/sk_test_/d' {} \;
+                find cleaned -type f -name "*.java" -exec sed -i '/AIza/d' {} \;
 
       - name: 🔧 Initialize Git and push
         working-directory: cleaned
