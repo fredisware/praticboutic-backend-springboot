@@ -14,7 +14,7 @@ jobs:
       - name: Create clean version
         run: |
           mkdir clean-version
-
+      
           # Copier tout sauf les fichiers sensibles
           rsync -av --exclude='.git' \
                     --exclude='src/main/resources/application.properties' \
@@ -23,17 +23,18 @@ jobs:
                     --exclude='src/main/resources/application-preprod.properties' \
                     --exclude='src/main/resources/application-prod.properties' \
                     ./ ./clean-version/
-
+      
           # Remplacer application.properties par l'exemple
           cp src/main/resources/application-example.properties clean-version/src/main/resources/application.properties
-
-          # Supprimer le contenu des dossiers key/ et ssl-certificate/
+      
+          # Supprimer le contenu des dossiers sensibles, mais laisser les dossiers
           rm -rf clean-version/src/main/resources/key/*
           rm -rf clean-version/src/main/resources/ssl-certificate/*
-
-          # Ajouter un .gitkeep dans ces dossiers pour qu'ils restent versionnés
           touch clean-version/src/main/resources/key/.gitkeep
           touch clean-version/src/main/resources/ssl-certificate/.gitkeep
+      
+          # Supprimer tout historique Git éventuel (très important !)
+          rm -rf clean-version/.git
 
       - name: Init Git repo in cleaned version
         working-directory: clean-version
@@ -42,7 +43,7 @@ jobs:
           git config user.name "GitHub Action"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "🚀 Public version: cleaned code published"
+          git commit -m "🚀 Cleaned public version"
 
       - name: Push to public repository
         working-directory: clean-version
