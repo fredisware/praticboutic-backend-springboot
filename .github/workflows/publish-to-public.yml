@@ -1,7 +1,7 @@
 name: Publish Clean Version to Public Repo
 
 on:
-  workflow_dispatch:  # Lancement manuel
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -11,27 +11,43 @@ jobs:
       - name: Checkout private repo
         uses: actions/checkout@v4
 
-      - name: Clean files (remove secrets)
+      - name: Create clean version
         run: |
-          rm -f src/main/resources/application.properties
-          cp src/main/resources/application-example.properties src/main/resources/application.properties
-          rm -rf .git
-          mkdir publish-dir
-          shopt -s extglob
-          cp -r !(publish-dir) publish-dir/
+          mkdir clean-version
 
-      - name: Init clean repo
-        working-directory: publish-dir
+          # Copier tout sauf les fichiers sensibles
+          rsync -av --exclude='.git' \
+                    --exclude='src/main/resources/application.properties' \
+                    --exclude='src/main/resources/application-dev.properties' \
+                    --exclude='src/main/resources/application-local.properties' \
+                    --exclude='src/main/resources/application-preprod.properties' \
+                    --exclude='src/main/resources/application-prod.properties' \
+                    ./ ./clean-version/
+
+          # Remplacer application.properties par l'exemple
+          cp src/main/resources/application-example.properties clean-version/src/main/resources/application.properties
+
+          # Supprimer le contenu des dossiers key/ et ssl-certificate/
+          rm -rf clean-version/src/main/resources/key/*
+          rm -rf clean-version/src/main/resources/ssl-certificate/*
+
+          # Ajouter un .gitkeep dans ces dossiers pour qu'ils restent versionnés
+          touch clean-version/src/main/resources/key/.gitkeep
+          touch clean-version/src/main/resources/ssl-certificate/.gitkeep
+
+      - name: Init Git repo in cleaned version
+        working-directory: clean-version
         run: |
           git init
           git config user.name "GitHub Action"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "📦 Publish cleaned public version"
+          git commit -m "🚀 Public version: cleaned code published"
 
       - name: Push to public repository
-        working-directory: publish-dir
+        working-directory: clean-version
         run: |
           git remote add origin https://x-access-token:${{ secrets.GH_PUBLIC_TOKEN }}@github.com/praticbouticpublic/backend.git
           git branch -M main
           git push -f origin main
+
