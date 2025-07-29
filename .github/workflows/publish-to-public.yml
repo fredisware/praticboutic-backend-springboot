@@ -1,0 +1,37 @@
+name: Publish Clean Version to Public Repo
+
+on:
+  workflow_dispatch:  # Lancement manuel
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+
+      - name: Clean files (remove secrets)
+        run: |
+          rm -f src/main/resources/application.properties
+          cp src/main/resources/application-example.properties src/main/resources/application.properties
+          rm -rf .git
+          mkdir publish-dir
+          shopt -s extglob
+          cp -r !(publish-dir) publish-dir/
+
+      - name: Init clean repo
+        working-directory: publish-dir
+        run: |
+          git init
+          git config user.name "GitHub Action"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "📦 Publish cleaned public version"
+
+      - name: Push to public repository
+        working-directory: publish-dir
+        run: |
+          git remote add origin https://x-access-token:${{ secrets.GH_PUBLIC_TOKEN }}@github.com/praticbouticpublic/backend.git
+          git branch -M main
+          git push -f origin main
