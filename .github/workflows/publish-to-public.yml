@@ -1,4 +1,4 @@
-name: 📦 Publish Clean Version to Public Repo
+name: Publish Clean Version to Public Repo
 
 on:
   push:
