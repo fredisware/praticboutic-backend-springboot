@@ -1,9 +1,7 @@
 name: Publish Clean Public Repo
 
 on:
-  push:
-    branches:
-      - main  # ou ta branche principale
+  workflow_dispatch:  # ← déclenchement manuel depuis l'interface GitHub
 
 jobs:
   clean-and-push:
