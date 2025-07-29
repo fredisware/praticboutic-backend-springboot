@@ -1,7 +1,7 @@
 name: 🚀 Publish to Public Repo
 
 on:
-  workflow_dispatch: # Tu veux le lancer à la mano
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -14,17 +14,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 🏗️ Clean Sensitive Files
+      - name: 🧹 Clean Sensitive Files
         run: |
-          rm -rf src/test/resources/key/*.json
-          sed -i '/stripe\.secret-key/d' src/test/resources/application*.properties
-          sed -i '/stripe\.test-secret-key/d' src/test/resources/application*.properties
-          sed -i '/GOOGLE_APPLICATION_CREDENTIALS/d' src/test/resources/application*.properties
-          sed -i '/GOOGLE_APPLICATION_CREDENTIALS/d' src/main/resources/application*.properties
-          rm -f src/test/resources/application*.bak
+          echo "🧹 Removing secrets..."
+          rm -f src/main/resources/application-*.properties
+          mkdir -p src/main/resources/key src/main/resources/ssl-certificate
+          find src/main/resources/key/* ! -type d -exec rm -f {} +
+          find src/main/resources/ssl-certificate/* ! -type d -exec rm -f {} +
 
-      - name: 📁 Copy Cleaned Code to Temp Directory
+      - name: 📁 Copy to Clean Folder
         run: |
+          echo "📁 Copying to 'cleaned' folder..."
           mkdir cleaned
           rsync -av --progress . cleaned --exclude .git --exclude cleaned
 
@@ -33,12 +33,13 @@ jobs:
         env:
           GH_PUBLIC_TOKEN: ${{ secrets.GH_PUBLIC_TOKEN }}
         run: |
+          echo "🔧 Initializing Git..."
           git init
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
           git commit -m "🧼 Clean public version without secrets"
           git branch -M main
+          echo "🚀 Pushing to public repo..."
           git remote add origin https://x-access-token:${GH_PUBLIC_TOKEN}@github.com/praticbouticpublic/backend.git
           git push -f origin main
-
