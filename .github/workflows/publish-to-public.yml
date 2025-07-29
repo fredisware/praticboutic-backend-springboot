@@ -47,8 +47,10 @@ jobs:
       - name: Push to public repository
         working-directory: clean-version
         run: |
-          echo "🧪 Remote URL: https://x-access-token:${{ secrets.GH_PUBLIC_TOKEN }}@github.com/praticbouticpublic/backend.git"
-          git remote add origin https://x-access-token:${{ secrets.GH_PUBLIC_TOKEN }}@github.com/praticbouticpublic/backend.git
+          REPO_URL="https://x-access-token:${{ secrets.GH_PUBLIC_TOKEN }}@github.com/praticbouticpublic/backend.git"
+          echo "🧪 Pushing to $REPO_URL"
+          git remote add origin "$REPO_URL"
           git branch -M main
           git push -f origin main
+
 
