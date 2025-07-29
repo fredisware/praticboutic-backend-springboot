@@ -1,57 +1,52 @@
-name: Publish Clean Version to Public Repo
+name: Publish Clean Public Repo
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main  # ou ta branche principale
 
 jobs:
-  publish:
+  clean-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout private repo
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Create clean version
-        run: |
-          mkdir clean-version
-      
-          # Copier tout sauf les fichiers sensibles
-          rsync -av --exclude='.git' \
-                    --exclude='src/main/resources/application.properties' \
-                    --exclude='src/main/resources/application-dev.properties' \
-                    --exclude='src/main/resources/application-local.properties' \
-                    --exclude='src/main/resources/application-preprod.properties' \
-                    --exclude='src/main/resources/application-prod.properties' \
-                    ./ ./clean-version/
-      
-          # Remplacer application.properties par l'exemple
-          cp src/main/resources/application-example.properties clean-version/src/main/resources/application.properties
-      
-          # Supprimer le contenu des dossiers sensibles, mais laisser les dossiers
-          rm -rf clean-version/src/main/resources/key/*
-          rm -rf clean-version/src/main/resources/ssl-certificate/*
-          touch clean-version/src/main/resources/key/.gitkeep
-          touch clean-version/src/main/resources/ssl-certificate/.gitkeep
-      
-          # Supprimer tout historique Git éventuel (très important !)
-          rm -rf clean-version/.git
+    - name: Prepare clean version without secrets
+      run: |
+        mkdir cleaned
+        rsync -av --exclude='.git' ./ ./cleaned/
+        
+        # Remove secret files and test files containing secrets
+        rm -f cleaned/src/test/resources/application*.properties
+        rm -f cleaned/src/test/resources/application.properties.bak
+        rm -f cleaned/src/test/java/com/ecommerce/**/PraticbouticBackendJavaApplicationTests.java
+        rm -f cleaned/src/test/resources/key/*.json
+        
+        # Clear key and ssl-certificate folders but keep the folders
+        rm -rf cleaned/src/test/resources/key/*
+        rm -rf cleaned/src/test/resources/ssl-certificate/*
+        mkdir -p cleaned/src/test/resources/key
+        mkdir -p cleaned/src/test/resources/ssl-certificate
+        touch cleaned/src/test/resources/key/.gitkeep
+        touch cleaned/src/test/resources/ssl-certificate/.gitkeep
+        
+        # Remove old Git history in cleaned folder
+        rm -rf cleaned/.git
 
-      - name: Init Git repo in cleaned version
-        working-directory: clean-version
-        run: |
-          git init
-          git config user.name "GitHub Action"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "🚀 Cleaned public version"
-
-      - name: Push to public repository
-        working-directory: clean-version
-        run: |
-          REPO_URL="https://x-access-token:${{ secrets.GH_PUBLIC_TOKEN }}@github.com/praticbouticpublic/backend.git"
-          echo "🧪 Pushing to $REPO_URL"
-          git remote add origin "$REPO_URL"
-          git branch -M main
-          git push -f origin main
+    - name: Push cleaned version to public repo
+      working-directory: cleaned
+      env:
+        REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/praticbouticpublic/backend.git
+      run: |
+        git init
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add .
+        git commit -m "🧼 Clean public version without secrets"
+        git branch -M main
+        git remote add origin "$REPO_URL"
+        git push -f origin main
 
 
