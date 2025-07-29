@@ -1,4 +1,9 @@
-jobs:
+name: 📦 Publish Clean Version to Public Repo
+
+on:
+  workflow_dispatch:
+
+jobs:  
   publish-clean-version:
     runs-on: ubuntu-latest
     env:
