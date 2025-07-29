@@ -13,15 +13,17 @@ jobs:
       - name: 🧩 Checkout code
         uses: actions/checkout@v4
 
-      - name: 🧹 Create cleaned folder
-        run: |
-          mkdir cleaned
-          rsync -av --progress ./ cleaned \
-            --exclude='.git' \
-            --exclude='src/test/resources/key/' \
-            --exclude='src/test/resources/application.properties' \
-            --exclude='src/test/resources/application-*.properties' \
-            --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java'
+- name: 🧹 Create cleaned folder
+  run: |
+    mkdir cleaned
+    rsync -av --progress ./ cleaned \
+      --exclude='.git' \
+      --exclude='src/main/resources/key/**' \
+      --exclude='src/main/resources/praticboutic-*.json' \
+      --exclude='src/test/resources/key/' \
+      --exclude='src/test/resources/application.properties' \
+      --exclude='src/test/resources/application-*.properties' \
+      --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java'
 
       - name: 🔐 Remove hardcoded secrets from copied files
         run: |
