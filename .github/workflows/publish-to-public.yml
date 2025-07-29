@@ -54,7 +54,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m ""
+          git commit -m "Clean public version"
           git branch -M main
           git remote add origin $PUBLIC_REPO_URL
           git push -f origin main
