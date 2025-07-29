@@ -1,9 +1,7 @@
 name: Publish Clean Version to Public Repo
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:  
   publish-clean-version:
