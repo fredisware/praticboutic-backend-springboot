@@ -146,23 +146,38 @@ public class CreatePaymentController {
             String type = item.getType();
             Double prixServeur;
 
-            if ("article".equals(type)) {
-                prixServeur = jdbcTemplate.queryForObject(
-                        "SELECT prix FROM article WHERE customid = ? AND artid = ?",
-                        Double.class,
-                        customid,
-                        id
-                );
-            } else if ("option".equals(type)) {
-                prixServeur = jdbcTemplate.queryForObject(
-                        "SELECT surcout FROM `option` WHERE customid = ? AND optid = ?",
-                        Double.class,
-                        customid,
-                        id
-                );
-            } else {
-                throw new Exception("Type d'article inconnu");
-            }
+
+                if ("article".equals(type)) {
+                    try {
+                        prixServeur = jdbcTemplate.queryForObject(
+                                "SELECT prix FROM article WHERE customid = ? AND artid = ?",
+                                Double.class,
+                                customid,
+                                id
+                        );
+                    }
+                    catch (Exception e) {
+                        prixServeur = 0.0;
+                        throw new Exception("Erreur vérification prix article : " + e.getMessage());
+                    }
+                } else if ("option".equals(type)) {
+                    try {
+                        prixServeur = jdbcTemplate.queryForObject(
+                                "SELECT surcout FROM `option` WHERE customid = ? AND optid = ?",
+                                Double.class,
+                                customid,
+                                id
+                        );
+                    }
+                    catch (Exception e) {
+                        prixServeur = 0.0;
+                        throw new Exception("Erreur vérification prix option : " + e.getMessage());
+                    }
+                } else {
+                    throw new Exception("Type d'article inconnu");
+                }
+
+
 
             if (Math.abs(prixServeur - item.getPrix()) < 0.001) {
                 price += item.getPrix() * item.getQt();
