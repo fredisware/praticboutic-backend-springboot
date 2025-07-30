@@ -237,13 +237,18 @@ public class CreatePaymentController {
         return (int) Math.round(total * 100);
     }
 
-    private String getValeurParam(String paramName, Integer customid) {
-        return jdbcTemplate.queryForObject(
-                "SELECT valeur FROM parametre WHERE nom = ? AND customid = ?",
-                String.class,
-                paramName,
-                customid
-        );
+    private String getValeurParam(String paramName, Integer customid) throws Exception {
+        try {
+            return jdbcTemplate.queryForObject(
+                    "SELECT valeur FROM parametre WHERE nom = ? AND customid = ?",
+                    String.class,
+                    paramName,
+                    customid
+            );
+        }
+        catch (Exception e) {
+           throw new Exception(" Impossible de récupérer le paramètre " + paramName + " id boutic " + customid.toString() + " : " + e.getMessage());
+        }
     }
 
     // Classe interne pour les réponses d'erreur
