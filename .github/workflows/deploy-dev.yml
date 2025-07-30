@@ -38,23 +38,23 @@ jobs:
           else
             echo "Aucun processus Java sur le port 8081."
           fi
-          rm -rf /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/{*,.*}
+          rm -rf /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/{*,.*}
           # git pull origin main  # ou "master" selon ta branche
-          git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/
+          git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/
           
-          cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/src/main/resources/
+          cd /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/src/main/resources/
           cp application-dev.properties application.properties
 
           cd /var/www/vhosts/praticboutic.fr/
-          chown -R qruser:psaserv javabackdev.praticboutic.fr/
-          chmod -R 777 javabackdev.praticboutic.fr/
+          chown -R qruser:psaserv backdev.praticboutic.fr/
+          chmod -R 777 backdev.praticboutic.fr/
 
-          cd /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/
+          cd /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/
           # Stop l'app, nettoie, build avec le profil dev
           sudo -u qruser mvn clean install -Dmaven.test.skip=true -Dspring-boot.run.profiles=dev
 
           # Trouve le fichier JAR
-          JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
+          JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
 
           PID=$(lsof -i :8081 -sTCP:LISTEN -t)
           if [ -n "$PID" ]; then
@@ -63,7 +63,7 @@ jobs:
           fi
           
           # Démarre la nouvelle version en arrière-plan
-          sudo -u qruser nohup java -jar "$JAR_FILE" --spring.profiles.active=dev > /var/www/vhosts/praticboutic.fr/javabackdev.praticboutic.fr/springboot/log.out 2>&1 &
+          sudo -u qruser nohup java -jar "$JAR_FILE" --spring.profiles.active=dev > /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/log.out 2>&1 &
           chown qruser:psaserv log.out
 
         
