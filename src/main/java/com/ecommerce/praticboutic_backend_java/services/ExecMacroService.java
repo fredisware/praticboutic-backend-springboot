@@ -36,6 +36,23 @@ public class ExecMacroService {
         Stripe.apiKey = stripeApiKey;
 
         try {
+            // Récupérer les clients sans cltid
+            String sql = "SELECT customid FROM customer WHERE cltid = 0";
+
+            List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+
+            for (Map<String, Object> row : rows) {
+                Long customId = ((Number) row.get("customid")).longValue();
+                updateCustomerActiveStatus(customId, false);
+            }
+
+            return 0;
+
+        } catch (Exception e) {
+            logger.error("Error during macro execution: {}", e.getMessage());
+        }
+
+        try {
             // Récupérer les clients avec leur stripe_customer_id
             String sql = "SELECT customer.customid, client.stripe_customer_id " +
                     "FROM customer JOIN client ON customer.cltid = client.cltid";
