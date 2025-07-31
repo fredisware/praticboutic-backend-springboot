@@ -16,8 +16,6 @@ import java.util.Map;
 
 @Service
 public class ExecMacroService {
-    @Value("${raz.boutic.enabled}")
-    private boolean enabled;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -29,9 +27,6 @@ public class ExecMacroService {
     private String stripeApiKey;
 
     public Integer desactiveBoutic() {
-        if (!enabled) {
-            return 1;
-        }
 
         Stripe.apiKey = stripeApiKey;
 
