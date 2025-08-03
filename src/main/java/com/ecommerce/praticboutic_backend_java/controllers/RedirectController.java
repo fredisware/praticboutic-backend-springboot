@@ -23,11 +23,15 @@ public class RedirectController {
             HttpServletResponse response
     ) throws IOException {
         // Redirection en fonction de la plateforme
-        if ("android".equals(platform))
-            // Redirection vers l'application mobile
-            response.sendRedirect("praticboutic://onboarding-complete");
-        else
-            response.sendRedirect(baseUrl + "/autoclose");
+        switch (platform.toLowerCase()) {
+            case "android":
+            case "ios":
+                response.sendRedirect("praticboutic://onboarding-complete");
+                break;
+            default:
+                response.sendRedirect(baseUrl + "/autoclose");
+                break;
+        }
     }
 
     @GetMapping("/autoclose")
