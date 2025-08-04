@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_tree_structure_part008">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/preprod_deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/preprod_deploy.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/prod_deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/prod_deploy.yml" afterDir="false" />
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_tree_structure_part009">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,14 +172,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00083" summary="initialcommit_part077">
-      <option name="closed" value="true" />
-      <created>1748186961792</created>
-      <option name="number" value="00083" />
-      <option name="presentableId" value="LOCAL-00083" />
-      <option name="project" value="LOCAL" />
-      <updated>1748186961792</updated>
     </task>
     <task id="LOCAL-00084" summary="initialcommit_part078">
       <option name="closed" value="true" />
@@ -567,7 +557,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754300176088</updated>
     </task>
-    <option name="localTasksCounter" value="132" />
+    <task id="LOCAL-00132" summary="evo_tree_structure_part009">
+      <option name="closed" value="true" />
+      <created>1754301017038</created>
+      <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
+      <option name="project" value="LOCAL" />
+      <updated>1754301017038</updated>
+    </task>
+    <option name="localTasksCounter" value="133" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -597,7 +595,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="initialcommit_part092" />
     <MESSAGE value="initialcommit_part093" />
     <MESSAGE value="initialcommit_part094" />
     <MESSAGE value="initialcommit_part095" />
@@ -622,7 +619,8 @@
     <MESSAGE value="evo_redirect_part002" />
     <MESSAGE value="evo_tree_structure_part007" />
     <MESSAGE value="evo_tree_structure_part008" />
-    <option name="LAST_COMMIT_MESSAGE" value="evo_tree_structure_part008" />
+    <MESSAGE value="evo_tree_structure_part009" />
+    <option name="LAST_COMMIT_MESSAGE" value="evo_tree_structure_part009" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

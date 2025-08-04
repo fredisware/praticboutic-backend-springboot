@@ -28,7 +28,7 @@ public class RedirectController {
                 response.sendRedirect("praticboutic://onboarding-complete");
                 break;
             case "ios":
-                response.sendRedirect(baseUrl + "/deep-link-ios");
+                response.sendRedirect(baseUrl + "/deep-link-ios.html");
                 break;
             default:
                 response.sendRedirect(baseUrl + "/autoclose");
