@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_tree_structure_part005" />
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part002" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -170,6 +170,38 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
+    </task>
+    <task id="LOCAL-00081" summary="initialcommit_part076">
+      <option name="closed" value="true" />
+      <created>1748182943694</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1748182943695</updated>
+    </task>
+    <task id="LOCAL-00082" summary="initialcommit_part076">
+      <option name="closed" value="true" />
+      <created>1748186164715</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1748186164715</updated>
+    </task>
+    <task id="LOCAL-00083" summary="initialcommit_part077">
+      <option name="closed" value="true" />
+      <created>1748186961792</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1748186961792</updated>
+    </task>
+    <task id="LOCAL-00084" summary="initialcommit_part078">
+      <option name="closed" value="true" />
+      <created>1748337691786</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1748337691787</updated>
     </task>
     <task id="LOCAL-00085" summary="initialcommit_part079">
       <option name="closed" value="true" />
@@ -531,39 +563,7 @@
       <option name="project" value="LOCAL" />
       <updated>1754295145972</updated>
     </task>
-    <task id="LOCAL-00130" summary="evo_tree_structure_part001">
-      <option name="closed" value="true" />
-      <created>1754298187567</created>
-      <option name="number" value="00130" />
-      <option name="presentableId" value="LOCAL-00130" />
-      <option name="project" value="LOCAL" />
-      <updated>1754298187567</updated>
-    </task>
-    <task id="LOCAL-00131" summary="evo_tree_structure_part002">
-      <option name="closed" value="true" />
-      <created>1754298226972</created>
-      <option name="number" value="00131" />
-      <option name="presentableId" value="LOCAL-00131" />
-      <option name="project" value="LOCAL" />
-      <updated>1754298226972</updated>
-    </task>
-    <task id="LOCAL-00132" summary="evo_tree_structure_part004">
-      <option name="closed" value="true" />
-      <created>1754298828521</created>
-      <option name="number" value="00132" />
-      <option name="presentableId" value="LOCAL-00132" />
-      <option name="project" value="LOCAL" />
-      <updated>1754298828521</updated>
-    </task>
-    <task id="LOCAL-00133" summary="evo_tree_structure_part005">
-      <option name="closed" value="true" />
-      <created>1754298935065</created>
-      <option name="number" value="00133" />
-      <option name="presentableId" value="LOCAL-00133" />
-      <option name="project" value="LOCAL" />
-      <updated>1754298935065</updated>
-    </task>
-    <option name="localTasksCounter" value="134" />
+    <option name="localTasksCounter" value="130" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -593,9 +593,10 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <ignored-roots>
-      <path value="$PROJECT_DIR$/springboot" />
-    </ignored-roots>
+    <MESSAGE value="initialcommit_part090" />
+    <MESSAGE value="initialcommit_part091" />
+    <MESSAGE value="initialcommit_part092" />
+    <MESSAGE value="initialcommit_part093" />
     <MESSAGE value="initialcommit_part094" />
     <MESSAGE value="initialcommit_part095" />
     <MESSAGE value="initialcommit_part096" />
@@ -617,11 +618,7 @@
     <MESSAGE value="version_1_part003" />
     <MESSAGE value="evo_redirect_part001" />
     <MESSAGE value="evo_redirect_part002" />
-    <MESSAGE value="evo_tree_structure_part001" />
-    <MESSAGE value="evo_tree_structure_part002" />
-    <MESSAGE value="evo_tree_structure_part004" />
-    <MESSAGE value="evo_tree_structure_part005" />
-    <option name="LAST_COMMIT_MESSAGE" value="evo_tree_structure_part005" />
+    <option name="LAST_COMMIT_MESSAGE" value="evo_redirect_part002" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

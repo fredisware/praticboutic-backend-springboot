@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.praticboutic_backend_java</groupId>
-	<artifactId>praticboutic_backend_java</artifactId>
+	<artifactId>praticboutic-backend-springboot</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<name>praticboutic_backend_java</name>
 	<description>Backend Java pour Praticboutic</description>
