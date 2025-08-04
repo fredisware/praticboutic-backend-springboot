@@ -29,11 +29,6 @@ public class EmailService
     
     @Value("${app.mail.from.name}")
     private String fromName;
-    
-    @Value("${app.base-url}")
-    private String baseUrl;
-
-    private Session session;
 
     @Autowired
     private JavaMailSender mailSender;
