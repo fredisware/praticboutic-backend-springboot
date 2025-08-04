@@ -17,7 +17,6 @@ jobs:
 
       - name: Create cleaned folder
         run: |
-          mkdir cleaned
           rsync -av --progress ./ cleaned \
             --exclude='.git' \
             --exclude='src/main/resources/key/**' \
@@ -35,7 +34,7 @@ jobs:
             --exclude='src/main/resources/static/.well-known/PRATICBOUTIC.keystore' \
             --exclude='src/main/resources/static/.well-known/assetlinks.json' \
             --exclude='src/main/resources/ssl-certificate/*.p12'
-
+            
       - name: 🔐 Remove hardcoded secrets from copied files
         run: |
           sed -i '/stripe.secret.key/d' cleaned/src/**/application*.properties || true
