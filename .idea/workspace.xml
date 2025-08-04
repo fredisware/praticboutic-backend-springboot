@@ -1,0 +1,1558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part002">
+      <change beforePath="$PROJECT_DIR$/.api_description" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/preprod_deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/preprod_deploy.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/prod_deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/prod_deploy.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.options" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/ECLIPSEF.RSA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/ECLIPSEF.SF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/ECLIPSE_.RSA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/ECLIPSE_.SF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/META-INF/eclipse.inf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/about.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/boot/PlatformURLBaseConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/boot/PlatformURLConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/boot/PlatformURLHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/Activator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/AdapterManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/CommonMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/DataArea.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/DevClassPathHelper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/FindSupport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/IAdapterFactoryExt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/IAdapterManagerProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/IRuntimeConstants.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/LocalizationUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/MetaDataKeeper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/PlatformURLConfigConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/PlatformURLConverter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/PlatformURLFragmentConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/PlatformURLMetaConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/PlatformURLPluginConnection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/PrintStackUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/ReferenceHashSet$HashableSoftReference.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/ReferenceHashSet$HashableWeakReference.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/ReferenceHashSet$HashedReference.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/ReferenceHashSet$StrongReference.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/ReferenceHashSet.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/ResourceTranslator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/RuntimeLog.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/internal/runtime/commonMessages.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/Assert.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/AssertionFailedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/CoreException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/FileLocator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/IAdaptable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/IAdapterFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/IAdapterManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/IBundleGroup.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/IBundleGroupProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/ILogListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/IPath.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/IProgressMonitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/IProgressMonitorWithBlocking.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/ISafeRunnable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/IStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/ListenerList.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/MultiStatus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/NullProgressMonitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/OperationCanceledException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/Path.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/PlatformObject.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/PluginVersionIdentifier.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/ProgressMonitorWrapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/QualifiedName.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/SafeRunner.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/Status.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/SubMonitor$RootInfo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/SubMonitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/SubProgressMonitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/core/runtime/URIUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/AbstractControlContentAssistSubjectAdapter$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/AbstractControlContentAssistSubjectAdapter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/ComboContentAssistSubjectAdapter$InternalDocument.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/ComboContentAssistSubjectAdapter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/IContentAssistSubjectControl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/ISubjectControlContentAssistProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/ISubjectControlContentAssistant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/ISubjectControlContextInformationPresenter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/ISubjectControlContextInformationValidator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/SubjectControlContentAssistant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/SubjectControlContextInformationValidator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/TextContentAssistSubjectAdapter$InternalDocument.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/TextContentAssistSubjectAdapter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/images/content_assist_cue.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/contentassist/images/content_assist_cue@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/DelayedInputChangeListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/InformationControlReplacer$DefaultInformationControlCreator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/InformationControlReplacer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/InternalAccessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/NonDeletingPositionUpdater.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/SelectionProcessor$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/SelectionProcessor$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/SelectionProcessor$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/SelectionProcessor$Implementation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/SelectionProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/StickyHoverManager$Closer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/StickyHoverManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/TableOwnerDrawSupport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/codemining/CancellationExceptionMonitor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/codemining/CodeMiningLineContentAnnotation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/codemining/CodeMiningLineHeaderAnnotation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/codemining/CodeMiningManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/codemining/ICodeMiningAnnotation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/BrowserInformationControl$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/BrowserInformationControl$1DisposeTask.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/BrowserInformationControl$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/BrowserInformationControl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/BrowserInformationControlInput.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/BrowserInput.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/HTML2TextReader.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/HTMLMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/HTMLMessages.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/HTMLPrinter$BuilderBuffer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/HTMLPrinter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/HTMLTextPresenter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/SingleCharReader.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/html/SubstitutionTextReader.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/AdditionalInfoController2$TableSelectionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/AdditionalInfoController2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/CompletionProposalPopup2$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/CompletionProposalPopup2$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/CompletionProposalPopup2$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/CompletionProposalPopup2$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/CompletionProposalPopup2$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/CompletionProposalPopup2$6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/CompletionProposalPopup2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContentAssistMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContentAssistMessages.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContentAssistant2$AutoAssistListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContentAssistant2$Closer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContentAssistant2$InternalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContentAssistant2$LayoutManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContentAssistant2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContextInformationPopup2$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContextInformationPopup2$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContextInformationPopup2$ContextFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/ContextInformationPopup2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/IContentAssistListener2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/IProposalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/link/contentassist/PopupCloser2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/ChangeRegion.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/Colors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/Hunk.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/HunkComputer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/LineIndexOutOfBoundsException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/Range.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionPainter$AnnotationListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionPainter$ColorTool.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionPainter$HoverInformationControlCreator$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionPainter$HoverInformationControlCreator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionPainter$MouseHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionPainter$RevisionAnnotation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionPainter$RevisionHover.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionPainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionSelectionProvider$PostSelectionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/revisions/RevisionSelectionProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/source/DiffPainter$AnnotationListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/internal/text/source/DiffPainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractHoverInformationControlManager$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractHoverInformationControlManager$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractHoverInformationControlManager$Closer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractHoverInformationControlManager$MouseTracker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractHoverInformationControlManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractInformationControl$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractInformationControl$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractInformationControl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractInformationControlManager$Anchor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractInformationControlManager$IInformationControlCloser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractInformationControlManager$MyInternalAccessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractInformationControlManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/AbstractReusableInformationControlCreator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/BlockTextSelection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/CursorLinePainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultAutoIndentStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultDocumentAdapter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultIndentLineAutoEditStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultInformationControl$IInformationPresenter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultInformationControl$IInformationPresenterExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultInformationControl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultTextDoubleClickStrategy$DocumentCharacterIterator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultTextDoubleClickStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultTextHover.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultUndoManager$CompoundTextCommand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultUndoManager$DocumentListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultUndoManager$HistoryListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultUndoManager$KeyAndMouseListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultUndoManager$TextCommand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultUndoManager$TextInputListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DefaultUndoManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DocumentClone$StringTextStore.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DocumentClone.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DocumentCommand$Command.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DocumentCommand$CommandIterator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DocumentCommand$ReverseListIterator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/DocumentCommand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/FindReplaceDocumentAdapterContentProposalProvider$ProposalComputer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/FindReplaceDocumentAdapterContentProposalProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IAutoEditStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IAutoIndentStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IBlockTextSelection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IDelayedInputChangeProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IDocumentAdapter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IDocumentAdapterExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IEditingSupport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IEditingSupportRegistry.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IEventConsumer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IFindReplaceTarget.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IFindReplaceTargetExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IFindReplaceTargetExtension3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IFindReplaceTargetExtension4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IInformationControl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IInformationControlCreator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IInformationControlCreatorExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IInformationControlExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IInformationControlExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IInformationControlExtension3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IInformationControlExtension4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IInformationControlExtension5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IInputChangedListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IMarkRegionTarget.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IMarkSelection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IMultiTextSelection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IPaintPositionManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IPainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IRewriteTarget.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ISelectionValidator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextDoubleClickStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextHover.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextHoverExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextHoverExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextInputListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextOperationTarget.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextOperationTargetExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextPresentationListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextSelection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension7.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension8$EnrichMode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension8.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerExtension9.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/ITextViewerLifecycle.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IUndoManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IUndoManagerExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IViewportListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IWidgetTokenKeeper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IWidgetTokenKeeperExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IWidgetTokenOwner.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/IWidgetTokenOwnerExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/JFaceTextMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/JFaceTextMessages.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/JFaceTextUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/MarginPainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/MarkSelection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/MultiTextSelection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/PaintManager$PaintPositionUpdater.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/PaintManager$PositionManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/PaintManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/PropagatingFontFieldEditor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/RegExMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/RegExMessages.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TabsToSpacesConverter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextAttribute.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextPresentation$FilterIterator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextPresentation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextSelection.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$ColumnPosition.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$CursorListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$DocumentRewriteSessionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$FindReplaceRange.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$FindReplaceTarget.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$RewriteTarget.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$ShiftPositionUpdater.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$TextDoubleClickStrategyConnector.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$TextHoverKey.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$TextVerifyListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$VerifyKeyListenersManager$Batch.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$VerifyKeyListenersManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$ViewerState.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$ViewportGuard.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$VisibleDocumentListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer$WidgetCommand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewerHoverManager$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewerHoverManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewerUndoManager$DocumentUndoListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewerUndoManager$KeyAndMouseListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewerUndoManager$TextInputListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/TextViewerUndoManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/WhitespaceCharacterPainter$StyleRangeWithMetricsOffsets.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/WhitespaceCharacterPainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/codemining/AbstractCodeMining.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/codemining/AbstractCodeMiningProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/codemining/CodeMiningReconciler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/codemining/CodeMiningStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/codemining/ICodeMining.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/codemining/ICodeMiningProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/codemining/LineContentCodeMining.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/codemining/LineEndCodeMining.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/codemining/LineHeaderCodeMining.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$DefaultPresenterControlCreator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$TableSelectionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$Timer$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$Timer$2$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$Timer$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$Timer$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$Timer$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$Timer$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$Timer$Task.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController$Timer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AdditionalInfoController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AsyncCompletionProposalPopup$ComputingProposal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AsyncCompletionProposalPopup$PopupVisibleTimer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/AsyncCompletionProposalPopup.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/BoldStylerProvider$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/BoldStylerProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$7.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$8.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$9.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$CommandKeyListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$EmptyProposal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$ProposalSelectionHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup$ProposalSelectionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompletionProposalPopup.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/CompositeContextInformationValidator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistSubjectControlAdapter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$AutoAssistListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$Closer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$ExceptionLoggingSafeRunnable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$InternalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$LayoutManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant$TriggerType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContentAssistant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContextInformation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContextInformationPopup$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContextInformationPopup$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContextInformationPopup$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContextInformationPopup$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContextInformationPopup$ContextFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContextInformationPopup.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ContextInformationValidator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionListenerExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionListenerExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionProposal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionProposalExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionProposalExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionProposalExtension3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionProposalExtension4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionProposalExtension5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionProposalExtension6.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionProposalExtension7.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/ICompletionProposalSorter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContentAssistListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContentAssistProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContentAssistProcessorExtension$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContentAssistProcessorExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContentAssistant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContentAssistantExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContentAssistantExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContentAssistantExtension3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContentAssistantExtension4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContextInformation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContextInformationExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContextInformationPresenter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/IContextInformationValidator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/JFaceTextMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/JFaceTextMessages.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/contentassist/PopupCloser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/ContentFormatter$NonDeletingPositionUpdater.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/ContentFormatter$PositionReference.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/ContentFormatter$RemoveAffectedPositions.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/ContentFormatter$UpdateAffectedPositions.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/ContentFormatter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/ContextBasedFormattingStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/FormattingContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/FormattingContextProperties.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/IContentFormatter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/IContentFormatterExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/IFormattingContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/IFormattingStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/IFormattingStrategyExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/MultiPassContentFormatter$NonDeletingPositionUpdater.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/formatter/MultiPassContentFormatter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/AbstractHyperlinkDetector.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/DefaultHyperlinkPresenter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/HyperlinkManager$DETECTION_STRATEGY.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/HyperlinkManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/HyperlinkMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/HyperlinkMessages.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/IHyperlink.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/IHyperlinkDetector.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/IHyperlinkDetectorExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/IHyperlinkDetectorExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/IHyperlinkPresenter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/IHyperlinkPresenterExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/IHyperlinkPresenterExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$LinkListInformationControl$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$LinkListInformationControl$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$LinkListInformationControl$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$LinkListInformationControl$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$LinkListInformationControl$LinkContentProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$LinkListInformationControl$LinkLabelProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$LinkListInformationControl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$MultipleHyperlinkHover.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$MultipleHyperlinkHoverManager$Closer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter$MultipleHyperlinkHoverManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/MultipleHyperlinkPresenter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/URLHyperlink.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/hyperlink/URLHyperlinkDetector.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/information/IInformationPresenter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/information/IInformationPresenterExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/information/IInformationProvider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/information/IInformationProviderExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/information/IInformationProviderExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/information/InformationPresenter$Closer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/information/InformationPresenter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$Closer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$DocumentListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$EmptyTarget.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$EmtpyFocusListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$ExitFlags.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$ExitListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$IExitPolicy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$ILinkedModeUIFocusListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$KeyListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$LinkedModeUITarget.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$MySelectionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$NullExitPolicy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI$ProposalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedModeUI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/LinkedPositionAnnotations.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/ProposalPosition.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/TabStopIterator$SequenceComparator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/link/TabStopIterator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/presentation/IPresentationDamager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/presentation/IPresentationReconciler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/presentation/IPresentationReconcilerExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/presentation/IPresentationRepairer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/presentation/PresentationReconciler$InternalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/presentation/PresentationReconciler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/quickassist/IQuickAssistAssistant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/quickassist/IQuickAssistAssistantExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/quickassist/IQuickAssistInvocationContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/quickassist/IQuickAssistProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/quickassist/IQuickFixableAnnotation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/quickassist/QuickAssistAssistant$ContentAssistProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/quickassist/QuickAssistAssistant$QuickAssistAssistantImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/quickassist/QuickAssistAssistant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/AbstractReconcileStep.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/AbstractReconciler$BackgroundThread.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/AbstractReconciler$Listener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/AbstractReconciler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/DirtyRegion.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/DirtyRegionQueue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/IReconcilableModel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/IReconcileResult.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/IReconcileStep.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/IReconciler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/IReconcilerExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/IReconcilingStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/IReconcilingStrategyExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/MonoReconciler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/reconciler/Reconciler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/revisions/IRevisionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/revisions/IRevisionRulerColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/revisions/IRevisionRulerColumnExtension$RenderingMode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/revisions/IRevisionRulerColumnExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/revisions/Revision.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/revisions/RevisionEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/revisions/RevisionInformation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/revisions/RevisionRange.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/rules/DefaultDamagerRepairer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/rules/RuleBasedDamagerRepairer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AbstractRulerColumn$InternalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AbstractRulerColumn$MouseHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AbstractRulerColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationBarHoverManager$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationBarHoverManager$Closer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationBarHoverManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$BoxStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$Decoration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$HighlightingStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$IDrawingStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$ITextStyleStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$NullStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$ReusableRegion.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$SquigglesStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter$UnderlineStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationPainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationRulerColumn$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationRulerColumn$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationRulerColumn$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationRulerColumn$AnnotationsListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationRulerColumn$ReusableRegion.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationRulerColumn$Tuple.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationRulerColumn$TupleComparator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/AnnotationRulerColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ChangeRulerColumn$InternalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ChangeRulerColumn$MouseHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ChangeRulerColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/CompositeRuler$CompositeRulerCanvas$ListenerInfo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/CompositeRuler$CompositeRulerCanvas.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/CompositeRuler$RulerLayout.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/CompositeRuler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ContentAssistantFacade.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/DefaultAnnotationHover.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/DefaultCharacterPairMatcher$CharPairs.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/DefaultCharacterPairMatcher$DocumentPartitionAccessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/DefaultCharacterPairMatcher.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IAnnotationAccess.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IAnnotationAccessExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IAnnotationAccessExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IAnnotationHover.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IAnnotationHoverExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IAnnotationHoverExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IAnnotationPresentation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IChangeRulerColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ICharacterPairMatcher.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ICharacterPairMatcherExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ILineDiffInfo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ILineDiffer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ILineDifferExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ILineDifferExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ILineRange.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IOverviewRuler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IOverviewRulerExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ISharedTextColors.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ISourceViewer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ISourceViewerExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ISourceViewerExtension2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ISourceViewerExtension3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ISourceViewerExtension4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ISourceViewerExtension5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IVerticalRuler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IVerticalRulerColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IVerticalRulerExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IVerticalRulerInfo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IVerticalRulerInfoExtension.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/IVerticalRulerListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/ImageUtilities.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/JFaceTextMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineChangeHover.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineNumberChangeRulerColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineNumberRulerColumn$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineNumberRulerColumn$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineNumberRulerColumn$InternalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineNumberRulerColumn$MouseHandler$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineNumberRulerColumn$MouseHandler$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineNumberRulerColumn$MouseHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineNumberRulerColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/LineRange.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/MatchingCharacterPainter$TextListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/MatchingCharacterPainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/OverviewRuler$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/OverviewRuler$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/OverviewRuler$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/OverviewRuler$FilterIterator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/OverviewRuler$HeaderPainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/OverviewRuler$InternalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/OverviewRuler$WidgetInfos.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/OverviewRuler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/OverviewRulerHoverManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/SourceViewer$ColumnPosition.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/SourceViewer$RulerLayout.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/SourceViewer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/SourceViewerConfiguration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/TextInvocationContext.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/VerticalRuler$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/VerticalRuler$InternalListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/VerticalRuler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/VerticalRulerEvent.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/VisibleLinesTracker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/AbstractInlinedAnnotation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/InlinedAnnotationDrawingStrategy$GCConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/InlinedAnnotationDrawingStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/InlinedAnnotationSupport$MouseTracker.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/InlinedAnnotationSupport$UpdateStylesWidth.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/InlinedAnnotationSupport$VisibleLines.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/InlinedAnnotationSupport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/LineContentAnnotation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/LineHeaderAnnotation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/inlined/Positions.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/AnnotationBag.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/IProjectionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/IProjectionPosition.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionAnnotation$DisplayDisposeRunnable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionAnnotation.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionAnnotationHover.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionAnnotationModel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionRulerColumn$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionRulerColumn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionSummary$Summarizer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionSummary.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionSupport$ProjectionAnnotationsPainter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionSupport$ProjectionDrawingStrategy.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionSupport$ProjectionListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionSupport.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionViewer$AnnotationModelListener.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionViewer$ProjectionCommand.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionViewer$ProjectionCommandQueue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionViewer$ReplaceVisibleDocumentExecutor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/ProjectionViewer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/SourceViewerInformationControl$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/SourceViewerInformationControl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/images/collapsed.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/images/collapsed@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/images/expanded.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/source/projection/images/expanded@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/ContextTypeRegistry.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/InclusivePositionUpdater.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/JFaceTextTemplateMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/JFaceTextTemplateMessages.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/PositionBasedCompletionProposal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/TemplateCompletionProcessor$ProposalComparator.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/TemplateCompletionProcessor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/TemplateProposal$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/TemplateProposal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/persistence/TemplatePersistenceData.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/persistence/TemplatePersistenceMessages.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/persistence/TemplateReaderWriter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/org/eclipse/jface/text/templates/persistence/TemplateStore.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml.versionsBackup" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/praticboutic-backend.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/ClientUrlsProperties.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/CommonConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/CorsConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/DatabaseConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/EmailConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/FirebaseConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/StripeConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/WebConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ChargeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/CheckVersionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/CodePostalZoneController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ConnexionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/CreatePaymentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/DatabaseController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/DepartCommandeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/EmailVerificationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ExecMacroController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/FileUploadController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/FraisLivraisonController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/FrontQueryController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/GeneralQueryController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/LoginLinkController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/LogoutController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/NotificationTestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/PDFQRCodeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/PasswordResetController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/RedirectController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/RegistrationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/RemiseController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SMSController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SendCodeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SessionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ShopController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ShopSettingsController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/StripeWebhookController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SuppressionController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ViewController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Abonnement.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/ArtListImg.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Article.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/BarLivr.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Categorie.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Client.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Commande.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Connexion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/CpZone.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Customer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/GroupeOpt.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Identifiant.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Image.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/LigneCmd.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Option.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Parametre.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/Promotion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/RelGrpOptArt.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/entities/StatutCmd.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/exceptions/ClientNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/exceptions/DatabaseException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/exceptions/SessionExpiredException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/exceptions/TooManyRequestsException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/models/BaseEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/models/ColumnData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/models/Item2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/models/JwtPayload.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/AbonnementRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/ArticleRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/CategorieRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/ClientRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/CommandeRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/ConnexionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/CustomerRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/GroupeOptionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/IdentifiantRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/ImageRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/LigneCmdRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/OptionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/ParametreRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/RelGrpOptArtRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/repositories/StatutCmdRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/BouticRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/BuildBouticRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/ChargeRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/ClientPropertyRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/ClientPropertyUpdateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/ColorRowRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/CpZoneRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/CreatePaymentRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/CustomPropertyRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/CustomPropertyUpdateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/DepartCommandeRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/EmailVerificationRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/FrontQueryRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/FrontRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/GetComDataRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/GetValuesRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/GoogleSignInRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/InsertRowRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/Item.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/LiensRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/LoginLinkRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/LoginRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/ParamRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/RegistrationRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/RemiseRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/RemplirOptionTableRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/SMSRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/SendCodeRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/SessionRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/ShopConfigRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/SubscriptionRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/SuppressionRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/UpdateEmailRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/UpdateRowRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/requests/VueTableRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/responses/ApiResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/responses/CreatePaymentResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/responses/ErrorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/responses/LoginResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/responses/ShippingCostResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/responses/VerificationResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/AbonnementService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/ArticleService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/BouticService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/CategorieService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/ClientService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/CustomerService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/DepartCommandeService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/EmailSendingService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/EmailService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/ExecMacroService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/GroupeOptionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/ImageService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/JsonParserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/JwtService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/MotDePasseService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/NotificationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/OptionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/ParameterService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/RelGrpOptArtService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/SessionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/SmsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/StatutCmdService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/StripeService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/SuppressionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/utils/Utils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-example.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-local.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-preprod.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/dbd/model.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/key/praticboutic-7a39684406f2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/key/praticboutic-88c3e1aae481.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/key/praticboutic-firebase-adminsdk-1b33c-a3caf016d6.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mobileapp/authorisation.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ssl-certificate/Lets_Encrypt_back.praticboutic.fr.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ssl-certificate/Lets_Encrypt_javabackdev.praticboutic.fr.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ssl-certificate/Lets_Encrypt_preback.praticboutic.fr.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/.well-known/PRATICBOUTIC.keystore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/.well-known/acme-challenge/.htaccess" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/.well-known/assetlinks.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/LIVRAISON.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/LOGO_PRATIC_BOUTIC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/ligne_de_separation.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/logo-pratic-boutic.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/img/pb_notificon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/logopbsvg.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/autoclose.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/deep-link-ios.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/config/TestMailConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/ChargeControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/CheckVersionControllerTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/application-dev.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/application-local.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/application-prod.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/application.properties.bak" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/dbd/model.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/hibernate.cfg.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/key/praticboutic-7a39684406f2.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/key/praticboutic-88c3e1aae481.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/key/praticboutic-firebase-adminsdk-1b33c-a3caf016d6.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/mobileapp/authorisation.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/ssl-certificate/Lets_Encrypt_back.praticboutic.fr.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/ssl-certificate/Lets_Encrypt_javabackdev.praticboutic.fr.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/.well-known/PRATICBOUTIC.keystore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/.well-known/acme-challenge/.htaccess" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/.well-known/assetlinks.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/img/LIVRAISON.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/img/LOGO_PRATIC_BOUTIC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/img/ligne_de_separation.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/img/logo-pratic-boutic.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/img/logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/img/pb_notificon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/static/logopbsvg.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/templates/autoclose.html" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Frederic Legand" />
+        <option value="Frdric Legand" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;praticboutic&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/praticboutic/praticboutic-backend.git&quot;,
+    &quot;accountId&quot;: &quot;cc550d82-897d-4af7-a195-899cbddbd3a0&quot;
+  }
+}</component>
+  <component name="InvalidFacetManager">
+    <ignored-facets>
+      <facet id="praticboutic_backend_java/invalid/Hibernate" />
+    </ignored-facets>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="PhpDebugGeneral" listening_started="true" />
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2uoutlchOah8NK6t5oDwo35ufst" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.PraticbouticBackendJavaApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JUnit.All in praticboutic_backend_java.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PraticbouticBackendJavaApplicationTests.contextLoads.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.com.ecommerce.praticboutic_backend_java in praticboutic_backend_java.executor&quot;: &quot;Debug&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-vcs.commit.checks.failed&quot;: &quot;Commit and push checks failed&quot;,
+    &quot;Notification.DoNotAsk-vcs.commit.checks.failed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.PraticbouticBackendJavaApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;/home/redisdead/dev/praticboutic_backend_java/src/main/java/com/ecommerce/praticboutic_backend_java&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/var/www/praticboutic-backend&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.ecommerce.praticboutic_backend_java.requests" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/ssl-certificate" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/test/" />
+      <recent name="$PROJECT_DIR$/src/main/resources/static" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/models" />
+      <recent name="$PROJECT_DIR$/src/main/resources/static" />
+      <recent name="$PROJECT_DIR$/src/main/resources/ssl-certificate" />
+      <recent name="$PROJECT_DIR$/src/main/resources/static/upload" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+      <recent name="com.ecommerce.praticboutic_backend_java" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ecommerce.praticboutic_backend_java" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.PraticbouticBackendJavaApplication">
+    <configuration name="PraticbouticBackendJavaApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.ecommerce.praticboutic_backend_java.PraticbouticBackendJavaApplication" />
+      <module name="praticboutic_backend_java" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ecommerce.praticboutic_backend_java.controllers.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.ecommerce.praticboutic_backend_java in praticboutic_backend_java" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="praticboutic_backend_java" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ecommerce.praticboutic_backend_java.configurations.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ecommerce.praticboutic_backend_java" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.PraticbouticBackendJavaApplication" />
+        <item itemvalue="JUnit.com.ecommerce.praticboutic_backend_java in praticboutic_backend_java" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="" />
+      <created>1742927466183</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742927466183</updated>
+      <workItem from="1742927467779" duration="199000" />
+      <workItem from="1742928178401" duration="4000" />
+      <workItem from="1742933254796" duration="136000" />
+      <workItem from="1742933440393" duration="9000" />
+      <workItem from="1742934972504" duration="205000" />
+    </task>
+    <task id="LOCAL-00081" summary="initialcommit_part076">
+      <option name="closed" value="true" />
+      <created>1748182943694</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1748182943695</updated>
+    </task>
+    <task id="LOCAL-00082" summary="initialcommit_part076">
+      <option name="closed" value="true" />
+      <created>1748186164715</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1748186164715</updated>
+    </task>
+    <task id="LOCAL-00083" summary="initialcommit_part077">
+      <option name="closed" value="true" />
+      <created>1748186961792</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1748186961792</updated>
+    </task>
+    <task id="LOCAL-00084" summary="initialcommit_part078">
+      <option name="closed" value="true" />
+      <created>1748337691786</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1748337691787</updated>
+    </task>
+    <task id="LOCAL-00085" summary="initialcommit_part079">
+      <option name="closed" value="true" />
+      <created>1748350641914</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1748350641914</updated>
+    </task>
+    <task id="LOCAL-00086" summary="initialcommit_part080">
+      <option name="closed" value="true" />
+      <created>1748442491185</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1748442491185</updated>
+    </task>
+    <task id="LOCAL-00087" summary="initialcommit_part081">
+      <option name="closed" value="true" />
+      <created>1748444449274</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1748444449274</updated>
+    </task>
+    <task id="LOCAL-00088" summary="initialcommit_part082">
+      <option name="closed" value="true" />
+      <created>1748445260183</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1748445260183</updated>
+    </task>
+    <task id="LOCAL-00089" summary="initialcommit_part083">
+      <option name="closed" value="true" />
+      <created>1748446466466</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1748446466467</updated>
+    </task>
+    <task id="LOCAL-00090" summary="initialcommit_part084">
+      <option name="closed" value="true" />
+      <created>1748451631453</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1748451631453</updated>
+    </task>
+    <task id="LOCAL-00091" summary="initialcommit_part085">
+      <option name="closed" value="true" />
+      <created>1748452440191</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1748452440191</updated>
+    </task>
+    <task id="LOCAL-00092" summary="initialcommit_part087">
+      <option name="closed" value="true" />
+      <created>1748461383165</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1748461383165</updated>
+    </task>
+    <task id="LOCAL-00093" summary="initialcommit_part088">
+      <option name="closed" value="true" />
+      <created>1748538350523</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1748538350524</updated>
+    </task>
+    <task id="LOCAL-00094" summary="test_macro_part001">
+      <option name="closed" value="true" />
+      <created>1748538629282</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1748538629282</updated>
+    </task>
+    <task id="LOCAL-00095" summary="test_macro_part002">
+      <option name="closed" value="true" />
+      <created>1748538980840</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1748538980840</updated>
+    </task>
+    <task id="LOCAL-00096" summary="test_macro_part003">
+      <option name="closed" value="true" />
+      <created>1748539293144</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1748539293144</updated>
+    </task>
+    <task id="LOCAL-00097" summary="test_macro_part004">
+      <option name="closed" value="true" />
+      <created>1748540571700</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1748540571700</updated>
+    </task>
+    <task id="LOCAL-00098" summary="test_macro_part005">
+      <option name="closed" value="true" />
+      <created>1748541597350</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1748541597350</updated>
+    </task>
+    <task id="LOCAL-00099" summary="test_macro_part006">
+      <option name="closed" value="true" />
+      <created>1748542678512</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1748542678512</updated>
+    </task>
+    <task id="LOCAL-00100" summary="test_macro_part007">
+      <option name="closed" value="true" />
+      <created>1748542832890</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1748542832890</updated>
+    </task>
+    <task id="LOCAL-00101" summary="test_macro_part008">
+      <option name="closed" value="true" />
+      <created>1748542936718</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1748542936718</updated>
+    </task>
+    <task id="LOCAL-00102" summary="test_macro_part009">
+      <option name="closed" value="true" />
+      <created>1748543173629</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1748543173629</updated>
+    </task>
+    <task id="LOCAL-00103" summary="test_macro_part010">
+      <option name="closed" value="true" />
+      <created>1748544173819</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1748544173820</updated>
+    </task>
+    <task id="LOCAL-00104" summary="initialcommit_part089">
+      <option name="closed" value="true" />
+      <created>1748582755312</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1748582755312</updated>
+    </task>
+    <task id="LOCAL-00105" summary="initialcommit_part090">
+      <option name="closed" value="true" />
+      <created>1748584514714</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1748584514714</updated>
+    </task>
+    <task id="LOCAL-00106" summary="initialcommit_part091">
+      <option name="closed" value="true" />
+      <created>1748599331146</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1748599331146</updated>
+    </task>
+    <task id="LOCAL-00107" summary="initialcommit_part092">
+      <option name="closed" value="true" />
+      <created>1748600972974</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1748600972974</updated>
+    </task>
+    <task id="LOCAL-00108" summary="initialcommit_part093">
+      <option name="closed" value="true" />
+      <created>1748621173779</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1748621173780</updated>
+    </task>
+    <task id="LOCAL-00109" summary="initialcommit_part094">
+      <option name="closed" value="true" />
+      <created>1748712763609</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1748712763609</updated>
+    </task>
+    <task id="LOCAL-00110" summary="initialcommit_part095">
+      <option name="closed" value="true" />
+      <created>1748715740835</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1748715740835</updated>
+    </task>
+    <task id="LOCAL-00111" summary="initialcommit_part096">
+      <option name="closed" value="true" />
+      <created>1748783201971</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1748783201971</updated>
+    </task>
+    <task id="LOCAL-00112" summary="initialcommit_part097">
+      <option name="closed" value="true" />
+      <created>1748784533592</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1748784533592</updated>
+    </task>
+    <task id="LOCAL-00113" summary="initialcommit_part098">
+      <option name="closed" value="true" />
+      <created>1748876058048</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1748876058049</updated>
+    </task>
+    <task id="LOCAL-00114" summary="initialcommit_part099">
+      <option name="closed" value="true" />
+      <created>1749621477627</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1749621477628</updated>
+    </task>
+    <task id="LOCAL-00115" summary="initialcommit_part100">
+      <option name="closed" value="true" />
+      <created>1749657270350</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1749657270350</updated>
+    </task>
+    <task id="LOCAL-00116" summary="initialcommit_part101">
+      <option name="closed" value="true" />
+      <created>1751269487742</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1751269487742</updated>
+    </task>
+    <task id="LOCAL-00117" summary="initialcommit_part102">
+      <option name="closed" value="true" />
+      <created>1753793375466</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1753793375467</updated>
+    </task>
+    <task id="LOCAL-00118" summary="initialcommit_part103">
+      <option name="closed" value="true" />
+      <created>1753862610100</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1753862610100</updated>
+    </task>
+    <task id="LOCAL-00119" summary="evo_version17_part001">
+      <option name="closed" value="true" />
+      <created>1753876799078</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1753876799079</updated>
+    </task>
+    <task id="LOCAL-00120" summary="initialcommit_part104">
+      <option name="closed" value="true" />
+      <created>1753905479468</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1753905479468</updated>
+    </task>
+    <task id="LOCAL-00121" summary="initialcommit_part105">
+      <option name="closed" value="true" />
+      <created>1753936168816</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1753936168816</updated>
+    </task>
+    <task id="LOCAL-00122" summary="initialcommit_part106">
+      <option name="closed" value="true" />
+      <created>1753938719492</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1753938719492</updated>
+    </task>
+    <task id="LOCAL-00123" summary="initialcommit_part107">
+      <option name="closed" value="true" />
+      <created>1753945854671</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1753945854672</updated>
+    </task>
+    <task id="LOCAL-00124" summary="version19_part001">
+      <option name="closed" value="true" />
+      <created>1754063291645</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1754063291646</updated>
+    </task>
+    <task id="LOCAL-00125" summary="version_1_part001">
+      <option name="closed" value="true" />
+      <created>1754065327783</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1754065327783</updated>
+    </task>
+    <task id="LOCAL-00126" summary="version_1_part002">
+      <option name="closed" value="true" />
+      <created>1754065621139</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1754065621139</updated>
+    </task>
+    <task id="LOCAL-00127" summary="version_1_part003">
+      <option name="closed" value="true" />
+      <created>1754212383923</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1754212383923</updated>
+    </task>
+    <task id="LOCAL-00128" summary="evo_redirect_part001">
+      <option name="closed" value="true" />
+      <created>1754291086124</created>
+      <option name="number" value="00128" />
+      <option name="presentableId" value="LOCAL-00128" />
+      <option name="project" value="LOCAL" />
+      <updated>1754291086125</updated>
+    </task>
+    <task id="LOCAL-00129" summary="evo_redirect_part002">
+      <option name="closed" value="true" />
+      <created>1754295145972</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1754295145972</updated>
+    </task>
+    <option name="localTasksCounter" value="130" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/springboot" />
+    </ignored-roots>
+    <MESSAGE value="initialcommit_part090" />
+    <MESSAGE value="initialcommit_part091" />
+    <MESSAGE value="initialcommit_part092" />
+    <MESSAGE value="initialcommit_part093" />
+    <MESSAGE value="initialcommit_part094" />
+    <MESSAGE value="initialcommit_part095" />
+    <MESSAGE value="initialcommit_part096" />
+    <MESSAGE value="initialcommit_part097" />
+    <MESSAGE value="initialcommit_part098" />
+    <MESSAGE value="initialcommit_part099" />
+    <MESSAGE value="initialcommit_part100" />
+    <MESSAGE value="initialcommit_part101" />
+    <MESSAGE value="initialcommit_part102" />
+    <MESSAGE value="initialcommit_part103" />
+    <MESSAGE value="evo_version17_part001" />
+    <MESSAGE value="initialcommit_part104" />
+    <MESSAGE value="initialcommit_part105" />
+    <MESSAGE value="initialcommit_part106" />
+    <MESSAGE value="initialcommit_part107" />
+    <MESSAGE value="version19_part001" />
+    <MESSAGE value="version_1_part001" />
+    <MESSAGE value="version_1_part002" />
+    <MESSAGE value="version_1_part003" />
+    <MESSAGE value="evo_redirect_part001" />
+    <MESSAGE value="evo_redirect_part002" />
+    <option name="LAST_COMMIT_MESSAGE" value="evo_redirect_part002" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SMSController.java</url>
+          <line>34</line>
+          <option name="timeStamp" value="205" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/LogoutController.java</url>
+          <line>24</line>
+          <option name="timeStamp" value="228" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/NotificationTestController.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="232" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java</url>
+          <line>494</line>
+          <option name="timeStamp" value="242" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java</url>
+          <line>255</line>
+          <option name="timeStamp" value="247" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java</url>
+          <line>650</line>
+          <option name="timeStamp" value="251" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/CreatePaymentController.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="252" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/CreatePaymentController.java</url>
+          <line>143</line>
+          <option name="timeStamp" value="258" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/CreatePaymentController.java</url>
+          <line>151</line>
+          <option name="timeStamp" value="259" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ExecMacroController.java</url>
+          <line>21</line>
+          <option name="timeStamp" value="262" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/ExecMacroService.java</url>
+          <line>28</line>
+          <properties class="com.ecommerce.praticboutic_backend_java.services.ExecMacroService" method="desactiveBoutic">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="261" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.lang.ClassNotFoundException" memberName="stackTrace" />
+        <PinnedItemInfo parentTag="org.apache.catalina.connector.Request" memberName="attributes" />
+        <PinnedItemInfo parentTag="com.ecommerce.praticboutic_backend_java.requests.InsertRowRequest" memberName="row" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>
