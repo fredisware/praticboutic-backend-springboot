@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part002" />
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_tree_structure_part008">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/deploy-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/preprod_deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/preprod_deploy.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/prod_deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/prod_deploy.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -68,34 +72,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.PraticbouticBackendJavaApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;JUnit.All in praticboutic_backend_java.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.PraticbouticBackendJavaApplicationTests.contextLoads.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.com.ecommerce.praticboutic_backend_java in praticboutic_backend_java.executor&quot;: &quot;Debug&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-vcs.commit.checks.failed&quot;: &quot;Commit and push checks failed&quot;,
-    &quot;Notification.DoNotAsk-vcs.commit.checks.failed&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.PraticbouticBackendJavaApplication.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_directory_selection&quot;: &quot;/home/redisdead/dev/praticboutic_backend_java/src/main/java/com/ecommerce/praticboutic_backend_java&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/var/www/praticboutic-backend&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.PraticbouticBackendJavaApplication.executor": "Debug",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "JUnit.All in praticboutic_backend_java.executor": "Debug",
+    "JUnit.PraticbouticBackendJavaApplicationTests.contextLoads.executor": "Debug",
+    "JUnit.com.ecommerce.praticboutic_backend_java in praticboutic_backend_java.executor": "Debug",
+    "Notification.DisplayName-DoNotAsk-vcs.commit.checks.failed": "Commit and push checks failed",
+    "Notification.DoNotAsk-vcs.commit.checks.failed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.PraticbouticBackendJavaApplication.executor": "Debug",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "/home/redisdead/dev/praticboutic_backend_java/src/main/java/com/ecommerce/praticboutic_backend_java",
+    "last_opened_file_path": "/var/www/praticboutic-backend/springboot",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.ecommerce.praticboutic_backend_java.requests" />
@@ -125,7 +129,7 @@
   <component name="RunManager" selected="Application.PraticbouticBackendJavaApplication">
     <configuration name="PraticbouticBackendJavaApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.ecommerce.praticboutic_backend_java.PraticbouticBackendJavaApplication" />
-      <module name="praticboutic_backend_java" />
+      <module name="praticboutic-backend-springboot" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.ecommerce.praticboutic_backend_java.controllers.*" />
@@ -137,7 +141,7 @@
       </method>
     </configuration>
     <configuration name="com.ecommerce.praticboutic_backend_java in praticboutic_backend_java" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="praticboutic_backend_java" />
+      <module name="praticboutic-backend-springboot" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.ecommerce.praticboutic_backend_java.configurations.*" />
@@ -170,22 +174,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00081" summary="initialcommit_part076">
-      <option name="closed" value="true" />
-      <created>1748182943694</created>
-      <option name="number" value="00081" />
-      <option name="presentableId" value="LOCAL-00081" />
-      <option name="project" value="LOCAL" />
-      <updated>1748182943695</updated>
-    </task>
-    <task id="LOCAL-00082" summary="initialcommit_part076">
-      <option name="closed" value="true" />
-      <created>1748186164715</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1748186164715</updated>
     </task>
     <task id="LOCAL-00083" summary="initialcommit_part077">
       <option name="closed" value="true" />
@@ -563,7 +551,23 @@
       <option name="project" value="LOCAL" />
       <updated>1754295145972</updated>
     </task>
-    <option name="localTasksCounter" value="130" />
+    <task id="LOCAL-00130" summary="evo_tree_structure_part007">
+      <option name="closed" value="true" />
+      <created>1754299911943</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1754299911944</updated>
+    </task>
+    <task id="LOCAL-00131" summary="evo_tree_structure_part008">
+      <option name="closed" value="true" />
+      <created>1754300176088</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1754300176088</updated>
+    </task>
+    <option name="localTasksCounter" value="132" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -593,8 +597,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="initialcommit_part090" />
-    <MESSAGE value="initialcommit_part091" />
     <MESSAGE value="initialcommit_part092" />
     <MESSAGE value="initialcommit_part093" />
     <MESSAGE value="initialcommit_part094" />
@@ -618,7 +620,9 @@
     <MESSAGE value="version_1_part003" />
     <MESSAGE value="evo_redirect_part001" />
     <MESSAGE value="evo_redirect_part002" />
-    <option name="LAST_COMMIT_MESSAGE" value="evo_redirect_part002" />
+    <MESSAGE value="evo_tree_structure_part007" />
+    <MESSAGE value="evo_tree_structure_part008" />
+    <option name="LAST_COMMIT_MESSAGE" value="evo_tree_structure_part008" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

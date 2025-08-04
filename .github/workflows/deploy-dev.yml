@@ -56,7 +56,7 @@ jobs:
           sudo -u qruser mvn clean install -Dmaven.test.skip=true -Dspring-boot.run.profiles=dev
 
           # Trouve le fichier JAR
-          JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/target -name 'praticboutic_backend_java-*.jar' ! -name '*.original' | head -n 1)
+          JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/target -name 'praticboutic-backend-springboot-*.jar' ! -name '*.original' | head -n 1)
 
           PID=$(lsof -i :8081 -sTCP:LISTEN -t)
           if [ -n "$PID" ]; then
