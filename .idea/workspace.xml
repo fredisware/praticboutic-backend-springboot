@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part003">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/RedirectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/RedirectController.java" afterDir="false" />
-    </list>
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part004" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -173,14 +170,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00085" summary="initialcommit_part079">
-      <option name="closed" value="true" />
-      <created>1748350641914</created>
-      <option name="number" value="00085" />
-      <option name="presentableId" value="LOCAL-00085" />
-      <option name="project" value="LOCAL" />
-      <updated>1748350641914</updated>
     </task>
     <task id="LOCAL-00086" summary="initialcommit_part080">
       <option name="closed" value="true" />
@@ -566,7 +555,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754316556758</updated>
     </task>
-    <option name="localTasksCounter" value="134" />
+    <task id="LOCAL-00134" summary="evo_redirect_part004">
+      <option name="closed" value="true" />
+      <created>1754316583566</created>
+      <option name="number" value="00134" />
+      <option name="presentableId" value="LOCAL-00134" />
+      <option name="project" value="LOCAL" />
+      <updated>1754316583566</updated>
+    </task>
+    <option name="localTasksCounter" value="135" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -596,7 +593,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="initialcommit_part094" />
     <MESSAGE value="initialcommit_part095" />
     <MESSAGE value="initialcommit_part096" />
     <MESSAGE value="initialcommit_part097" />
@@ -621,7 +617,8 @@
     <MESSAGE value="evo_tree_structure_part008" />
     <MESSAGE value="evo_tree_structure_part009" />
     <MESSAGE value="evo_redirect_part003" />
-    <option name="LAST_COMMIT_MESSAGE" value="evo_redirect_part003" />
+    <MESSAGE value="evo_redirect_part004" />
+    <option name="LAST_COMMIT_MESSAGE" value="evo_redirect_part004" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
