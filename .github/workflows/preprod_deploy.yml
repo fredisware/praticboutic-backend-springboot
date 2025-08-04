@@ -37,7 +37,8 @@ jobs:
           else
             echo "Aucun processus Java sur le port 8082."
           fi
-          rm -rf /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/{*,.*}
+          shopt -s extglob dotglob
+          rm -rf /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/!(upload)
           # git pull origin main  # ou "master" selon ta branche
           git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/
           
