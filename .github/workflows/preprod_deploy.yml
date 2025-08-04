@@ -38,9 +38,9 @@ jobs:
             echo "Aucun processus Java sur le port 8082."
           fi
           shopt -s extglob dotglob
-          rm -rf /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/!(upload)
+          rm -rf /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/
           # git pull origin main  # ou "master" selon ta branche
-          git clone git@github.com:praticboutic/praticboutic-backend.git /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/
+          git clone git@github.com:praticboutic/praticboutic-backend.git /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/
           
           cd /var/www/vhosts/praticboutic.fr/preback.praticboutic.fr/springboot/src/main/resources/
           cp application-preprod.properties application.properties
