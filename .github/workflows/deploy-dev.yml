@@ -38,9 +38,9 @@ jobs:
           else
             echo "Aucun processus Java sur le port 8081."
           fi
-          rm -rf /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/{*,.*}
+          rm -rf /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/{*,.*}
           # git pull origin main  # ou "master" selon ta branche
-          git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/
+          git clone git@github.com:praticboutic/praticboutic-javabackend.git /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/
           
           cd /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/src/main/resources/
           cp application-dev.properties application.properties

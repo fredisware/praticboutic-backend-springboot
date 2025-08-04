@@ -20,21 +20,21 @@ jobs:
           mkdir cleaned
           rsync -av --progress ./ cleaned \
             --exclude='.git' \
-            --exclude='src/main/resources/key/**' \
-            --exclude='src/main/resources/praticboutic-*.json' \
-            --exclude='src/test/resources/key/' \
-            --exclude='src/test/resources/application.properties' \
-            --exclude='src/test/resources/application-*.properties' \
-            --exclude='src/main/resources/application-local.properties' \
-            --exclude='src/main/resources/application-dev.properties' \
-            --exclude='src/main/resources/application.properties' \
-            --exclude='src/main/resources/application-preprod.properties' \
-            --exclude='src/main/resources/application-prod.properties' \
-            --exclude='src/test/resources/application.properties.bak' \
-            --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java' \
-            --exclude='src/main/resources/static/.well-known/PRATICBOUTIC.keystore' \
-            --exclude='src/main/resources/static/.well-known/assetlinks.json' \
-            --exclude='src/main/resources/ssl-certificate/*.p12'
+            --exclude='springboot/src/main/resources/key/**' \
+            --exclude='springboot/src/main/resources/praticboutic-*.json' \
+            --exclude='springboot/src/test/resources/key/' \
+            --exclude='springboot/src/test/resources/application.properties' \
+            --exclude='springboot/src/test/resources/application-*.properties' \
+            --exclude='springboot/src/main/resources/application-local.properties' \
+            --exclude='springboot/src/main/resources/application-dev.properties' \
+            --exclude='springboot/src/main/resources/application.properties' \
+            --exclude='springboot/src/main/resources/application-preprod.properties' \
+            --exclude='springboot/src/main/resources/application-prod.properties' \
+            --exclude='springboot/src/test/resources/application.properties.bak' \
+            --exclude='springboot/src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java' \
+            --exclude='springboot/src/main/resources/static/.well-known/PRATICBOUTIC.keystore' \
+            --exclude='springboot/src/main/resources/static/.well-known/assetlinks.json' \
+            --exclude='springboot/src/main/resources/ssl-certificate/*.p12'
 
       - name: 🔐 Remove hardcoded secrets from copied files
         run: |
