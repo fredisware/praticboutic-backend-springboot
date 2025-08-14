@@ -610,11 +610,11 @@ public class SubscriptionController {
             Subscription subscription = Subscription.retrieve(subscriptionId);
             subscription = subscription.update(updateParams);
 
-            // Récupérer l'ID de l'abonnement dans la base de données
+            // Récupérer l'ID de l'abonnement dans la base de données - CORRECTION
             Integer aboId = jdbcTemplate.queryForObject(
                     "SELECT aboid FROM abonnement WHERE stripe_subscription_id = ?",
-                    new Object[]{subscriptionId},
-                    Integer.class
+                    Integer.class,
+                    subscriptionId
             );
 
             // Désactiver l'abonnement dans la base de données
@@ -634,6 +634,7 @@ public class SubscriptionController {
             throw new Exception(e.getMessage());
         }
     }
+
 
     /**
      * Réactive un abonnement précédemment annulé
@@ -719,13 +720,13 @@ public class SubscriptionController {
 
             SubscriptionCollection subscriptions = com.stripe.model.Subscription.list(params);
 
-            // Vérifie la boutique active dans la base de données
+            // Vérifie la boutique active dans la base de données - CORRECTION
             Integer actif = jdbcTemplate.queryForObject(
                     "SELECT customer.actif FROM customer " +
                             "JOIN client ON client.cltid = customer.cltid " +
                             "WHERE client.stripe_customer_id = ?",
-                    new Object[]{stripeCustomerId},
-                    Integer.class
+                    Integer.class,
+                    stripeCustomerId
             );
 
             boolean hasStripeSub = !subscriptions.getData().isEmpty();
@@ -745,5 +746,6 @@ public class SubscriptionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
+
 
 }

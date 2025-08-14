@@ -81,20 +81,22 @@ public class SuppressionService {
         String basePath = "../../upload/";
         try {
             // Images articles
-            jdbcTemplate.query("SELECT image FROM artlistimg WHERE customid = ?", new Object[]{bouticid},
+            jdbcTemplate.query("SELECT image FROM artlistimg WHERE customid = ?",
                     (rs, rowNum) -> {
                         File f = new File(basePath + rs.getString("image"));
                         f.delete();
                         return null;
-                    });
+                    }, bouticid);
+
 
             // Logo
-            jdbcTemplate.query("SELECT logo FROM customer WHERE customid = ?", new Object[]{bouticid},
+            jdbcTemplate.query("SELECT logo FROM customer WHERE customid = ?",
                     (rs, rowNum) -> {
                         File f = new File(basePath + rs.getString("logo"));
                         f.delete();
                         return null;
-                    });
+                    }, bouticid);
+
 
         } catch (Exception e) {
             System.err.println("Erreur suppression images");

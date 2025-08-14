@@ -8,6 +8,7 @@ import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -237,7 +238,7 @@ public class ConnexionController {
     }
 
     private GoogleIdToken verifyGoogleToken(String idTokenString) throws IOException {
-        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .setAudience(Collections.singletonList(googleClientId))
                 .build();
         try {

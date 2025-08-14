@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part004" />
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part005">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ConnexionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ConnexionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/SuppressionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/SuppressionService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,6 +50,7 @@
 }</component>
   <component name="InvalidFacetManager">
     <ignored-facets>
+      <facet id="praticboutic-backend-springboot/invalid/Hibernate" />
       <facet id="praticboutic_backend_java/invalid/Hibernate" />
     </ignored-facets>
   </component>
@@ -92,7 +98,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "settings.editor.selected.configurable": "ml.llm.LLMThirdPartyAiProvidersConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -170,14 +176,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00086" summary="initialcommit_part080">
-      <option name="closed" value="true" />
-      <created>1748442491185</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1748442491185</updated>
     </task>
     <task id="LOCAL-00087" summary="initialcommit_part081">
       <option name="closed" value="true" />
@@ -563,7 +561,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754316583566</updated>
     </task>
-    <option name="localTasksCounter" value="135" />
+    <task id="LOCAL-00135" summary="evo_redirect_part005">
+      <option name="closed" value="true" />
+      <created>1754320634417</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1754320634418</updated>
+    </task>
+    <option name="localTasksCounter" value="136" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -593,7 +599,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="initialcommit_part095" />
     <MESSAGE value="initialcommit_part096" />
     <MESSAGE value="initialcommit_part097" />
     <MESSAGE value="initialcommit_part098" />
@@ -618,7 +623,8 @@
     <MESSAGE value="evo_tree_structure_part009" />
     <MESSAGE value="evo_redirect_part003" />
     <MESSAGE value="evo_redirect_part004" />
-    <option name="LAST_COMMIT_MESSAGE" value="evo_redirect_part004" />
+    <MESSAGE value="evo_redirect_part005" />
+    <option name="LAST_COMMIT_MESSAGE" value="evo_redirect_part005" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -650,7 +656,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java</url>
-          <line>650</line>
+          <line>651</line>
           <option name="timeStamp" value="251" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
