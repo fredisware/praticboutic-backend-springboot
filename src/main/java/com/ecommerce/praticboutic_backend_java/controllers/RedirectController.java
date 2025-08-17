@@ -25,9 +25,14 @@ public class RedirectController {
         // Redirection en fonction de la plateforme
         switch (platform.toLowerCase()) {
             case "android":
-            case "ios":
                 response.sendRedirect("praticboutic://onboarding-complete");
                 break;
+
+            case "ios":
+                // Rediriger vers la page intermédiaire iOS avec tentative d’ouverture + fallback
+                response.sendRedirect(baseUrl + "/deep-link-ios.html");
+                break;
+
             default:
                 response.sendRedirect(baseUrl + "/autoclose");
                 break;

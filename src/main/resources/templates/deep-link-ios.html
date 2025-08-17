@@ -4,16 +4,52 @@
     <meta charset="UTF-8">
     <title>Redirection vers l'application</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Empêche un retour vers une version mise en cache -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
 
     <script type="text/javascript">
-        window.onload = function () {
-          // Tenter d'ouvrir l'app
-          window.location.href = "praticboutic://onboarding-complete";
+        function buildDeepLink() {
+            // Propage les query params reçus (status, state, etc.)
+            var qs = window.location.search || '';
+            // Ajoute un slash optionnel si nécessaire (tolérant)
+            var base = 'praticboutic://onboarding-complete';
+            // Utilise replace pour ne pas polluer l’historique si le schéma est bloqué
+            return base + qs;
+        }
 
-          // Fallback après 3 secondes (ne rien faire ou rediriger vers App Store si souhaité)
-          setTimeout(function () {
-            document.getElementById("message").innerText = "Vous pouvez maintenant retourner dans l'application PraticBoutic.";
-          }, 3000);
+        function openApp() {
+            try {
+                window.location.replace(buildDeepLink());
+            } catch (e) {
+                // En dernier recours
+                window.location.href = buildDeepLink();
+            }
+        }
+
+        window.onload = function () {
+            // Tente d'ouvrir l'app automatiquement
+            openApp();
+
+            // Prépare un fallback éventuel (App Store) après 3,5s
+            // Annulé si la page devient cachée (signal que l'app s'est ouverte)
+            var fallbackTimer = setTimeout(function () {
+                // Exemple de fallback (décommente si nécessaire)
+                // window.location.href = 'https://apps.apple.com/app/idVOTRE_APP_ID';
+                var msg = document.getElementById('message');
+                if (msg) {
+                    msg.innerText = "Vous pouvez maintenant retourner dans l'application PraticBoutic. Si rien ne se passe, appuyez sur le bouton ci-dessous.";
+                }
+                var btn = document.getElementById('openButton');
+                if (btn) btn.style.display = 'inline-block';
+            }, 3500);
+
+            document.addEventListener('visibilitychange', function () {
+                if (document.hidden) {
+                    clearTimeout(fallbackTimer);
+                }
+            });
         };
     </script>
 
@@ -28,17 +64,27 @@
           height: 100vh;
           text-align: center;
         }
-
         .container {
           padding: 20px;
+          max-width: 520px;
         }
-
         h2 {
           color: #333;
+          margin-bottom: 12px;
         }
-
         p {
           color: #666;
+          margin-top: 0;
+        }
+        .btn {
+          display: none;
+          margin-top: 16px;
+          padding: 10px 16px;
+          background: #0a84ff;
+          color: #fff;
+          border-radius: 8px;
+          text-decoration: none;
+          font-weight: 600;
         }
     </style>
 </head>
@@ -46,6 +92,7 @@
 <div class="container">
     <h2>Finalisation de l'inscription</h2>
     <p id="message">Redirection en cours vers l'application PraticBoutic...</p>
+    <a id="openButton" class="btn" href="javascript:void(0)" onclick="openApp()">Ouvrir l’application</a>
 </div>
 </body>
 </html>
