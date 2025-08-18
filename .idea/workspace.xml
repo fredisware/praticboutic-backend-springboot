@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part005">
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part008">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/deep-link-ios.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/LoginLinkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/LoginLinkController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/deep-link-ios.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/deep-link-ios.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/RedirectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/RedirectController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/deep-link-ios.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,9 +114,9 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/static" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/models" />
-      <recent name="$PROJECT_DIR$/src/main/resources/static" />
       <recent name="$PROJECT_DIR$/src/main/resources/ssl-certificate" />
       <recent name="$PROJECT_DIR$/src/main/resources/static/upload" />
     </key>
@@ -175,14 +176,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00087" summary="initialcommit_part081">
-      <option name="closed" value="true" />
-      <created>1748444449274</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1748444449274</updated>
     </task>
     <task id="LOCAL-00088" summary="initialcommit_part082">
       <option name="closed" value="true" />
@@ -568,7 +561,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754320634418</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="evo_redirect_part007">
+      <option name="closed" value="true" />
+      <created>1755522375746</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1755522375746</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -598,8 +599,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="initialcommit_part096" />
-    <MESSAGE value="initialcommit_part097" />
     <MESSAGE value="initialcommit_part098" />
     <MESSAGE value="initialcommit_part099" />
     <MESSAGE value="initialcommit_part100" />
@@ -623,7 +622,9 @@
     <MESSAGE value="evo_redirect_part003" />
     <MESSAGE value="evo_redirect_part004" />
     <MESSAGE value="evo_redirect_part005" />
-    <option name="LAST_COMMIT_MESSAGE" value="evo_redirect_part005" />
+    <MESSAGE value="evo_redirect_part007" />
+    <MESSAGE value="evo_redirect_part008" />
+    <option name="LAST_COMMIT_MESSAGE" value="evo_redirect_part008" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
