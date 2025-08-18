@@ -2,54 +2,52 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Redirection vers l'application</title>
+    <title>Redirection vers l’application PraticBoutic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Empêche un retour vers une version mise en cache -->
-    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+
+    <!-- Empêcher la mise en cache -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
 
     <script type="text/javascript">
         function buildDeepLink() {
-            // Propage les query params reçus (status, state, etc.)
-            var qs = window.location.search || '';
-            // Ajoute un slash optionnel si nécessaire (tolérant)
-            var base = 'praticboutic://onboarding-complete';
-            // Utilise replace pour ne pas polluer l’historique si le schéma est bloqué
-            return base + qs;
+          const qs = window.location.search || '';
+          return "praticboutic://onboarding-complete" + qs;
         }
 
         function openApp() {
-            try {
-                window.location.replace(buildDeepLink());
-            } catch (e) {
-                // En dernier recours
-                window.location.href = buildDeepLink();
-            }
+          try {
+            window.location.replace(buildDeepLink());
+          } catch (e) {
+            window.location.href = buildDeepLink();
+          }
         }
 
         window.onload = function () {
-            // Tente d'ouvrir l'app automatiquement
-            openApp();
+          // Lance la redirection vers l'app
+          openApp();
 
-            // Prépare un fallback éventuel (App Store) après 3,5s
-            // Annulé si la page devient cachée (signal que l'app s'est ouverte)
-            var fallbackTimer = setTimeout(function () {
-                // Exemple de fallback (décommente si nécessaire)
-                // window.location.href = 'https://apps.apple.com/app/idVOTRE_APP_ID';
-                var msg = document.getElementById('message');
-                if (msg) {
-                    msg.innerText = "Vous pouvez maintenant retourner dans l'application PraticBoutic. Si rien ne se passe, appuyez sur le bouton ci-dessous.";
-                }
-                var btn = document.getElementById('openButton');
-                if (btn) btn.style.display = 'inline-block';
-            }, 3500);
+          // Fallback au bout de 3,5s
+          const fallbackTimer = setTimeout(function () {
+            const msg = document.getElementById("message");
+            if (msg) {
+              msg.innerText =
+                "Si l’application ne s’ouvre pas automatiquement, appuyez sur le bouton ci-dessous pour continuer.";
+            }
+            const btn = document.getElementById("openButton");
+            if (btn) btn.style.display = "inline-block";
 
-            document.addEventListener('visibilitychange', function () {
-                if (document.hidden) {
-                    clearTimeout(fallbackTimer);
-                }
-            });
+            // 👉 Décommente si tu veux renvoyer vers l’App Store automatiquement
+            // window.location.href = "https://apps.apple.com/app/idVOTRE_APP_ID";
+          }, 3500);
+
+          // Si l'app a pris la main (Safari devient caché), annuler le fallback
+          document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+              clearTimeout(fallbackTimer);
+            }
+          });
         };
     </script>
 
@@ -73,25 +71,31 @@
           margin-bottom: 12px;
         }
         p {
-          color: #666;
-          margin-top: 0;
+          color: #555;
+          font-size: 16px;
         }
         .btn {
           display: none;
-          margin-top: 16px;
-          padding: 10px 16px;
+          margin-top: 20px;
+          padding: 12px 20px;
           background: #0a84ff;
           color: #fff;
-          border-radius: 8px;
+          border-radius: 10px;
           text-decoration: none;
           font-weight: 600;
+          font-size: 16px;
+          box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+          transition: background 0.2s ease;
+        }
+        .btn:hover {
+          background: #006be6;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2>Finalisation de l'inscription</h2>
-    <p id="message">Redirection en cours vers l'application PraticBoutic...</p>
+    <h2>Finalisation de l’inscription</h2>
+    <p id="message">Redirection en cours vers l’application PraticBoutic...</p>
     <a id="openButton" class="btn" href="javascript:void(0)" onclick="openApp()">Ouvrir l’application</a>
 </div>
 </body>

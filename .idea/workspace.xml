@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_redirect_part005">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/RedirectController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/RedirectController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/LoginLinkController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/LoginLinkController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/deep-link-ios.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/deep-link-ios.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

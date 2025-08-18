@@ -63,11 +63,6 @@ public class LoginLinkController {
             Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
             // Vérifier l'authentification
-            //if (!sessionService.isAuthenticated()) {
-            //    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Non authentifié"));
-            //}
-
-            // Vérifier l'authentification
             if (!jwtService.isAuthenticated(payload)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Non authentifié"));
             }
@@ -107,23 +102,35 @@ public class LoginLinkController {
             String url;
             Map<String, Object> response = new HashMap<>();
 
-
             if (stripeAccountId != null && !stripeAccountId.isEmpty()) {
-                // Le compte existe déjà
                 Account account = Account.retrieve(stripeAccountId);
-                
+
                 if (account.getDetailsSubmitted()) {
+                    // Compte déjà onboardé → login link
                     LoginLinkCreateOnAccountParams params = LoginLinkCreateOnAccountParams.builder().build();
                     LoginLink loginLink = LoginLink.createOnAccount(stripeAccountId, params);
-                    String jwt = JwtService.generateToken(payload, "" );
+                    String jwt = JwtService.generateToken(payload, "");
                     response.put("token", jwt);
-                    response.put( "url", loginLink.getUrl());
+                    response.put("url", loginLink.getUrl());
                 } else {
-                    response = createInscription(request.getBouticid(), request.getPlatform(), payload);
-                    // Compte incomplet, créer un lien d'onboarding
+                    // Compte existant mais onboarding incomplet → créer un NOUVEL account link
+                    String refreshUrl = baseUrl + "/api/redirect-handler?platform=" + request.getPlatform();
+                    String returnUrl = baseUrl + "/api/redirect-handler?platform=" + request.getPlatform();
+
+                    AccountLinkCreateParams linkParams = AccountLinkCreateParams.builder()
+                            .setAccount(stripeAccountId)
+                            .setRefreshUrl(refreshUrl)
+                            .setReturnUrl(returnUrl)
+                            .setType(AccountLinkCreateParams.Type.ACCOUNT_ONBOARDING)
+                            .build();
+
+                    AccountLink accountLink = AccountLink.create(linkParams);
+                    String jwt = JwtService.generateToken(payload, "");
+                    response.put("token", jwt);
+                    response.put("url", accountLink.getUrl());
                 }
             } else {
-                // Aucun compte, créer un nouveau
+                // Pas de compte → créer nouveau
                 response = createInscription(request.getBouticid(), request.getPlatform(), payload);
             }
 
