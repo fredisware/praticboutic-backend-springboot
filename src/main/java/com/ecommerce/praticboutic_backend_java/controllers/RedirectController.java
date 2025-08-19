@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class RedirectController {
 
