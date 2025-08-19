@@ -26,15 +26,12 @@ public class RedirectController {
     ) throws IOException {
         switch (platform.toLowerCase()) {
             case "android":
+            case "ios":
                 if ("refresh".equals(status)) {
                     response.sendRedirect("praticboutic://onboarding-cancelled");
                 } else {
                     response.sendRedirect("praticboutic://onboarding-complete");
                 }
-                break;
-
-            case "ios":
-                response.sendRedirect(baseUrl + "/deep-link-ios.html?status=" + status);
                 break;
 
             default:
