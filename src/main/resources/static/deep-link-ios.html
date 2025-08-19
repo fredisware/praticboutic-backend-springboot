@@ -11,12 +11,18 @@
 
     <script type="text/javascript">
         function buildDeepLink() {
-            const qs = window.location.search || '';
-            return "praticboutic://onboarding-complete" + qs;
+            const params = new URLSearchParams(window.location.search);
+            const status = params.get('status') || 'complete'; // 'complete' ou 'cancelled'
+            return `praticboutic://onboarding-${status}`;
         }
 
         function openApp() {
-            window.location.replace(buildDeepLink());
+            const deepLink = buildDeepLink();
+            const msg = document.getElementById("message");
+            msg.innerText = "Ouverture de l’application…";
+
+            // Tente d’ouvrir l’application
+            window.location.replace(deepLink);
         }
 
         window.onload = function () {
@@ -28,7 +34,11 @@
                 if (msg) msg.innerText = "Si l’application ne s’ouvre pas automatiquement, appuyez sur le bouton ci-dessous.";
 
                 const btn = document.getElementById("openButton");
-                if (btn) btn.style.display = "inline-block";
+                if (btn) {
+                    btn.style.display = "inline-block";
+                    btn.style.opacity = 0;
+                    setTimeout(() => btn.style.opacity = 1, 50); // effet fade-in
+                }
             }, 3500);
 
             // Annule le fallback si l’app prend la main
@@ -60,6 +70,7 @@
         p {
             color: #555;
             font-size: 16px;
+            transition: color 0.3s ease;
         }
         .btn {
             display: none;
@@ -72,7 +83,7 @@
             font-weight: 600;
             font-size: 16px;
             box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-            transition: background 0.2s ease;
+            transition: background 0.2s ease, opacity 0.3s ease;
         }
         .btn:hover {
             background: #006be6;

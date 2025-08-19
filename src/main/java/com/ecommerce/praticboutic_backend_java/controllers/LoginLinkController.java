@@ -114,8 +114,8 @@ public class LoginLinkController {
                     response.put("url", loginLink.getUrl());
                 } else {
                     // Compte existant mais onboarding incomplet → créer un NOUVEL account link
-                    String refreshUrl = baseUrl + "/api/redirect-handler?platform=" + request.getPlatform();
-                    String returnUrl = baseUrl + "/api/redirect-handler?platform=" + request.getPlatform();
+                    String refreshUrl = baseUrl + "/api/redirect-handler?platform=" + request.getPlatform() + "&status=refresh";
+                    String returnUrl = baseUrl + "/api/redirect-handler?platform=" + request.getPlatform() + "&status=return";
 
                     AccountLinkCreateParams linkParams = AccountLinkCreateParams.builder()
                             .setAccount(stripeAccountId)

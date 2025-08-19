@@ -20,18 +20,21 @@ public class RedirectController {
     @GetMapping("/redirect-handler")
     public void handleRedirect(
             @RequestParam(value = "platform", required = false, defaultValue = "web") String platform,
+            @RequestParam(value = "status", required = false, defaultValue = "return") String status,
             HttpServletRequest request,
             HttpServletResponse response
     ) throws IOException {
-        // Redirection en fonction de la plateforme
         switch (platform.toLowerCase()) {
             case "android":
-                response.sendRedirect("praticboutic://onboarding-complete");
+                if ("refresh".equals(status)) {
+                    response.sendRedirect("praticboutic://onboarding-cancelled");
+                } else {
+                    response.sendRedirect("praticboutic://onboarding-complete");
+                }
                 break;
 
             case "ios":
-                // Rediriger vers la page intermédiaire iOS avec tentative d’ouverture + fallback
-                response.sendRedirect(baseUrl + "/deep-link-ios.html");
+                response.sendRedirect(baseUrl + "/deep-link-ios.html?status=" + status);
                 break;
 
             default:
