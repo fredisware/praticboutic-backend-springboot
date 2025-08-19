@@ -140,20 +140,20 @@ public class ClientService {
 
         Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
         // Récupération et validation de l'email
-        String verifyEmail = payload.get("verify_email").toString();
-        if (StringUtils.isEmpty(verifyEmail)) {
+        Object verifyEmail = payload.get("verify_email");
+        if (verifyEmail == null) {
             throw new DatabaseException.InvalidSessionDataException("L'email ne peut pas être vide");
         }
 
         // Vérification de l'unicité de l'email
-        Long existingClientCount = clientRepository.countByEmail(verifyEmail);
+        Long existingClientCount = clientRepository.countByEmail(verifyEmail.toString());
         if (existingClientCount > 0) {
             throw new DatabaseException.EmailAlreadyExistsException("Ce courriel est déjà utilisé: " + verifyEmail);
         }
 
         // Création du client avec hachage sécurisé du mot de passe
         Client client = new Client();
-        client.setEmail(verifyEmail);
+        client.setEmail(verifyEmail.toString());
 
         String password = payload.get("registration_pass").toString();
         if (StringUtils.isEmpty(password)) {

@@ -25,8 +25,8 @@ public class ShopSettingsController {
 
             Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérifier si l'email est vérifié
-            String verifyEmail = payload.get("verify_email").toString();
-            if (verifyEmail == null || verifyEmail.isEmpty()) {
+            Object verifyEmail = payload.get("verify_email");
+            if (verifyEmail == null || verifyEmail.toString().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error","Courriel non vérifié"));
             }
             // Enregistrer les configurations dans la session

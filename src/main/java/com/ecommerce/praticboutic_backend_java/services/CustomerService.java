@@ -133,7 +133,7 @@ public class CustomerService {
         customer.setCltid(client.getCltId());
         customer.setCustomer(aliasBoutic);
         customer.setNom(payload.get("initboutic_nom").toString());
-        customer.setLogo(payload.get("initboutic_logo").toString());
+        customer.setLogo(String.valueOf(payload.get("initboutic_logo")));
         customer.setCourriel(payload.get("initboutic_email").toString());
         customer.setActif(1);
 

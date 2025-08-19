@@ -199,7 +199,7 @@ public class SubscriptionController {
         // Vérifier que l'email a été vérifié
         String token = authHeader.replace("Bearer ", "");
         Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
-        if (payload.get("verify_email").toString() == null) {
+        if (payload.get("verify_email") == null) {
             throw new Exception("Courriel non vérifié");
         }
 
@@ -425,7 +425,7 @@ public class SubscriptionController {
             throw new Exception("Action invalide");
         }
 
-        if (payload.get("verify_email").toString() == null) {
+        if (String.valueOf(payload.get("verify_email")) == null) {
             throw new Exception("Courriel non vérifié");
         }
 

@@ -34,8 +34,8 @@ public class RegistrationController {
             String token = authHeader.replace("Bearer ", "");
             Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
             // Vérification de l'email
-            String verifyEmail = payload.get("verify_email").toString();
-            if (verifyEmail == null || verifyEmail.isEmpty()) {
+            Object verifyEmail = payload.get("verify_email");
+            if (verifyEmail == null || verifyEmail.toString().isEmpty()) {
                 throw new Exception("Courriel non vérifié");
             }
             // Enregistrement des données dans la session
@@ -61,7 +61,7 @@ public class RegistrationController {
                                     .setPostalCode(input.cp)
                                     .build()
                     )
-                    .setEmail(verifyEmail)
+                    .setEmail(verifyEmail.toString())
                     .setName(input.nom)
                     .setPhone(input.tel)
                     .build();

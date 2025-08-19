@@ -18,7 +18,7 @@ public class BouticService{
         Map<String, Object> payload = JwtService.parseToken(token).getClaims();
         payload.put("bo_stripe_customer_id", payload.get("registration_stripe_customer_id").toString());
         payload.put("bo_id", customer.getCustomId());
-        payload.put("bo_email", payload.get("verify_email").toString());
+        payload.put("bo_email", payload.get("verify_email"));
         payload.put("bo_auth", "oui");
         payload.put("bo_init", "oui");
         payload.put("bo_customer", customer.getCustomer());
