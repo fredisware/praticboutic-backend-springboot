@@ -17,4 +17,6 @@ public interface ImageRepository extends JpaRepository<Image, Integer> {
 
     List<Image> findByCustomidAndArtid(Integer customid, Integer artid); // au lieu de findByArtid
 
+    List<Image> findByCustomidAndArtidOrderByFavoriDescIdAsc(Integer customid, Integer artid);
+
 }
