@@ -50,7 +50,7 @@ public class ChargeControllerTest {
             mockedAccount.when(() -> Account.retrieve("acct_test_123")).thenReturn(mockAccount);
 
             // Act
-            ResponseEntity<?> response = chargeController.checkStripeAccount(request, httpSession);
+            ResponseEntity<?> response = chargeController.checkStripeAccount(request, String.valueOf(httpSession));
 
             // Assert
             assertEquals(200, response.getStatusCodeValue());
@@ -65,7 +65,7 @@ public class ChargeControllerTest {
         when(sessionService.isAuthenticated()).thenReturn(false);
 
         // Act
-        ResponseEntity<?> response = chargeController.checkStripeAccount(request, httpSession);
+        ResponseEntity<?> response = chargeController.checkStripeAccount(request, String.valueOf(httpSession));
 
         // Assert
         assertEquals(401, response.getStatusCodeValue());
@@ -79,7 +79,7 @@ public class ChargeControllerTest {
         when(sessionService.isAuthenticated()).thenReturn(true);
 
         // Act
-        ResponseEntity<?> response = chargeController.checkStripeAccount(request, httpSession);
+        ResponseEntity<?> response = chargeController.checkStripeAccount(request, String.valueOf(httpSession));
 
         // Assert
         assertEquals(400, response.getStatusCodeValue());
@@ -95,7 +95,7 @@ public class ChargeControllerTest {
         when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 2)).thenReturn(null);
 
         // Act
-        ResponseEntity<?> response = chargeController.checkStripeAccount(request, httpSession);
+        ResponseEntity<?> response = chargeController.checkStripeAccount(request, String.valueOf(httpSession));
 
         // Assert
         assertEquals(200, response.getStatusCodeValue());
