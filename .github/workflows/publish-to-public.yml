@@ -33,7 +33,8 @@ jobs:
             --exclude='src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java' \
             --exclude='src/main/resources/static/.well-known/PRATICBOUTIC.keystore' \
             --exclude='src/main/resources/static/.well-known/assetlinks.json' \
-            --exclude='src/main/resources/ssl-certificate/*.p12'
+            --exclude='src/main/resources/ssl-certificate/*.p12' \
+            --exclude='.github/workflows/*.yml'
             
       - name: 🔐 Remove hardcoded secrets from copied files
         run: |
