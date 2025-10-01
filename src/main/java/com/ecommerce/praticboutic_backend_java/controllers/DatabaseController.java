@@ -304,10 +304,11 @@ public class DatabaseController {
                         query.setParameter("valeur", column.getValeur());
                         if (query.getSingleResult() > 0)
                         {
+                            response.put("error", "Impossible d'avoir plusieurs fois la valeur '" +
+                                    column.getValeur() + "' dans la colonne '" +
+                                    column.getDesc() + "'");
                             return ResponseEntity.status(HttpStatus.CONFLICT)
-                                    .body("Impossible d'avoir plusieurs fois la valeur '" +
-                                            column.getValeur() + "' dans la colonne '" +
-                                            column.getDesc() + "'");
+                                    .body(response);
                         }
                     }
                 } catch (NoSuchFieldException e) {
