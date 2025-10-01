@@ -302,10 +302,12 @@ public class DatabaseController {
                         TypedQuery<Long> query = entityManager.createQuery(jpql, Long.class);
                         query.setParameter("customid", input.getBouticid());
                         query.setParameter("valeur", column.getValeur());
-                        if (query.getSingleResult() > 0) {
-                            throw new IllegalArgumentException("Impossible d'avoir plusieurs fois la valeur '" +
-                                    column.getValeur() + "' dans la colonne '" +
-                                    column.getDesc() + "'");
+                        if (query.getSingleResult() > 0)
+                        {
+                            return ResponseEntity.status(HttpStatus.CONFLICT)
+                                    .body("Impossible d'avoir plusieurs fois la valeur '" +
+                                            column.getValeur() + "' dans la colonne '" +
+                                            column.getDesc() + "'");
                         }
                     }
                 } catch (NoSuchFieldException e) {
@@ -338,21 +340,7 @@ public class DatabaseController {
             for (int i = 0; i < values.size(); i++) {
                 insertQuery.setParameter(i + 1, values.get(i));
             }
-            int result;
-            try
-            {
-                result = insertQuery.executeUpdate();
-            }
-            catch (DataIntegrityViolationException e)
-            {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("Erreur d'unicité : " + e.getMessage());
-            }
-            catch (Exception e)
-            {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Erreur inattendue : " + e.getMessage());
-            }
+            int result = insertQuery.executeUpdate();
 
             // Récupérer l'ID généré
             Query idQuery = entityManager.createNativeQuery("SELECT LAST_INSERT_ID()");

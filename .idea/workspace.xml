@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_tests_part005">
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_tests_part006">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/DatabaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/DatabaseController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -174,14 +175,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00099" summary="test_macro_part006">
-      <option name="closed" value="true" />
-      <created>1748542678512</created>
-      <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
-      <option name="project" value="LOCAL" />
-      <updated>1748542678512</updated>
     </task>
     <task id="LOCAL-00100" summary="test_macro_part007">
       <option name="closed" value="true" />
@@ -567,7 +560,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759326475935</updated>
     </task>
-    <option name="localTasksCounter" value="148" />
+    <task id="LOCAL-00148" summary="bugfix_tests_part006">
+      <option name="closed" value="true" />
+      <created>1759326743395</created>
+      <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
+      <option name="project" value="LOCAL" />
+      <updated>1759326743395</updated>
+    </task>
+    <option name="localTasksCounter" value="149" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -597,7 +598,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="initialcommit_part107" />
     <MESSAGE value="version19_part001" />
     <MESSAGE value="version_1_part001" />
     <MESSAGE value="version_1_part002" />
@@ -622,7 +622,8 @@
     <MESSAGE value="bugfix_tests_part003" />
     <MESSAGE value="bugfix_tests_part004" />
     <MESSAGE value="bugfix_tests_part005" />
-    <option name="LAST_COMMIT_MESSAGE" value="bugfix_tests_part005" />
+    <MESSAGE value="bugfix_tests_part006" />
+    <option name="LAST_COMMIT_MESSAGE" value="bugfix_tests_part006" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
