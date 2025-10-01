@@ -21,8 +21,8 @@ public class JwtService {
     private static final Key key = Keys.hmacShaKeyFor(SECRET_BYTES);
             //.secretKeyFor(SignatureAlgorithm.HS256);
 
-    // Durée de validité : 1 heure
-    private static final long jwtExpirationMs = 60 * 60 * 1000;
+    // Durée de validité : 1 mois
+    private static final long jwtExpirationMs = 30L * 24 * 60 * 60 * 1000; // 30 jours en ms
 
 /*
     // Lire l'identité dans un token
