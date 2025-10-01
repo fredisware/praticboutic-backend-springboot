@@ -26,6 +26,7 @@ import jakarta.persistence.*;
 
 import org.hibernate.SessionFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -331,12 +332,24 @@ public class DatabaseController {
 
             String insertSql = "INSERT INTO `" + input.getTable() + "` (" + columns + ") VALUES (" + placeholders + ")";
 
+
+
             Query insertQuery = entityManager.createNativeQuery(insertSql);
             for (int i = 0; i < values.size(); i++) {
                 insertQuery.setParameter(i + 1, values.get(i));
             }
-
-            int result = insertQuery.executeUpdate();
+            int result;
+            try
+            {
+                result = insertQuery.executeUpdate();
+            }
+            catch (DataIntegrityViolationException e) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Erreur d'unicité : la donnée existe déjà !");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Erreur inattendue : " + e.getMessage());
+            }
 
             // Récupérer l'ID généré
             Query idQuery = entityManager.createNativeQuery("SELECT LAST_INSERT_ID()");
