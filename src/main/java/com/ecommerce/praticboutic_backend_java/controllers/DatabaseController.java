@@ -413,9 +413,10 @@ public class DatabaseController {
 
                     Long lCount = query.getSingleResult();
                     if (lCount > 0) {
-                        throw new IllegalArgumentException("Impossible d'avoir plusieurs fois la valeur '" +
+                        response.put("error", "Impossible d'avoir plusieurs fois la valeur '" +
                                 column.getValeur() + "' dans la colonne '" +
                                 column.getDesc() + "'");
+                        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
                     }
                 }
             }
