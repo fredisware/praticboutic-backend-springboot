@@ -343,10 +343,13 @@ public class DatabaseController {
             {
                 result = insertQuery.executeUpdate();
             }
-            catch (DataIntegrityViolationException e) {
+            catch (DataIntegrityViolationException e)
+            {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("Erreur d'unicité : la donnée existe déjà !");
-            } catch (Exception e) {
+                        .body("Erreur d'unicité : " + e.getMessage());
+            }
+            catch (Exception e)
+            {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body("Erreur inattendue : " + e.getMessage());
             }

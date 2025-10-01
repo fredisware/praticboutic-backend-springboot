@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_tests_part005">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/DatabaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/DatabaseController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -175,14 +174,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00098" summary="test_macro_part005">
-      <option name="closed" value="true" />
-      <created>1748541597350</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1748541597350</updated>
     </task>
     <task id="LOCAL-00099" summary="test_macro_part006">
       <option name="closed" value="true" />
@@ -568,7 +559,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759323287594</updated>
     </task>
-    <option name="localTasksCounter" value="147" />
+    <task id="LOCAL-00147" summary="bugfix_tests_part005">
+      <option name="closed" value="true" />
+      <created>1759326475935</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1759326475935</updated>
+    </task>
+    <option name="localTasksCounter" value="148" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
