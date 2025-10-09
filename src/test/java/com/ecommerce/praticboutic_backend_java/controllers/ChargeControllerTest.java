@@ -1,104 +1,180 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.ChargeRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.ParameterService;
-import com.ecommerce.praticboutic_backend_java.services.SessionService;
-import com.stripe.Stripe;
-import com.stripe.model.Account;
-import jakarta.servlet.http.HttpSession;
+// ... existing code ...
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.Answers;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.util.ReflectionTestUtils.setField;
 
-public class ChargeControllerTest {
+// ... existing code ...
 
-    @InjectMocks
-    private ChargeController chargeController;
+class ChargeControllerTest {
 
-    @Mock
-    private SessionService sessionService;
+    private ChargeController controller;
 
-    @Mock
+    private JwtService jwtService;
     private ParameterService parameterService;
 
-    @Mock
-    private HttpSession httpSession;
+    // Petit stub minimal pour remplacer JwtPayload réel
+    static class JwtPayloadStub {
+        private final Map<String, Object> claims;
+        JwtPayloadStub(Map<String, Object> claims) { this.claims = claims; }
+        public Map<String, Object> getClaims() { return claims; }
+    }
 
     @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
+    void setUp() {
+        jwtService = mock(JwtService.class, Answers.RETURNS_DEEP_STUBS);
+        parameterService = mock(ParameterService.class, Answers.RETURNS_DEEP_STUBS);
+
+        controller = new ChargeController(); // constructeur par défaut
+
+        // injecter les champs @Autowired/@Value via réflexion
+        setField(controller, "jwtService", jwtService);
+        setField(controller, "parameterService", parameterService);
+        setField(controller, "stripeApiKey", "sk_test_dummy"); // valeur factice pour tests
     }
 
     @Test
-    public void testCheckStripeAccount_authenticatedAndChargesEnabled_returnsOK() throws Exception {
-        // Arrange
-        ChargeRequest request = new ChargeRequest();
-        request.setBouticid(1);
+    @DisplayName("checkStripeAccount - retourne OK si compte Stripe chargeable")
+    void checkStripeAccount_returnsOK_whenChargesEnabled() throws Exception {
+        ChargeRequest req = new ChargeRequest();
+        req.setBouticid(10);
+        String auth = "Bearer token123";
 
-        when(sessionService.isAuthenticated()).thenReturn(true);
-        when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 1)).thenReturn("acct_test_123");
+        try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            jwtStatic.when(() -> JwtService.parseToken("token123"))
+                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
 
-        Account mockAccount = mock(Account.class);
-        when(mockAccount.getChargesEnabled()).thenReturn(true);
+            when(jwtService.isAuthenticated(anyMap())).thenReturn(true);
+            when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 10)).thenReturn("acct_1ABC");
 
-        // Stripe redéfinition statique
-        try (MockedStatic<Account> mockedAccount = mockStatic(Account.class)) {
-            mockedAccount.when(() -> Account.retrieve("acct_test_123")).thenReturn(mockAccount);
+            try (var accountMocked = Mockito.mockStatic(com.stripe.model.Account.class)) {
+                com.stripe.model.Account fake = mock(com.stripe.model.Account.class);
+                when(fake.getChargesEnabled()).thenReturn(true);
+                accountMocked.when(() -> com.stripe.model.Account.retrieve("acct_1ABC")).thenReturn(fake);
 
-            // Act
-            ResponseEntity<?> response = chargeController.checkStripeAccount(request, String.valueOf(httpSession));
+                ResponseEntity<?> resp = controller.checkStripeAccount(req, auth);
 
-            // Assert
-            assertEquals(200, response.getStatusCodeValue());
-            assertEquals("OK", response.getBody());
+                assertEquals(HttpStatus.OK, resp.getStatusCode());
+                assertEquals(Map.of("result", "OK"), resp.getBody());
+            }
         }
+
+        verify(jwtService).isAuthenticated(anyMap());
+        verify(parameterService).getParameterValue("STRIPE_ACCOUNT_ID", 10);
+        verifyNoMoreInteractions(jwtService, parameterService);
     }
 
     @Test
-    public void testCheckStripeAccount_notAuthenticated_returnsUnauthorized() {
-        // Arrange
-        ChargeRequest request = new ChargeRequest();
-        when(sessionService.isAuthenticated()).thenReturn(false);
+    @DisplayName("checkStripeAccount - retourne KO si pas d'ID Stripe")
+    void checkStripeAccount_returnsKO_whenMissingStripeAccountId() throws Exception {
+        ChargeRequest req = new ChargeRequest();
+        req.setBouticid(11);
+        String auth = "Bearer tokenABC";
 
-        // Act
-        ResponseEntity<?> response = chargeController.checkStripeAccount(request, String.valueOf(httpSession));
+        try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            jwtStatic.when(() -> JwtService.parseToken("tokenABC"))
+                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
+            when(jwtService.isAuthenticated(anyMap())).thenReturn(true);
+            when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 11)).thenReturn("");
 
-        // Assert
-        assertEquals(401, response.getStatusCodeValue());
+            ResponseEntity<?> resp = controller.checkStripeAccount(req, auth);
+
+            assertEquals(HttpStatus.OK, resp.getStatusCode());
+            assertEquals(Map.of("result", "KO"), resp.getBody());
+        }
+
+        verify(jwtService).isAuthenticated(anyMap());
+        verify(parameterService).getParameterValue("STRIPE_ACCOUNT_ID", 11);
+        verifyNoMoreInteractions(jwtService, parameterService);
     }
 
     @Test
-    public void testCheckStripeAccount_missingBouticId_returnsBadRequest() {
-        // Arrange
-        ChargeRequest request = new ChargeRequest(); // pas de setBouticId
+    @DisplayName("checkStripeAccount - 500 si non authentifié")
+    void checkStripeAccount_returnsError_whenUnauthenticated() throws Exception {
+        ChargeRequest req = new ChargeRequest();
+        req.setBouticid(12);
+        String auth = "Bearer tokenZ";
 
-        when(sessionService.isAuthenticated()).thenReturn(true);
+        try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            jwtStatic.when(() -> JwtService.parseToken("tokenZ"))
+                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
+            when(jwtService.isAuthenticated(anyMap())).thenReturn(false);
 
-        // Act
-        ResponseEntity<?> response = chargeController.checkStripeAccount(request, String.valueOf(httpSession));
+            ResponseEntity<?> resp = controller.checkStripeAccount(req, auth);
 
-        // Assert
-        assertEquals(400, response.getStatusCodeValue());
+            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
+            assertTrue(((Map<?, ?>) resp.getBody()).get("error").toString().contains("Non authentifié"));
+        }
+
+        verify(jwtService).isAuthenticated(anyMap());
+        verifyNoMoreInteractions(jwtService);
+        verifyNoInteractions(parameterService);
     }
 
     @Test
-    public void testCheckStripeAccount_accountIdNotFound_returnsKO() {
-        // Arrange
-        ChargeRequest request = new ChargeRequest();
-        request.setBouticid(2);
+    @DisplayName("checkStripeAccount - 500 si ID boutique manquant")
+    void checkStripeAccount_returnsError_whenBouticIdMissing() throws Exception {
+        ChargeRequest req = new ChargeRequest(); // bouticid null
+        String auth = "Bearer tokenY";
 
-        when(sessionService.isAuthenticated()).thenReturn(true);
-        when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 2)).thenReturn(null);
+        try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            jwtStatic.when(() -> JwtService.parseToken("tokenY"))
+                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
+            when(jwtService.isAuthenticated(anyMap())).thenReturn(true);
 
-        // Act
-        ResponseEntity<?> response = chargeController.checkStripeAccount(request, String.valueOf(httpSession));
+            ResponseEntity<?> resp = controller.checkStripeAccount(req, auth);
 
-        // Assert
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("KO", response.getBody());
+            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
+            assertTrue(((Map<?, ?>) resp.getBody()).get("error").toString().contains("ID de boutique manquant"));
+        }
+
+        verify(jwtService).isAuthenticated(anyMap());
+        verifyNoMoreInteractions(jwtService);
+        verifyNoInteractions(parameterService);
+    }
+
+    @Test
+    @DisplayName("checkStripeAccount - retourne KO si chargesEnabled = false")
+    void checkStripeAccount_returnsKO_whenChargesDisabled() throws Exception {
+        ChargeRequest req = new ChargeRequest();
+        req.setBouticid(15);
+        String auth = "Bearer tokenKO";
+
+        try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            jwtStatic.when(() -> JwtService.parseToken("tokenKO"))
+                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
+            when(jwtService.isAuthenticated(anyMap())).thenReturn(true);
+            when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 15)).thenReturn("acct_disabled");
+
+            try (var accountMocked = Mockito.mockStatic(com.stripe.model.Account.class)) {
+                com.stripe.model.Account fake = mock(com.stripe.model.Account.class);
+                when(fake.getChargesEnabled()).thenReturn(false);
+                accountMocked.when(() -> com.stripe.model.Account.retrieve("acct_disabled")).thenReturn(fake);
+
+                ResponseEntity<?> resp = controller.checkStripeAccount(req, auth);
+
+                assertEquals(HttpStatus.OK, resp.getStatusCode());
+                assertEquals(Map.of("result", "KO"), resp.getBody());
+            }
+        }
+
+        verify(jwtService).isAuthenticated(anyMap());
+        verify(parameterService).getParameterValue("STRIPE_ACCOUNT_ID", 15);
+        verifyNoMoreInteractions(jwtService, parameterService);
     }
 }

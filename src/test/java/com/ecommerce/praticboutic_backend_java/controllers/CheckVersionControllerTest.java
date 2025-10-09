@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -101,7 +102,7 @@ public class CheckVersionControllerTest {
         when(objectMapper.readTree(any(InputStream.class))).thenReturn(jsonNode);
 
         ResponseEntity<?> response = checkVersionController.checkVersionAlt(request);
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(jsonNode, response.getBody());
     }
 
@@ -115,7 +116,7 @@ public class CheckVersionControllerTest {
         when(resource.exists()).thenReturn(false);
 
         ResponseEntity<?> response = checkVersionController.checkVersionAlt(request);
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -129,7 +130,7 @@ public class CheckVersionControllerTest {
         when(resource.getInputStream()).thenThrow(new IOException("Fichier inaccessible"));
 
         ResponseEntity<?> response = checkVersionController.checkVersionAlt(request);
-        assertEquals(500, response.getStatusCodeValue());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 }
 

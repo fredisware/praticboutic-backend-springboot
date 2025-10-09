@@ -3,18 +3,12 @@ package com.ecommerce.praticboutic_backend_java.controllers;
 import com.ecommerce.praticboutic_backend_java.configurations.DatabaseConfig;
 import com.ecommerce.praticboutic_backend_java.requests.BouticRequest;
 import com.ecommerce.praticboutic_backend_java.services.JwtService;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpSession;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +26,7 @@ public class ShopController {
 
     private final List<String> FORBIDDEN_IDS = Arrays.asList("admin", "common", "route", "upload", "vendor");
 
+    @Autowired
     public ShopController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

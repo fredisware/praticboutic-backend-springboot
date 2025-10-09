@@ -4,8 +4,127 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_tests_part006">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/DatabaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/DatabaseController.java" afterDir="false" />
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_tests_part007">
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/ClientUrlsPropertiesTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/CorsConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/DatabaseConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/EmailConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/FirebaseConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/SecurityConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/StripeConfigTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/CodePostalZoneControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/ConnexionControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/CreatePaymentControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/DepartCommandeControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/EmailVerificationControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/ExecMacroControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/FileUploadControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/FraisLivraisonControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/FrontQueryControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/GeneralQueryControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/LoginLinkControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/LogoutControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/PDFQRCodeControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/PasswordResetControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/RedirectControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/RegistrationControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/RemiseControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/SMSControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/SendCodeControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/SessionControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/ShopControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/ShopSettingsControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/StripeWebhookControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/SuppressionControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/ViewControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/AbonnementTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/ArtListImgTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/ArticleTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/BarLivrTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/CategorieTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/ClientTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/CommandeTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/ConnexionTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/CpZoneTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/CustomerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/GroupeOptTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/IdentifiantTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/ImageTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/LigneCmdTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/OptionTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/ParametreTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/PromotionTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/RelGrpOptArtTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/entities/StatutCmdTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/exceptions/ClientNotFoundExceptionTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/exceptions/DatabaseExceptionTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/exceptions/SessionExpiredExceptionTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/exceptions/TooManyRequestsExceptionTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/models/BaseEntityTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/models/ColumnDataTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/models/Item2Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/models/JwtPayloadTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/AbonnementRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/ArticleRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/CategorieRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/ClientRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/CommandeRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/ConnexionRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/CustomerRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/GroupeOptionRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/IdentifiantRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/ImageRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/LigneCmdRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/OptionRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/ParametreRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/RelGrpOptArtRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/repositories/StatutCmdRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/requests/ApiResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/requests/CreatePaymentResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/requests/ErrorResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/requests/LoginResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/requests/ShippingCostResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/requests/VerificationResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/responses/ApiResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/responses/CreatePaymentResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/responses/ErrorResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/responses/LoginResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/responses/ShippingCostResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/responses/VerificationResponseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/AbonnementServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/ArticleServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/BouticServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/CategorieServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/ClientServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/CustomerServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/DepartCommandeServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/EmailSendingServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/EmailServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/ExecMacroServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/GroupeOptionServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/ImageServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/JsonParserServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/JwtServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/MotDePasseServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/NotificationServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/OptionServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/ParameterServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/RelGrpOptArtServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/SessionServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/SmsServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/StatutCmdServciceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/StripeServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/SuppressionServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/utils/UtilsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/CommonConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/WebConfigTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/NotificationTestController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ShopController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ShopController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/config/TestMailConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/ChargeControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/ChargeControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/CheckVersionControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/CheckVersionControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/upload/.htaccess" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +138,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Kotlin Class" />
+        <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -71,35 +192,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.PraticbouticBackendJavaApplication.executor": "Debug",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "JUnit.All in praticboutic_backend_java.executor": "Debug",
-    "JUnit.PraticbouticBackendJavaApplicationTests.contextLoads.executor": "Debug",
-    "JUnit.com.ecommerce.praticboutic_backend_java in praticboutic_backend_java.executor": "Debug",
-    "Notification.DisplayName-DoNotAsk-vcs.commit.checks.failed": "Commit and push checks failed",
-    "Notification.DoNotAsk-vcs.commit.checks.failed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.PraticbouticBackendJavaApplication.executor": "Debug",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "/home/redisdead/dev/praticboutic_backend_java/src/main/java/com/ecommerce/praticboutic_backend_java",
-    "last_opened_file_path": "/var/www/praticboutic-backend/springboot/src/test/resources",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "ml.llm.LLMThirdPartyAiProvidersConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.PraticbouticBackendJavaApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JUnit.All in praticboutic_backend_java.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PraticbouticBackendJavaApplicationTests.contextLoads.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.com.ecommerce.praticboutic_backend_java in praticboutic_backend_java.executor&quot;: &quot;Debug&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-vcs.commit.checks.failed&quot;: &quot;Commit and push checks failed&quot;,
+    &quot;Notification.DoNotAsk-vcs.commit.checks.failed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.PraticbouticBackendJavaApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;/home/redisdead/dev/praticboutic_backend_java/src/main/java/com/ecommerce/praticboutic_backend_java&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/var/www/praticboutic-backend/springboot/src/test/resources&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMThirdPartyAiProvidersConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.ecommerce.praticboutic_backend_java.requests" />
@@ -119,10 +240,12 @@
       <recent name="$PROJECT_DIR$/src/main/resources/static/upload" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.ecommerce.praticboutic_backend_java.services" />
       <recent name="" />
       <recent name="com.ecommerce.praticboutic_backend_java" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ecommerce.praticboutic_backend_java.controllers" />
       <recent name="com.ecommerce.praticboutic_backend_java" />
     </key>
   </component>
@@ -140,7 +263,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="com.ecommerce.praticboutic_backend_java in praticboutic_backend_java" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="com.ecommerce.praticboutic_backend_java in praticboutic-backend-springboot" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="praticboutic-backend-springboot" />
       <extension name="coverage">
         <pattern>
@@ -157,7 +280,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.PraticbouticBackendJavaApplication" />
-        <item itemvalue="JUnit.com.ecommerce.praticboutic_backend_java in praticboutic_backend_java" />
+        <item itemvalue="JUnit.com.ecommerce.praticboutic_backend_java in praticboutic-backend-springboot" />
       </list>
     </recent_temporary>
   </component>
@@ -174,14 +297,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00101" summary="test_macro_part008">
-      <option name="closed" value="true" />
-      <created>1748542936718</created>
-      <option name="number" value="00101" />
-      <option name="presentableId" value="LOCAL-00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1748542936718</updated>
     </task>
     <task id="LOCAL-00102" summary="test_macro_part009">
       <option name="closed" value="true" />
@@ -567,7 +682,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759328606700</updated>
     </task>
-    <option name="localTasksCounter" value="150" />
+    <task id="LOCAL-00150" summary="bugfix_tests_part007">
+      <option name="closed" value="true" />
+      <created>1759329373438</created>
+      <option name="number" value="00150" />
+      <option name="presentableId" value="LOCAL-00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1759329373438</updated>
+    </task>
+    <option name="localTasksCounter" value="151" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -597,7 +720,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="version19_part001" />
     <MESSAGE value="version_1_part001" />
     <MESSAGE value="version_1_part002" />
     <MESSAGE value="version_1_part003" />
@@ -622,7 +744,8 @@
     <MESSAGE value="bugfix_tests_part004" />
     <MESSAGE value="bugfix_tests_part005" />
     <MESSAGE value="bugfix_tests_part006" />
-    <option name="LAST_COMMIT_MESSAGE" value="bugfix_tests_part006" />
+    <MESSAGE value="bugfix_tests_part007" />
+    <option name="LAST_COMMIT_MESSAGE" value="bugfix_tests_part007" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -638,16 +761,6 @@
           <option name="timeStamp" value="228" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/NotificationTestController.java</url>
-          <line>23</line>
-          <option name="timeStamp" value="232" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java</url>
-          <line>494</line>
-          <option name="timeStamp" value="242" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java</url>
           <line>255</line>
           <option name="timeStamp" value="247" />
@@ -656,21 +769,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/SubscriptionController.java</url>
           <line>651</line>
           <option name="timeStamp" value="251" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/CreatePaymentController.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="252" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/CreatePaymentController.java</url>
-          <line>143</line>
-          <option name="timeStamp" value="258" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/CreatePaymentController.java</url>
-          <line>151</line>
-          <option name="timeStamp" value="259" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/ExecMacroController.java</url>
