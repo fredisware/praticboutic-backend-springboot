@@ -1,6 +1,7 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.services.JwtService;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,8 @@ class LogoutControllerTest {
             jwtStatic.when(() -> JwtService.generateToken(anyMap(), anyString()))
                     .thenReturn("new.jwt");
 
-            ResponseEntity<?> resp = controller.logout("Bearer tok");
+            HttpSession session = mock(HttpSession.class);
+            ResponseEntity<?> resp = controller.logout(session, "Bearer tok");
 
             assertEquals(HttpStatus.OK, resp.getStatusCode());
             Map<?, ?> body = (Map<?, ?>) resp.getBody();
