@@ -31,16 +31,14 @@ class ShopControllerTest {
 
     @BeforeEach
     void setUp() {
-        JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
-        ShopController controller = new ShopController(jdbcTemplate);
-        inject(controller, "dbConfig", dbConfig);
-        jdbcTemplate = mock(JdbcTemplate.class, Answers.RETURNS_DEEP_STUBS);
+        // Pas de redéclaration locale
+        jdbcTemplate = mock(JdbcTemplate.class);
         dbConfig = mock(DatabaseConfig.class, Answers.RETURNS_DEEP_STUBS);
 
-        // Injection par réflexion
+        controller = new ShopController(jdbcTemplate);
         inject(controller, "dbConfig", dbConfig);
-        inject(controller, "jdbcTemplate", jdbcTemplate);
     }
+
 
     @Test
     @DisplayName("register-boutic - 401 si email non vérifié")

@@ -1,5 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.entities;
 
+
 import com.ecommerce.praticboutic_backend_java.models.BaseEntity;
 import jakarta.persistence.*;
 
@@ -9,7 +10,7 @@ import java.time.LocalDate;
  * Entité Abonnement
  */
 @Entity
-@Table(name = "abonnement")
+@Table(name = "ABONNEMENT")
 public class Abonnement extends BaseEntity {
 
     @Id
@@ -32,7 +33,7 @@ public class Abonnement extends BaseEntity {
     @Column(name = "actif", nullable = false)
     private Integer actif;
 
-    @Column(name = "metered", nullable = false, columnDefinition = "int unsigned NOT NULL DEFAULT '0'")
+    @Column(name = "metered", nullable = false)
     private Integer metered = 0;
 
     // Relations (commentées, à activer si nécessaire)

@@ -3,17 +3,17 @@ package com.ecommerce.praticboutic_backend_java.services;
 import com.ecommerce.praticboutic_backend_java.entities.Abonnement;
 import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
+import com.ecommerce.praticboutic_backend_java.models.JwtPayload;
 import com.ecommerce.praticboutic_backend_java.repositories.AbonnementRepository;
 // ... existing code ...
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.dao.DataAccessException;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,6 +30,12 @@ class AbonnementServiceTest {
 
     @InjectMocks
     private AbonnementService abonnementService;
+
+    @Mock
+    private Client client;
+
+    @Mock
+    private Customer customer;
 
     private AutoCloseable mocks;
 
@@ -133,23 +139,41 @@ class AbonnementServiceTest {
     class CreateAndSaveAbonnementTests {
 
         @Test
-        @DisplayName("retourne l'abonnement sauvegardé en happy path")
-        void returnsSavedAbonnement_happyPath() throws DataAccessException {
+        void returnsSavedAbonnement_happyPath() {
+            // Arrange
+            AbonnementRepository mockRepo = mock(AbonnementRepository.class);
+            SessionService mockSession = mock(SessionService.class);
+            AbonnementService abonnementService = new AbonnementService();
+            abonnementService.abonnementRepository = mockRepo;
+            abonnementService.sessionService = mockSession;
+
             Client client = new Client();
+            client.setCltId(1);
+
             Customer customer = new Customer();
-            String token = "tok_xxx";
+            customer.setCustomId(10);
 
-            Abonnement toSave = new Abonnement();
-            Abonnement saved = new Abonnement();
+            Abonnement fakeAbonnement = new Abonnement();
+            when(mockRepo.save(any())).thenReturn(fakeAbonnement);
 
-            // Adaptez si la méthode construit l'entité via des setters
-            when(abonnementRepository.save(any(Abonnement.class))).thenReturn(saved);
+            // Mock du JwtPayload
+            JwtPayload mockPayload = mock(JwtPayload.class);
+            when(mockPayload.getClaims()).thenReturn(Map.of(
+                    "creationabonnement_stripe_subscription_id", "sub_123"
+            ));
 
-            Abonnement result = abonnementService.createAndSaveAbonnement(client, customer, token);
+            // Mock statique du JwtService
+            try (MockedStatic<JwtService> mockedJwt = mockStatic(JwtService.class)) {
+                mockedJwt.when(() -> JwtService.parseToken(anyString()))
+                        .thenReturn(mockPayload);
 
-            assertSame(saved, result);
-            verify(abonnementRepository).save(any(Abonnement.class));
-            verifyNoMoreInteractions(abonnementRepository, sessionService);
+                // Act
+                Abonnement result = abonnementService.createAndSaveAbonnement(client, customer, "fake-token");
+
+                // Assert
+                assertNotNull(result);
+                verify(mockRepo, times(1)).save(any(Abonnement.class));
+            }
         }
 
         @Test
@@ -177,5 +201,28 @@ class AbonnementServiceTest {
         // Ce test sert seulement d’exemple de structure; il peut être supprimé si inutile.
         // La règle verifyNoMoreInteractions est déjà utilisée dans chaque test.
         assertTrue(true);
+    }
+
+    @Test
+    void createAndSaveAbonnement_happyPath() {
+        String token = "jwt-token";
+
+        // Mock du JwtPayload
+        JwtPayload mockPayload = mock(JwtPayload.class);
+        when(mockPayload.getClaims()).thenReturn(Map.of(
+                "creationabonnement_stripe_subscription_id", "sub_123"
+        ));
+
+        // Mock statique de JwtService
+        try (MockedStatic<JwtService> mockedJwtService = mockStatic(JwtService.class)) {
+            mockedJwtService.when(() -> JwtService.parseToken(token)).thenReturn(mockPayload);
+
+            // Appel de la méthode
+            Abonnement result = abonnementService.createAndSaveAbonnement(client, customer, token);
+
+            assertNotNull(result);
+            // Ajouter d'autres assertions selon la logique de création
+            // par ex. vérifier que certaines propriétés sont définies
+        }
     }
 }

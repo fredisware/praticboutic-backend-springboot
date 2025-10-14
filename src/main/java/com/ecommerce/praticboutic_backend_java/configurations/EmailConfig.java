@@ -43,9 +43,9 @@ public class EmailConfig {
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", auth);
-        props.put("mail.smtp.starttls.enable", starttls);
-        props.put("mail.debug", debug);
+        props.put("mail.smtp.auth", Boolean.toString(auth));
+        props.put("mail.smtp.starttls.enable", Boolean.toString(starttls));
+        props.put("mail.debug", Boolean.toString(debug));
         props.put("mail.smtp.ssl.trust", host);
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 

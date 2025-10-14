@@ -11,7 +11,7 @@ import java.util.List;
  * Entité représentant une option dans l'application
  */
 @Entity
-@Table(name = "\"option\"") // Le mot "option" étant un mot réservé en SQL, on utilise des backticks
+@Table(name = "OPTION_") // Le mot "option" étant réservé, on ajoute le "_"
 public class Option implements Serializable {
 
     @Id
@@ -34,34 +34,29 @@ public class Option implements Serializable {
     @Column(name = "visible", nullable = false)
     private Integer visible = 1;
 
-    // Relation avec Categorie (si vous souhaitez conserver la relation JPA)
+    // Relation ManyToOne avec GroupeOpt
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "grpoptid", insertable = false, updatable = false) // Utilisez insertable=false, updatable=false pour éviter les conflits
+    @JoinColumn(name = "grpoptid", insertable = false, updatable = false)
     @JsonIgnoreProperties("options")
-    private GroupeOpt groupeopt;
+    private GroupeOpt groupeOption;
 
     // Constructeurs
-    public Option() {
-    }
+    public Option() {}
 
-    public Option(Integer customid, String nom) {
-        this.customid = customid;
-        this.nom = nom;
-    }
-
-    public Option(Integer customid, String nom, Double surcout, Integer groupeOptionId) {
+    public Option(Integer customid, String nom, Double surcout, Integer grpoptid) {
         this.customid = customid;
         this.nom = nom;
         this.surcout = surcout;
+        this.grpoptid = grpoptid;
     }
 
-    // Getters et setters
+    // Getters / Setters
     public Integer getOptId() {
         return optid;
     }
 
-    public void setOptId(Integer id) {
-        this.optid = id;
+    public void setOptId(Integer optid) {
+        this.optid = optid;
     }
 
     public Integer getCustomId() {
@@ -84,7 +79,7 @@ public class Option implements Serializable {
         return surcout;
     }
 
-    public void setSurcout() {
+    public void setSurcout(Double surcout) {
         this.surcout = surcout;
     }
 
@@ -92,7 +87,7 @@ public class Option implements Serializable {
         return grpoptid;
     }
 
-    public void setGroupeOptionId(Boolean groupeOptionId) {
+    public void setGroupeOptionId(Integer grpoptid) {
         this.grpoptid = grpoptid;
     }
 
@@ -105,44 +100,41 @@ public class Option implements Serializable {
     }
 
     public GroupeOpt getGroupeOption() {
-        return groupeopt;
+        return groupeOption;
     }
 
-    public void setGroupeOption(GroupeOpt groupeopt) {
-        this.groupeopt= groupeopt;
+    public void setGroupeOption(GroupeOpt groupeOption) {
+        this.groupeOption = groupeOption;
+        if (groupeOption != null) {
+            this.grpoptid = groupeOption.getGrpoptid(); // synchronise l'ID
+        }
     }
 
-    /**
-     * Vérifie si l'option est visible
-     * @return true si l'option est visible, false sinon
-     */
     @Transient
-    public Integer isVisible() {
-        return visible;
+    public boolean isVisible() {
+        return visible != null && visible == 1;
+    }
+
+    // Méthode pour l'affichage en tableau ou liste
+    public List<Object> getDisplayData() {
+        List<Object> row = new ArrayList<>();
+        row.add(getOptId());
+        row.add(getNom());
+        row.add(getSurcout());
+        row.add(groupeOption != null ? groupeOption.getNom() : null);
+        row.add(isVisible() ? "1" : "0");
+        return row;
     }
 
     @Override
     public String toString() {
         return "Option{" +
-                "opid=" + optid +
+                "optid=" + optid +
                 ", customid=" + customid +
                 ", nom='" + nom + '\'' +
                 ", surcout=" + surcout +
-                ", groupeOptionId=" + grpoptid +
+                ", grpoptid=" + grpoptid +
                 ", visible=" + visible +
                 '}';
     }
-
-    public List<Object> getDisplayData()
-    {
-        List<Object> row = new ArrayList<>();
-        row.add(getOptId());
-        row.add(getNom());
-        row.add(getSurcout());
-        row.add(getGroupeOption().getNom());
-        row.add((getVisible()==1) ? "1" : "0");
-        return row;
-    }
-
-
 }

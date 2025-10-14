@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Entity
-@Table(name = "commande", uniqueConstraints = @UniqueConstraint(name = "numref_UNIQUE", columnNames = {"customid", "numref"}))
+@Table(name = "COMMANDE")
 public class Commande extends BaseEntity {
 
     @Id
@@ -50,16 +50,16 @@ public class Commande extends BaseEntity {
     @Column(name = "paiement", length = 45)
     private String paiement;
 
-    @Column(name = "sstotal", columnDefinition = "double DEFAULT 0")
+    @Column(name = "sstotal")
     private Double sstotal = 0.0;
 
-    @Column(name = "remise", columnDefinition = "double DEFAULT 0")
+    @Column(name = "remise")
     private Double remise = 0.0;
 
-    @Column(name = "fraislivraison", columnDefinition = "double DEFAULT 0")
+    @Column(name = "fraislivraison")
     private Double fraislivraison = 0.0;
 
-    @Column(name = "total", columnDefinition = "double DEFAULT 0")
+    @Column(name = "total")
     private Double total = 0.0;
 
     @Column(name = "commentaire", length = 300)

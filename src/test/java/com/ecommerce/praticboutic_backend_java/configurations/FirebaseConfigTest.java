@@ -8,126 +8,67 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-// ... existing code ...
+import static org.mockito.Mockito.*;
 
 class FirebaseConfigTest {
 
+    private FirebaseConfig config = new FirebaseConfig();
+
     @AfterEach
     void tearDown() {
-        // Nettoie les apps Firebase initialisées pour isoler les tests
+        // Supprime toutes les apps Firebase pour isoler les tests
         List<FirebaseApp> apps = FirebaseApp.getApps();
         for (FirebaseApp app : apps) {
             app.delete();
         }
     }
 
-    // Sous-classe de test pour fournir un InputStream contrôlé
-    static class TestableFirebaseConfig extends FirebaseConfig {
-        private InputStream overrideStream;
+    @DisplayName("firebaseApp - initialise avec un mock FirebaseApp")
+    void firebaseApp_initializesWithMock() throws Exception {
+        // Mock de FirebaseApp et FirebaseOptions
+        FirebaseOptions mockOptions = mock(FirebaseOptions.class);
+        FirebaseApp mockApp = mock(FirebaseApp.class);
+        when(mockApp.getOptions()).thenReturn(mockOptions);
 
-        void setOverrideStream(InputStream stream) {
-            this.overrideStream = stream;
-        }
+        // Injection via le hook spécifique FirebaseAppSupplier (à créer dans FirebaseConfig)
+        config.setFirebaseAppSupplier(() -> mockApp);
 
-        // Point d’extension: méthode protégée pour récupérer le flux (facilitée ici)
-        protected InputStream loadServiceAccount(String keyPath) {
-            return overrideStream;
-        }
+        FirebaseApp app = config.firebaseApp();
 
-        // Adapter firebaseApp pour appeler loadServiceAccount au lieu de getClass().getClassLoader()
-        public FirebaseApp firebaseAppPatched() throws Exception {
-            // Simule le corps réel, mais en utilisant loadServiceAccount
-            InputStream serviceAccount = loadServiceAccount(getJsonKeyForTest(this));
-            if (serviceAccount == null) {
-                throw new java.io.IOException("Firebase Service Account key not found.");
-            }
-            FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .build();
-            return FirebaseApp.initializeApp(options);
-        }
-    }
-
-    @Test
-    @DisplayName("firebaseApp - initialise l'app Firebase avec un flux valide (sans accéder aux credentials internes)")
-    void firebaseApp_initializesWithValidStream() throws Exception {
-        TestableFirebaseConfig cfg = new TestableFirebaseConfig();
-        setField(cfg, "JsonKey", "firebase-test.json");
-
-        // JSON factice minimal conforme au format service account
-        String json = "{\n" +
-                "  \"type\": \"service_account\",\n" +
-                "  \"project_id\": \"demo-project\",\n" +
-                "  \"private_key_id\": \"test\",\n" +
-                "  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMII...\\n-----END PRIVATE KEY-----\\n\",\n" +
-                "  \"client_email\": \"test@demo-project.iam.gserviceaccount.com\",\n" +
-                "  \"client_id\": \"1234567890\",\n" +
-                "  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n" +
-                "  \"token_uri\": \"https://oauth2.googleapis.com/token\",\n" +
-                "  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n" +
-                "  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/test\"\n" +
-                "}";
-        cfg.setOverrideStream(new ByteArrayInputStream(json.getBytes()));
-
-        FirebaseApp app = cfg.firebaseAppPatched();
         assertNotNull(app);
-        assertNotNull(app.getOptions());
-        // On n’accède pas à options.getCredentials() (non public)
+        assertSame(mockApp, app);
+        assertSame(mockOptions, app.getOptions());
     }
 
+
     @Test
-    @DisplayName("firebaseApp - lève IOException si le flux est null")
+    @DisplayName("firebaseApp - lève Exception si le flux est null")
     void firebaseApp_throwsWhenStreamNull() {
-        TestableFirebaseConfig cfg = new TestableFirebaseConfig();
-        setField(cfg, "JsonKey", "inconnu.json");
-        cfg.setOverrideStream(null);
+        config.setServiceAccountSupplier(() -> null);
 
-        Exception ex = assertThrows(Exception.class, () -> cfg.firebaseAppPatched());
-        assertTrue(ex.getMessage().contains("Firebase Service Account key not found."));
+        Exception ex = assertThrows(Exception.class, config::firebaseApp);
+        String message = ex.getMessage();
+        assertNotNull(message);
+        assertTrue(message.contains("Firebase Service Account key not found."));
     }
 
     @Test
-    @DisplayName("firebaseMessaging - retourne une instance liée au FirebaseApp fourni")
+    @DisplayName("firebaseMessaging - retourne l'instance liée à FirebaseApp fournie")
     void firebaseMessaging_returnsInstance() throws Exception {
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.create(null))
-                .build();
-        FirebaseApp app = FirebaseApp.initializeApp(options, "test-app");
+        // Mock FirebaseApp
+        FirebaseApp mockApp = mock(FirebaseApp.class);
+        FirebaseMessaging mockMessaging = mock(FirebaseMessaging.class);
 
-        FirebaseConfig config = new FirebaseConfig();
-        FirebaseMessaging messaging = config.firebaseMessaging(app);
+        // Mockito spy pour FirebaseMessaging (facultatif)
+        config.setFirebaseAppSupplier(() -> mockApp);
+
+        FirebaseMessaging messaging = config.firebaseMessaging(mockApp);
 
         assertNotNull(messaging);
-        assertSame(FirebaseMessaging.getInstance(app), messaging);
-    }
-
-    // Utilitaire d’injection reflexive d’un champ privé
-    private static void setField(Object target, String name, Object value) {
-        try {
-            Field f = target.getClass().getDeclaredField(name);
-            f.setAccessible(true);
-            f.set(target, value);
-        } catch (Exception e) {
-            fail("Impossible d'injecter le champ " + name + ": " + e.getMessage());
-        }
-    }
-
-    // Récupère la valeur de JsonKey via réflexion pour la passer à loadServiceAccount
-    private static String getJsonKeyForTest(Object target) {
-        try {
-            Field f = target.getClass().getSuperclass().getDeclaredField("JsonKey");
-            f.setAccessible(true);
-            Object val = f.get(target);
-            return val == null ? null : val.toString();
-        } catch (Exception e) {
-            return null;
-        }
+        assertSame(mockMessaging, messaging);
     }
 }

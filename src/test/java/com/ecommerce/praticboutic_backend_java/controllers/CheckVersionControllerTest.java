@@ -43,10 +43,8 @@ public class CheckVersionControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        // Simuler le chemin du fichier depuis application.properties
         ReflectionTestUtils.setField(checkVersionController, "authorizationFilePath", "mobileapp/authorisation.json");
-
-
+        ReflectionTestUtils.setField(checkVersionController, "resourceLoader", resourceLoader); // 🟢 AJOUTE CECI
     }
 
     @Test

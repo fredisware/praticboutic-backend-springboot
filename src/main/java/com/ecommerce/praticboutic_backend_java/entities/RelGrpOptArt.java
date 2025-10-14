@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "relgrpoptart")
+@Table(name = "RELGRPOPTART")
 public class RelGrpOptArt extends BaseEntity {
 
     @Id

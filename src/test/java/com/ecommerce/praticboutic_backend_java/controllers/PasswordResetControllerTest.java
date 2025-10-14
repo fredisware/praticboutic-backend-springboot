@@ -18,8 +18,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-// ... existing code ...
-
 class PasswordResetControllerTest {
 
     private PasswordResetController controller;
@@ -45,12 +43,14 @@ class PasswordResetControllerTest {
         when(httpRequest.getRemoteAddr()).thenReturn("1.2.3.4");
         when(httpRequest.getHeader("X-Forwarded-For")).thenReturn(null);
 
-        doNothing().when(motDePasseService).reinitialiserMotDePasse("user@example.com", "1.2.3.4");
+        // ✅ Correction ici : retourne true au lieu de doNothing()
+        when(motDePasseService.reinitialiserMotDePasse("user@example.com", "1.2.3.4"))
+                .thenReturn(true);
 
         ResponseEntity<?> resp = controller.resetPassword(req, httpRequest, httpResponse);
 
         assertEquals(HttpStatus.OK, resp.getStatusCode());
-        assertEquals(Map.of("result","OK"), resp.getBody());
+        assertEquals(Map.of("result", "OK"), resp.getBody());
     }
 
     @Test
@@ -60,7 +60,7 @@ class PasswordResetControllerTest {
         req.setEmail("unknown@example.com");
         when(httpRequest.getRemoteAddr()).thenReturn("1.2.3.4");
 
-        doThrow(new ClientNotFoundException("not found"))
+        doThrow(new ClientNotFoundException("Courriel non-trouvé"))
                 .when(motDePasseService).reinitialiserMotDePasse(anyString(), anyString());
 
         ResponseEntity<?> resp = controller.resetPassword(req, httpRequest, httpResponse);
@@ -109,10 +109,12 @@ class PasswordResetControllerTest {
         when(httpRequest.getRemoteAddr()).thenReturn("1.2.3.4");
         when(httpRequest.getHeader("X-Forwarded-For")).thenReturn("9.9.9.9, 8.8.8.8");
 
+        // Mock basique pour éviter une vraie exécution
+        when(motDePasseService.reinitialiserMotDePasse(anyString(), anyString()))
+                .thenReturn(true);
+
         ResponseEntity<?> resp = controller.resetPassword(req, httpRequest, httpResponse);
 
-        // On ne peut pas vérifier l'appel exact sans captor ici car pas d'interaction définie
-        // On vérifie seulement que le code ne plante pas et répond
         assertNotNull(resp);
     }
 

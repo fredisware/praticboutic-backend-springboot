@@ -1,8 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.requests.SessionRequest;
-import com.ecommerce.praticboutic_backend_java.services.JwtService;
-import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,84 +13,60 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 public class CheckVersionController {
 
-    @Autowired
-    private JwtService jwtService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     private ResourceLoader resourceLoader;
 
-    @Value("${app.authorization.file.path}")
+    @Value("${authorization.file.path:mobileapp/authorisation.json}")
     private String authorizationFilePath;
-    
-    @Autowired
-    private ObjectMapper objectMapper;
 
-    @PostMapping("/check")
+    public CheckVersionController(ResourceLoader resourceLoader, ObjectMapper objectMapper) {
+        this.resourceLoader = resourceLoader;
+        this.objectMapper = objectMapper;
+    }
+
+    @PostMapping("/checkVersion")
     public ResponseEntity<?> checkVersion(@RequestBody SessionRequest request) {
         try {
             Resource resource = resourceLoader.getResource("classpath:" + authorizationFilePath);
+
             if (!resource.exists()) {
-                throw new Exception("Fichier d'autorisation non trouvé");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
 
             try (InputStream is = resource.getInputStream()) {
-                JsonNode authorizationData = objectMapper.readTree(is);
-                return ResponseEntity.ok(Map.of("result", authorizationData));
+                JsonNode jsonNode = objectMapper.readTree(is);
+                return ResponseEntity.ok(jsonNode); // ✅ direct, pas d'enveloppe
             }
 
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", e.getMessage()));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-    
-    // Alternative utilisant ResourceLoader si le fichier est dans les ressources de l'application
-    @PostMapping("/check-alt")
+
+    @PostMapping("/checkVersionAlt")
     public ResponseEntity<?> checkVersionAlt(@RequestBody SessionRequest request) {
         try {
+            Resource resource = resourceLoader.getResource("classpath:" + authorizationFilePath);
 
-            // Lire le fichier d'autorisation depuis les ressources
-            Resource resource = resourceLoader.getResource("classpath:mobileapp/authorisation.json");
-            
             if (!resource.exists()) {
-                throw new Exception("Fichier d'autorisation non trouvé");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-            
-            // Lire le contenu JSON du fichier
-            try (InputStream inputStream = resource.getInputStream()) {
-                JsonNode authorizationData = objectMapper.readTree(inputStream);
-                return ResponseEntity.ok(Map.of("result", authorizationData));
+
+            try (InputStream is = resource.getInputStream()) {
+                JsonNode jsonNode = objectMapper.readTree(is);
+                return ResponseEntity.ok(jsonNode); // ✅ direct aussi
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("error", e.getMessage()));
-        }
-    }
 
-    // Classe pour représenter les réponses d'erreur
-    private static class ErrorResponse {
-        private String error;
-
-        public ErrorResponse(String error) {
-            this.error = error;
-        }
-
-        public String getError() {
-            return error;
-        }
-
-        public void setError(String error) {
-            this.error = error;
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

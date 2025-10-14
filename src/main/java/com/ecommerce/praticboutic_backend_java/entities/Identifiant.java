@@ -3,7 +3,7 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "identifiant")
+@Table(name = "IDENTIFIANT")
 public class Identifiant {
 
     @Id

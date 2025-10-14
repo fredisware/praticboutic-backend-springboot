@@ -66,4 +66,5 @@ public abstract class BaseEntity {
         throw new IllegalArgumentException("Aucune entité trouvée pour la table : " + tableName);
     }
 
+
 }

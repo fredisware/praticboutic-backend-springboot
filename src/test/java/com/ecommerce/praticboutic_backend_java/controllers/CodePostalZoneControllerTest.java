@@ -1,13 +1,19 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
+import com.ecommerce.praticboutic_backend_java.requests.CpZoneRequest;
+import com.ecommerce.praticboutic_backend_java.services.JwtService;
+import com.ecommerce.praticboutic_backend_java.models.JwtPayload;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-// ... existing code ...
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -15,65 +21,116 @@ import static org.mockito.Mockito.*;
 class CodePostalZoneControllerTest {
 
     private CodePostalZoneController controller;
-
-    // Suppose dépendance: un service pour récupérer les zones
-    private Object cpZoneService; // remplacez par le type réel, ex: CpZoneService
+    private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
-        // Mocks
-        cpZoneService = mock(Object.class); // remplacez par le type réel
-
-        controller = new CodePostalZoneController(); // constructeur par défaut
-        // Injection par réflexion si champs @Autowired
-        setField(controller, "cpZoneService", cpZoneService);
+        jdbcTemplate = mock(JdbcTemplate.class);
+        controller = new CodePostalZoneController();
+        inject(controller, "jdbcTemplate", jdbcTemplate);
     }
 
     @Test
-    @DisplayName("findByCodePostal - retourne 200 avec la liste quand trouvée")
-    void findByCodePostal_returns200_withList() {
-        String cp = "75001";
-        // when(cpZoneService.findByCodePostal(cp)).thenReturn(List.of(new CpZone(), new CpZone()));
-        // ResponseEntity<?> resp = controller.findByCodePostal(cp);
+    @DisplayName("Code postal présent - retourne ok")
+    void checkCpZone_present_returnsOk() {
+        CpZoneRequest request = new CpZoneRequest();
+        request.setCustomer("myshop");
+        request.setCp("75001");
 
-        // Adaptation minimale sans code exact:
-        ResponseEntity<?> resp = ResponseEntity.ok(List.of());
+        // Mock du token JWT
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("customer", "myshop");
+        payload.put("method", "POST");
+        payload.put("table", "cpzone");
+        payload.put("myshop_mail", "non");
 
-        assertEquals(HttpStatus.OK, resp.getStatusCode());
-        assertNotNull(resp.getBody());
-        // verify(cpZoneService).findByCodePostal(cp);
-        // verifyNoMoreInteractions(cpZoneService);
+        try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            jwtStatic.when(() -> JwtService.parseToken("token123"))
+                    .thenReturn(new JwtPayload(null, null, payload));
+
+            // Mock JdbcTemplate pour customid
+            when(jdbcTemplate.queryForObject(
+                    eq("SELECT customid FROM customer WHERE customer = ?"),
+                    eq(Integer.class),
+                    eq("myshop")
+            )).thenReturn(1);
+
+            // Mock JdbcTemplate pour cpzone
+            when(jdbcTemplate.queryForObject(
+                    eq("SELECT COUNT(*) FROM cpzone WHERE customid = ? AND codepostal = ? AND actif = 1"),
+                    eq(Integer.class),
+                    eq(1),
+                    eq("75001")
+            )).thenReturn(1);
+
+            ResponseEntity<?> resp = controller.checkCpZone(request, "Bearer token123");
+            assertEquals(HttpStatus.OK, resp.getStatusCode());
+            Map<?, ?> body = (Map<?, ?>) resp.getBody();
+            assertEquals("ok", body.get("result"));
+        }
     }
 
     @Test
-    @DisplayName("findByCodePostal - 400 si code postal manquant")
-    void findByCodePostal_returns400_whenMissingCp() {
-        // ResponseEntity<?> resp = controller.findByCodePostal(null);
-        // Exemple d’attendu:
-        ResponseEntity<?> resp = ResponseEntity.status(HttpStatus.BAD_REQUEST).body("cp requis");
+    @DisplayName("Code postal absent - retourne ko")
+    void checkCpZone_absent_returnsKo() {
+        CpZoneRequest request = new CpZoneRequest();
+        request.setCustomer("myshop");
+        request.setCp("99999");
 
-        assertEquals(HttpStatus.BAD_REQUEST, resp.getStatusCode());
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("customer", "myshop");
+        payload.put("method", "POST");
+        payload.put("table", "cpzone");
+        payload.put("myshop_mail", "non");
+
+        try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            jwtStatic.when(() -> JwtService.parseToken("token123"))
+                    .thenReturn(new JwtPayload(null, null, payload));
+
+            when(jdbcTemplate.queryForObject(
+                    anyString(), eq(Integer.class), eq("myshop")
+            )).thenReturn(1);
+
+            when(jdbcTemplate.queryForObject(
+                    anyString(), eq(Integer.class), eq(1), eq("99999")
+            )).thenReturn(0);
+
+            ResponseEntity<?> resp = controller.checkCpZone(request, "Bearer token123");
+            assertEquals(HttpStatus.OK, resp.getStatusCode());
+            Map<?, ?> body = (Map<?, ?>) resp.getBody();
+            assertEquals("ko", body.get("result"));
+        }
     }
 
     @Test
-    @DisplayName("findByCodePostal - 500 en cas d'erreur du service")
-    void findByCodePostal_returns500_onServiceError() {
-        String cp = "99999";
-        // when(cpZoneService.findByCodePostal(cp)).thenThrow(new RuntimeException("boom"));
-        // ResponseEntity<?> resp = controller.findByCodePostal(cp);
-        ResponseEntity<?> resp = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
+    @DisplayName("Erreur - token sans customer")
+    void checkCpZone_missingCustomer_throwsError() {
+        CpZoneRequest request = new CpZoneRequest();
+        request.setCustomer("shop");
+        request.setCp("75001");
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
-        // verify(cpZoneService).findByCodePostal(cp);
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("method", "POST");
+        payload.put("table", "cpzone");
+
+        try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            jwtStatic.when(() -> JwtService.parseToken("token123"))
+                    .thenReturn(new JwtPayload(null, null, payload));
+
+            ResponseEntity<?> resp = controller.checkCpZone(request, "Bearer token123");
+            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
+            Map<?, ?> body = (Map<?, ?>) resp.getBody();
+            assertTrue(body.get("error").toString().contains("Pas de boutic"));
+        }
     }
 
-    private static void setField(Object target, String name, Object value) {
+    private static void inject(Object target, String field, Object value) {
         try {
-            java.lang.reflect.Field f = target.getClass().getDeclaredField(name);
+            java.lang.reflect.Field f = target.getClass().getDeclaredField(field);
             f.setAccessible(true);
             f.set(target, value);
         } catch (Exception e) {
-            fail("Injection échouée pour le champ " + name + ": " + e.getMessage());
+            fail("Injection échouée pour le champ " + field + ": " + e.getMessage());
         }
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Entity
-@Table(name = "lignecmd", uniqueConstraints = @UniqueConstraint(name = "numref_UNIQUE", columnNames = {"customid", "cmdid", "ordre"}))
+@Table(name = "lIGNECMD", uniqueConstraints = @UniqueConstraint(name = "numref_UNIQUE", columnNames = {"customid", "cmdid", "ordre"}))
 public class LigneCmd extends BaseEntity {
 
     @Id

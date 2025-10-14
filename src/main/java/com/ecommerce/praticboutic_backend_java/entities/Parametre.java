@@ -7,7 +7,7 @@ import jakarta.persistence.*;
  * Entité Paramètre
  */
 @Entity
-@Table(name = "parametre")
+@Table(name = "PARAMETRE")
 public class Parametre extends BaseEntity {
 
     @Id

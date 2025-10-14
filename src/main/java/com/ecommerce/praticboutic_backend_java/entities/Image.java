@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Entité représentant une image d'article dans l'application
  */
 @Entity
-@Table(name = "artlistimg")
+@Table(name = "ARTLISTIMG")
 public class Image implements Serializable {
 
     @Id

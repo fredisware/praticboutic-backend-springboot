@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "cpzone")
+@Table(name = "CPZONE")
 public class CpZone extends BaseEntity {
 
     @Id

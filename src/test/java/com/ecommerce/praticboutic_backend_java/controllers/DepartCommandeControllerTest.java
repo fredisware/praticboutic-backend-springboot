@@ -96,19 +96,18 @@ class DepartCommandeControllerTest {
             jwtStatic.when(() -> JwtService.generateToken(anyMap(), anyString()))
                     .thenReturn("new.jwt.token");
 
-            when(customerRepository.findByCustomer("cust-alias")).thenReturn(customer);
-            when(clientRepository.findClientById(100)).thenReturn(Optional.of(client));
             when(paramService.getParameterValue("CMPT_CMD", 42)).thenReturn("7");
-            doNothing().when(paramService).setValeurParam(eq("CMPT_CMD"), eq(42), anyString());
+            when(paramService.setValeurParam(eq("CMPT_CMD"), eq(42), anyString())).thenReturn(true);
             when(paramService.getParameterValue("Subject_mail", 42)).thenReturn("Sujet");
             doNothing().when(departCommandeService).sendEmail(eq("c@ex.com"), eq("Sujet"), anyString(), eq(input), any(Double[].class), eq("tok123"));
             when(departCommandeService.enregistreCommande(anyString(), eq(input), any(Double[].class), eq("tok123"))).thenReturn(555);
             when(paramService.getParameterValue("NEW_ORDER", 42)).thenReturn("0");
-            doNothing().when(paramService).setValeurParam(eq("NEW_ORDER"), eq(42), anyString());
-            doNothing().when(notificationService).sendPushNotification(eq("dev-1"), anyString(), anyString());
+            when(paramService.setValeurParam(eq("NEW_ORDER"), eq(42), anyString())).thenReturn(true);
+            when(notificationService.sendPushNotification(anyString(), anyString(), anyString())).thenReturn("OK");
             when(stripeService.recordSubscriptionUsage(eq(42), anyDouble(), anyDouble(), anyDouble())).thenReturn(true);
             when(paramService.getParameterValue("VALIDATION_SMS", 42)).thenReturn("oui");
-            doNothing().when(smsService).sendOrderSms(eq("oui"), eq(555), eq(42), eq("0600000000"));
+            when(smsService.sendOrderSms(eq("oui"), eq(555), eq(42), eq("0600000000"))).thenReturn(true);
+
 
             ResponseEntity<?> resp = controller.creerDepartCommande(input, authHeader);
 

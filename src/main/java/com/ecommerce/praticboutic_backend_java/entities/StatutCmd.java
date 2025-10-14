@@ -9,7 +9,7 @@ import java.util.List;
  * Entité StatutCmd
  */
 @Entity
-@Table(name = "statutcmd")
+@Table(name = "STATUTCMD")
 public class StatutCmd extends BaseEntity {
 
     @Id
@@ -79,16 +79,8 @@ public class StatutCmd extends BaseEntity {
         this.message = message;
     }
 
-    public Integer isDefaut() {
-        return defaut;
-    }
-
     public void setDefaut(Integer defaut) {
         this.defaut = defaut;
-    }
-
-    public Integer isActif() {
-        return actif;
     }
 
     public void setActif(Integer actif) {

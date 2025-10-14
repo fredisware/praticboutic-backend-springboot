@@ -1,5 +1,6 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
+import com.ecommerce.praticboutic_backend_java.models.JwtPayload;
 import com.ecommerce.praticboutic_backend_java.requests.ChargeRequest;
 import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.ParameterService;
@@ -28,13 +29,6 @@ class ChargeControllerTest {
     private JwtService jwtService;
     private ParameterService parameterService;
 
-    // Petit stub minimal pour remplacer JwtPayload réel
-    static class JwtPayloadStub {
-        private final Map<String, Object> claims;
-        JwtPayloadStub(Map<String, Object> claims) { this.claims = claims; }
-        public Map<String, Object> getClaims() { return claims; }
-    }
-
     @BeforeEach
     void setUp() {
         jwtService = mock(JwtService.class, Answers.RETURNS_DEEP_STUBS);
@@ -56,8 +50,11 @@ class ChargeControllerTest {
         String auth = "Bearer token123";
 
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            JwtPayload payload = mock(JwtPayload.class);
             jwtStatic.when(() -> JwtService.parseToken("token123"))
-                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
+                    .thenReturn(payload);
+
+            when(jwtService.isAuthenticated(anyMap())).thenReturn(true);
 
             when(jwtService.isAuthenticated(anyMap())).thenReturn(true);
             when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 10)).thenReturn("acct_1ABC");
@@ -87,8 +84,9 @@ class ChargeControllerTest {
         String auth = "Bearer tokenABC";
 
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            JwtPayload payload = mock(JwtPayload.class);
             jwtStatic.when(() -> JwtService.parseToken("tokenABC"))
-                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
+                    .thenReturn(payload);
             when(jwtService.isAuthenticated(anyMap())).thenReturn(true);
             when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 11)).thenReturn("");
 
@@ -111,8 +109,9 @@ class ChargeControllerTest {
         String auth = "Bearer tokenZ";
 
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            JwtPayload payload = mock(JwtPayload.class);
             jwtStatic.when(() -> JwtService.parseToken("tokenZ"))
-                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
+                    .thenReturn(payload);
             when(jwtService.isAuthenticated(anyMap())).thenReturn(false);
 
             ResponseEntity<?> resp = controller.checkStripeAccount(req, auth);
@@ -133,8 +132,9 @@ class ChargeControllerTest {
         String auth = "Bearer tokenY";
 
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            JwtPayload payload = mock(JwtPayload.class);
             jwtStatic.when(() -> JwtService.parseToken("tokenY"))
-                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
+                    .thenReturn(payload);
             when(jwtService.isAuthenticated(anyMap())).thenReturn(true);
 
             ResponseEntity<?> resp = controller.checkStripeAccount(req, auth);
@@ -156,8 +156,9 @@ class ChargeControllerTest {
         String auth = "Bearer tokenKO";
 
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
+            JwtPayload payload = mock(JwtPayload.class);
             jwtStatic.when(() -> JwtService.parseToken("tokenKO"))
-                    .thenReturn(new JwtPayloadStub(Map.of("sub", "x")));
+                    .thenReturn(payload);
             when(jwtService.isAuthenticated(anyMap())).thenReturn(true);
             when(parameterService.getParameterValue("STRIPE_ACCOUNT_ID", 15)).thenReturn("acct_disabled");
 

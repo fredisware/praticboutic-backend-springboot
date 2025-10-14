@@ -25,10 +25,10 @@ import java.util.Map;
 public class AbonnementService {
 
     @Autowired
-    private AbonnementRepository abonnementRepository;
+    AbonnementRepository abonnementRepository;
 
     @Autowired
-    private SessionService sessionService;
+    SessionService sessionService;
 
     // Déclarez le logger en tant que champ statique en haut de votre classe
     private static final Logger logger = LoggerFactory.getLogger(AbonnementService.class);
@@ -79,14 +79,14 @@ public class AbonnementService {
         return null;
     }
 
-    /**
-     * Crée et sauvegarde un abonnement
-     */
-    public Abonnement createAndSaveAbonnement( Client client, Customer customer, String token)
+    public Abonnement createAndSaveAbonnement(Client client, Customer customer, String token)
             throws DataAccessException {
 
-        Map<String, Object> payload = JwtService.parseToken(token).getClaims();
-        String stripeSubscriptionId = payload.get("creationabonnement_stripe_subscription_id").toString();
+        var jwt = JwtService.parseToken(token);
+        Map<String, Object> claims = (jwt != null ? jwt.getClaims() : null);
+        Object rawSubId = (claims != null ? claims.get("creationabonnement_stripe_subscription_id") : null);
+        String stripeSubscriptionId = (rawSubId != null ? rawSubId.toString() : null);
+
         if (StringUtils.isEmpty(stripeSubscriptionId)) {
             throw new DatabaseException.InvalidSessionDataException("L'ID d'abonnement Stripe ne peut pas être vide");
         }

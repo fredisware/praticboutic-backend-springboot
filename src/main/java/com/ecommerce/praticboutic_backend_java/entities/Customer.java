@@ -7,7 +7,7 @@ import jakarta.persistence.*;
  * Entité Customer (boutique)
  */
 @Entity
-@Table(name = "customer")
+@Table(name = "CUSTOMER")
 public class Customer extends BaseEntity {
 
     @Id

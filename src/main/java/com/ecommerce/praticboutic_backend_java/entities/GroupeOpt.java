@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "groupeopt")
+@Table(name = "GROUPEOPT")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class GroupeOpt extends BaseEntity {
 
