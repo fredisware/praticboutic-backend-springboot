@@ -4,6 +4,7 @@ import com.ecommerce.praticboutic_backend_java.entities.Abonnement;
 import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import com.ecommerce.praticboutic_backend_java.exceptions.DatabaseException;
+import com.ecommerce.praticboutic_backend_java.models.JwtPayload;
 import com.ecommerce.praticboutic_backend_java.repositories.AbonnementRepository;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
@@ -92,7 +93,7 @@ public class AbonnementService {
         }
 
         Abonnement abonnement = new Abonnement();
-        abonnement.setCltId(client.getCltId());
+        abonnement.setClient(client);
         abonnement.setCreationBoutic(false);
         abonnement.setBouticId(customer.getCustomId());
         abonnement.setStripeSubscriptionId(stripeSubscriptionId);
@@ -105,6 +106,8 @@ public class AbonnementService {
             throw new DataAccessException("Erreur lors de la sauvegarde de l'abonnement", e) {};
         }
     }
+
+
 
 
 }

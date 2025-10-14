@@ -137,4 +137,23 @@ public class Abonnement extends BaseEntity {
 
     public void setDateFin(LocalDate dateFin) {
     }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cltid", insertable = false, updatable = false)
+    private Client client;
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+        if (client != null) {
+            this.cltId = client.getCltId(); // synchronise le champ FK
+        }
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bouticid", insertable = false, updatable = false)
+    private Customer customer;
 }

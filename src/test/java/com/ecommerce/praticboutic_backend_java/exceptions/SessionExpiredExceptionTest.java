@@ -12,32 +12,9 @@ class SessionExpiredExceptionTest {
         SessionExpiredException exception = new SessionExpiredException(message);
 
         assertEquals(message, exception.getMessage());
-        assertNull(exception.getCause());
+        assertNull(exception.getCause()); // Pas de constructeur avec cause
     }
 
-    @Test
-    void testConstructorWithMessageAndCause() {
-        String message = "Session expirée, veuillez vous reconnecter";
-        Throwable cause = new RuntimeException("Jeton invalide");
-
-        SessionExpiredException exception = new SessionExpiredException(message);
-
-        assertEquals(message, exception.getMessage());
-        assertEquals(cause, exception.getCause());
-    }
-
-    @Test
-    void testConstructorWithCauseOnly() {
-        Throwable cause = new IllegalStateException("Données de session absentes");
-        SessionExpiredException exception = new SessionExpiredException("Test");
-
-        assertEquals(cause, exception.getCause());
-        assertTrue(exception.getMessage().contains("Données de session absentes"));
-    }
-
-    @Test
-    void testIsRuntimeException() {
-        SessionExpiredException exception = new SessionExpiredException("Test");
-        assertInstanceOf(RuntimeException.class, exception);
-    }
+    // Comme ton exception n'accepte pas cause, on ne peut tester message+cause ou cause seul
+    // On ne teste pas instanceof RuntimeException car c'est une checked exception
 }

@@ -213,4 +213,16 @@ public class Customer extends BaseEntity {
     public boolean isPresent() {
         return (this.customid != null) && (this.customid != 0);
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customId=" + customid +
+                ", customer='" + customer + '\'' +
+                ", actif=" + actif +
+                ", client=" + (client != null ? client.getCltId() : "null") +
+                '}';
+    }
+
+
 }

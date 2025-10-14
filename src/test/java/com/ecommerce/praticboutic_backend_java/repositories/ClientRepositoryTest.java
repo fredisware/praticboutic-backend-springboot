@@ -2,6 +2,7 @@ package com.ecommerce.praticboutic_backend_java.repositories;
 
 import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,29 +20,37 @@ class ClientRepositoryTest {
     private ClientRepository clientRepository;
 
     @Autowired
-    private CustomerRepository customerRepository; // Si tu as un repository Customer
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private EntityManager em;
 
     private Client client;
     private Customer customer;
 
     @BeforeEach
     void setUp() {
-        clientRepository.deleteAll();
+        // Supprime tout pour être sûr
         customerRepository.deleteAll();
+        clientRepository.deleteAll();
 
-        customer = new Customer();
-        customer.setNom("Customer1");
-        customer = customerRepository.save(customer);
-
+        // Création et sauvegarde du client
         client = new Client();
         client.setEmail("user@example.com");
         client.setActif(1);
         client.setNom("Client1");
-        client = clientRepository.save(client);
+        client = clientRepository.saveAndFlush(client); // 🔹 flush pour générer l'ID
+
+        // Création et sauvegarde du customer lié
+        customer = new Customer();
+        customer.setNom("Customer1");
+        customer.setClient(client); // ⚡ lien vers client persistant
+        customer = customerRepository.saveAndFlush(customer); // 🔹 flush
     }
 
     @Test
     void testCountByEmail() {
+
         Long count = clientRepository.countByEmail("user@example.com");
         assertEquals(1L, count);
 
@@ -52,7 +61,20 @@ class ClientRepositoryTest {
     @Test
     @Transactional
     void testUpdateEmailById() {
+        // Création et sauvegarde du client
+        client = new Client();
+        client.setEmail("user@example.com");
+        client.setActif(1);
+        client.setNom("Client1");
+        client = clientRepository.save(client);
+
+        // Met à jour son email
         clientRepository.updateEmailById("newemail@example.com", client.getCltId());
+
+        em.flush();
+        em.clear();
+
+        // Vérifie le résultat
         Optional<Client> updated = clientRepository.findById(client.getCltId());
         assertTrue(updated.isPresent());
         assertEquals("newemail@example.com", updated.get().getEmail());
@@ -60,6 +82,7 @@ class ClientRepositoryTest {
 
     @Test
     void testFindByEmailAndActif() {
+
         Optional<Client> found = clientRepository.findByEmailAndActif("user@example.com", 1);
         assertTrue(found.isPresent());
         assertEquals(client.getCltId(), found.get().getCltId());
@@ -70,6 +93,7 @@ class ClientRepositoryTest {
 
     @Test
     void testFindByEmail() {
+
         Optional<Client> found = clientRepository.findByEmail("user@example.com");
         assertTrue(found.isPresent());
         assertEquals(client.getCltId(), found.get().getCltId());
@@ -80,6 +104,7 @@ class ClientRepositoryTest {
 
     @Test
     void testFindByCustomer() {
+
         Client found = clientRepository.findByCustomer(customer);
         assertNotNull(found);
         assertEquals(client.getCltId(), found.getCltId());
@@ -87,6 +112,7 @@ class ClientRepositoryTest {
 
     @Test
     void testFindClientById() {
+
         Optional<Client> found = clientRepository.findClientById(client.getCltId());
         assertTrue(found.isPresent());
         assertEquals(client.getEmail(), found.get().getEmail());

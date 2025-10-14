@@ -102,7 +102,8 @@ class CustomerRepositoryTest {
 
         assertNotNull(saved.getCustomId());
         assertEquals("boutique-3", saved.getCustomer());
-        assertEquals(client.getCltId(), saved.getCltid()); // vérifie la liaison
+        assertEquals(client.getCltId(), saved.getClient().getCltId());
+
     }
 
 

@@ -23,6 +23,7 @@ public class JwtService {
 
     // Durée de validité : 1 mois
     private static final long jwtExpirationMs = 30L * 24 * 60 * 60 * 1000; // 30 jours en ms
+    private Map<String, Object> claims;
 
 /*
     // Lire l'identité dans un token
@@ -113,6 +114,11 @@ public class JwtService {
         generateToken(sessionData, subject);
 
     }
+    
+    public void setClaims(Map<String, Object> claims) {
+        this.claims = claims;
+    }
+
 
 
 

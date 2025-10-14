@@ -3,13 +3,13 @@ package com.ecommerce.praticboutic_backend_java.controllers;
 import com.ecommerce.praticboutic_backend_java.exceptions.ClientNotFoundException;
 import com.ecommerce.praticboutic_backend_java.exceptions.TooManyRequestsException;
 import com.ecommerce.praticboutic_backend_java.requests.EmailVerificationRequest;
+import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
 import com.ecommerce.praticboutic_backend_java.services.MotDePasseService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -28,9 +28,9 @@ class PasswordResetControllerTest {
     @BeforeEach
     void setUp() {
         controller = new PasswordResetController();
-        motDePasseService = mock(MotDePasseService.class, Answers.RETURNS_DEEP_STUBS);
-        httpRequest = mock(HttpServletRequest.class, Answers.RETURNS_DEEP_STUBS);
-        httpResponse = mock(HttpServletResponse.class, Answers.RETURNS_DEEP_STUBS);
+        motDePasseService = mock(MotDePasseService.class); // ✅ pas de RETURNS_DEEP_STUBS
+        httpRequest = mock(HttpServletRequest.class);
+        httpResponse = mock(HttpServletResponse.class);
 
         inject(controller, "motDePasseService", motDePasseService);
     }
@@ -40,10 +40,10 @@ class PasswordResetControllerTest {
     void resetPassword_ok() throws Exception {
         EmailVerificationRequest req = new EmailVerificationRequest();
         req.setEmail("user@example.com");
+
         when(httpRequest.getRemoteAddr()).thenReturn("1.2.3.4");
         when(httpRequest.getHeader("X-Forwarded-For")).thenReturn(null);
 
-        // ✅ Correction ici : retourne true au lieu de doNothing()
         when(motDePasseService.reinitialiserMotDePasse("user@example.com", "1.2.3.4"))
                 .thenReturn(true);
 
@@ -58,6 +58,7 @@ class PasswordResetControllerTest {
     void resetPassword_clientNotFound() throws Exception {
         EmailVerificationRequest req = new EmailVerificationRequest();
         req.setEmail("unknown@example.com");
+
         when(httpRequest.getRemoteAddr()).thenReturn("1.2.3.4");
 
         doThrow(new ClientNotFoundException("Courriel non-trouvé"))
@@ -66,7 +67,9 @@ class PasswordResetControllerTest {
         ResponseEntity<?> resp = controller.resetPassword(req, httpRequest, httpResponse);
 
         assertEquals(HttpStatus.NOT_FOUND, resp.getStatusCode());
-        assertTrue(resp.getBody().toString().contains("Courriel non-trouvé"));
+        ErrorResponse body = (ErrorResponse) resp.getBody();
+        assertNotNull(body);
+        assertTrue(body.getError().contains("Courriel non-trouvé"));
     }
 
     @Test
@@ -74,6 +77,7 @@ class PasswordResetControllerTest {
     void resetPassword_tooManyRequests() throws Exception {
         EmailVerificationRequest req = new EmailVerificationRequest();
         req.setEmail("user@example.com");
+
         when(httpRequest.getRemoteAddr()).thenReturn("1.2.3.4");
 
         doThrow(new TooManyRequestsException("rate limited"))
@@ -82,7 +86,9 @@ class PasswordResetControllerTest {
         ResponseEntity<?> resp = controller.resetPassword(req, httpRequest, httpResponse);
 
         assertEquals(HttpStatus.TOO_MANY_REQUESTS, resp.getStatusCode());
-        assertTrue(resp.getBody().toString().contains("rate limited"));
+        ErrorResponse body = (ErrorResponse) resp.getBody();
+        assertNotNull(body);
+        assertTrue(body.getError().contains("rate limited"));
     }
 
     @Test
@@ -90,6 +96,7 @@ class PasswordResetControllerTest {
     void resetPassword_genericException() throws Exception {
         EmailVerificationRequest req = new EmailVerificationRequest();
         req.setEmail("user@example.com");
+
         when(httpRequest.getRemoteAddr()).thenReturn("1.2.3.4");
 
         doThrow(new RuntimeException("boom"))
@@ -98,7 +105,9 @@ class PasswordResetControllerTest {
         ResponseEntity<?> resp = controller.resetPassword(req, httpRequest, httpResponse);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
-        assertTrue(resp.getBody().toString().contains("Une erreur est survenue"));
+        ErrorResponse body = (ErrorResponse) resp.getBody();
+        assertNotNull(body);
+        assertTrue(body.getError().contains("Une erreur est survenue"));
     }
 
     @Test
@@ -106,18 +115,21 @@ class PasswordResetControllerTest {
     void resetPassword_forwardedHeader() throws Exception {
         EmailVerificationRequest req = new EmailVerificationRequest();
         req.setEmail("user@example.com");
+
         when(httpRequest.getRemoteAddr()).thenReturn("1.2.3.4");
         when(httpRequest.getHeader("X-Forwarded-For")).thenReturn("9.9.9.9, 8.8.8.8");
 
-        // Mock basique pour éviter une vraie exécution
         when(motDePasseService.reinitialiserMotDePasse(anyString(), anyString()))
                 .thenReturn(true);
 
         ResponseEntity<?> resp = controller.resetPassword(req, httpRequest, httpResponse);
 
         assertNotNull(resp);
+        assertEquals(HttpStatus.OK, resp.getStatusCode());
+        assertEquals(Map.of("result", "OK"), resp.getBody());
     }
 
+    // Méthode utilitaire pour injection de dépendances
     private static void inject(Object target, String field, Object value) {
         try {
             java.lang.reflect.Field f = target.getClass().getDeclaredField(field);

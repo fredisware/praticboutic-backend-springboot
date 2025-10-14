@@ -89,18 +89,27 @@ class OptionTest {
     @Test
     @DisplayName("getDisplayData() - retourne des données cohérentes")
     void getDisplayData_ifPresent() {
+        // Création de l'option avec groupe associé
         Option o = new Option();
         o.setOptId(5);
         o.setNom("Sans oignon");
         o.setSurcout(0.0);
-        o.setGroupeOption(groupeOpt);
+        o.setGroupeOption(groupeOpt); // le nom du groupe doit correspondre à l'attendu
 
+        // Récupération des données pour affichage
         List<Object> row = o.getDisplayData();
+
         assertNotNull(row);
-        // Adapte le nombre de colonnes selon ton implémentation de getDisplayData()
-        assertTrue(row.contains("Personnalisations"));
-        assertTrue(row.contains("Sans oignon"));
+        assertEquals(5, row.size()); // 5 colonnes dans getDisplayData()
+
+        // Vérification de chaque colonne
+        assertEquals(5, row.get(0));                     // optId
+        assertEquals("Sans oignon", row.get(1));        // nom de l'option
+        assertEquals(0.0, row.get(2));                  // surcout
+        assertEquals("Tailles", row.get(3));            // nom du groupe
+        assertEquals(true, row.get(4));                 // visible
     }
+
 
     @Test
     @DisplayName("toString() ne jette pas d'exception et reflète le nom si défini")

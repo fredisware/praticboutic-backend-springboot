@@ -1,6 +1,8 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
 import com.ecommerce.praticboutic_backend_java.controllers.FraisLivraisonController.ShippingCostRequest;
+import com.ecommerce.praticboutic_backend_java.controllers.FraisLivraisonController.ShippingCostResponse;
+import com.ecommerce.praticboutic_backend_java.controllers.FraisLivraisonController.ErrorResponse;
 import com.ecommerce.praticboutic_backend_java.models.JwtPayload;
 import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +21,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
-// ... existing code ...
 
 class FraisLivraisonControllerTest {
 
@@ -45,12 +45,10 @@ class FraisLivraisonControllerTest {
         payload.put("customer", "cust");
         payload.put("cust_mail", "non");
 
-        // JWT
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
             jwtStatic.when(() -> JwtService.parseToken("tok"))
                     .thenReturn(new JwtPayload(null, null, payload));
 
-            // JDBC mocks
             Connection conn = mock(Connection.class);
             PreparedStatement ps1 = mock(PreparedStatement.class);
             ResultSet rs1 = mock(ResultSet.class);
@@ -70,8 +68,7 @@ class FraisLivraisonControllerTest {
             ResponseEntity<?> resp = controller.getFraisLivr(req, "Bearer tok");
 
             assertEquals(HttpStatus.OK, resp.getStatusCode());
-            FraisLivraisonController.ShippingCostResponse body =
-                    (FraisLivraisonController.ShippingCostResponse) resp.getBody();
+            ShippingCostResponse body = (ShippingCostResponse) resp.getBody();
             assertNotNull(body);
             assertEquals(3.5, body.getCost());
         }
@@ -85,7 +82,6 @@ class FraisLivraisonControllerTest {
         req.setSstotal(25.0);
 
         Map<String, Object> payload = new HashMap<>();
-        // pas de 'customer'
 
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
             jwtStatic.when(() -> JwtService.parseToken("tok"))
@@ -94,7 +90,9 @@ class FraisLivraisonControllerTest {
             ResponseEntity<?> resp = controller.getFraisLivr(req, "Bearer tok");
 
             assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
-            assertTrue(resp.getBody().toString().contains("Pas de boutic"));
+            ErrorResponse body = (ErrorResponse) resp.getBody();
+            assertNotNull(body);
+            assertTrue(body.getError().contains("Pas de boutic"));
         }
     }
 
@@ -107,7 +105,6 @@ class FraisLivraisonControllerTest {
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("customer", "cust");
-        // pas de 'cust_mail'
 
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
             jwtStatic.when(() -> JwtService.parseToken("tok"))
@@ -116,7 +113,9 @@ class FraisLivraisonControllerTest {
             ResponseEntity<?> resp = controller.getFraisLivr(req, "Bearer tok");
 
             assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
-            assertTrue(resp.getBody().toString().contains("Pas de courriel"));
+            ErrorResponse body = (ErrorResponse) resp.getBody();
+            assertNotNull(body);
+            assertTrue(body.getError().contains("Pas de courriel"));
         }
     }
 
@@ -138,7 +137,9 @@ class FraisLivraisonControllerTest {
             ResponseEntity<?> resp = controller.getFraisLivr(req, "Bearer tok");
 
             assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
-            assertTrue(resp.getBody().toString().contains("Courriel déjà envoyé"));
+            ErrorResponse body = (ErrorResponse) resp.getBody();
+            assertNotNull(body);
+            assertTrue(body.getError().contains("Courriel déjà envoyé"));
         }
     }
 
@@ -162,7 +163,9 @@ class FraisLivraisonControllerTest {
             ResponseEntity<?> resp = controller.getFraisLivr(req, "Bearer tok");
 
             assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
-            assertTrue(resp.getBody().toString().contains("db down"));
+            ErrorResponse body = (ErrorResponse) resp.getBody();
+            assertNotNull(body);
+            assertTrue(body.getError().contains("db down"));
         }
     }
 

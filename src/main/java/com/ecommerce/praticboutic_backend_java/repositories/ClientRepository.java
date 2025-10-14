@@ -22,8 +22,8 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Client c SET c.email = :email WHERE c.id = :id")
-    void updateEmailById(@Param("email") String email, @Param("id") Integer id);
+    @Query("UPDATE Client c SET c.email = :email WHERE c.cltid = :cltid")
+    void updateEmailById(@Param("email") String email, @Param("cltid") Integer id);
 
     Optional<Client> findByEmailAndActif(String email, Integer actif);
 
@@ -31,7 +31,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 
     //Client find(Integer bouticid);
 
-    @Query("SELECT c FROM Client c JOIN Customer cust ON c.cltid = cust.cltid WHERE cust = :customer")
+    @Query("SELECT c FROM Client c WHERE c = :#{#customer.client}")
     Client findByCustomer(@Param("customer") Customer customer);
 
     //Client findByCltid(Integer clientId);

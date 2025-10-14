@@ -1,8 +1,9 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
+import com.ecommerce.praticboutic_backend_java.models.JwtPayload;
 import com.ecommerce.praticboutic_backend_java.requests.SuppressionRequest;
+import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
 import com.ecommerce.praticboutic_backend_java.services.JwtService;
-import com.ecommerce.praticboutic_backend_java.services.SessionService;
 import com.ecommerce.praticboutic_backend_java.services.SuppressionService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +24,24 @@ public class SuppressionController {
     protected JwtService jwtService;
 
     @PostMapping("/suppression")
-    public ResponseEntity<?> supprimerCompte(@RequestBody SuppressionRequest request, HttpServletRequest servletRequest, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> supprimerCompte(@RequestBody SuppressionRequest request,
+                                             HttpServletRequest servletRequest,
+                                             @RequestHeader("Authorization") String authHeader) {
         try {
             String token = authHeader.replace("Bearer ", "");
-            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
-            if (!jwtService.isAuthenticated(payload)) {
+            JwtPayload payload = jwtService.parseToken(token);
+
+            if (!jwtService.isAuthenticated(payload.getClaims())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Non authentifié"));
+                        .body(new ErrorResponse("Non authentifié"));
             }
+
             suppressionService.supprimerCompte(request, servletRequest.getRemoteAddr());
             return ResponseEntity.ok(Map.of("result", "OK"));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("{\"error\": \"" + e.getMessage() + "\"}");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
+
 }

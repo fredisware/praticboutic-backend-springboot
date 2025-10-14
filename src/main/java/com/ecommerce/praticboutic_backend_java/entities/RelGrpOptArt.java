@@ -43,7 +43,7 @@ public class RelGrpOptArt extends BaseEntity {
     }
 
     public void setRelgrpoartid(Integer relgrpoartid) {
-        this.relgrpoartid = this.relgrpoartid;
+        this.relgrpoartid = relgrpoartid;
     }
 
 

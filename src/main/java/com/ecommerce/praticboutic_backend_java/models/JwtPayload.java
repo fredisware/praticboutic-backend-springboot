@@ -16,6 +16,10 @@ public class JwtPayload {
         this.claims = claims;
     }
 
+    public JwtPayload() {
+
+    }
+
     public String getSubject() {
         return subject;
     }
@@ -28,5 +32,8 @@ public class JwtPayload {
         return claims;
     }
 
+    public void setClaims(Map<String, Object> claims) {
+        this.claims = claims;
+    }
 
 }

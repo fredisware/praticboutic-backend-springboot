@@ -16,7 +16,7 @@ public class Image implements Serializable {
     private Integer id;
 
     @Column(name = "customid", nullable = false)
-    private Integer customid = 0;
+    private Integer customid;
 
     @Column(name = "artid") // ou le nom approprié dans la base de données
     private Integer artid;

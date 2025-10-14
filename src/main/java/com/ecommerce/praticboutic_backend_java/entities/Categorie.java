@@ -85,4 +85,14 @@ public class Categorie extends BaseEntity {
         row.add(getVisible().toString());
         return row;
     }
+
+    @Override
+    public String toString() {
+        return "Categorie{" +
+                "catid=" + catid +
+                ", customid=" + customid +
+                ", nom=" + (nom != null ? "'" + nom + "'" : "null") +
+                ", visible=" + visible +
+                '}';
+    }
 }

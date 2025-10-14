@@ -5,224 +5,148 @@ import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import com.ecommerce.praticboutic_backend_java.models.JwtPayload;
 import com.ecommerce.praticboutic_backend_java.repositories.AbonnementRepository;
-// ... existing code ...
-import org.junit.jupiter.api.BeforeEach;
+import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
+import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
-import org.springframework.dao.DataAccessException;
+import org.mockito.MockedStatic;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 
-// ... existing code ...
-
+@SpringBootTest
+@Transactional
 class AbonnementServiceTest {
 
-    @Mock
-    private AbonnementRepository abonnementRepository;
-
-    @Mock
-    private SessionService sessionService;
-
-    @InjectMocks
+    @Autowired
     private AbonnementService abonnementService;
 
-    @Mock
-    private Client client;
+    @Autowired
+    private AbonnementRepository abonnementRepository;
 
-    @Mock
-    private Customer customer;
+    @Autowired
+    private ClientRepository clientRepository;
 
-    private AutoCloseable mocks;
-
-    @BeforeEach
-    void setUp() {
-        mocks = MockitoAnnotations.openMocks(this);
-    }
-
-    // ... existing code ...
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Test
-    @DisplayName("findById - retourne l'abonnement quand existe")
-    void findById_returnsAbonnement_whenExists() {
-        Integer id = 123;
-        Abonnement expected = new Abonnement();
-        // TODO: setter id si nécessaire
-        when(abonnementRepository.findById(id)).thenReturn(java.util.Optional.of(expected));
-
-        Abonnement actual = abonnementService.findById(id);
-
-        assertSame(expected, actual);
-        verify(abonnementRepository).findById(id);
-        verifyNoMoreInteractions(abonnementRepository, sessionService);
-    }
-
-    // ... existing code ...
-
-    @Test
-    @DisplayName("findById - retourne null quand absent")
-    void findById_returnsNull_whenNotFound() {
-        Integer id = 999;
-        when(abonnementRepository.findById(id)).thenReturn(java.util.Optional.empty());
-
-        Abonnement actual = abonnementService.findById(id);
-
-        assertNull(actual);
-        verify(abonnementRepository).findById(id);
-        verifyNoMoreInteractions(abonnementRepository, sessionService);
-    }
-
-    // ... existing code ...
-
-    @Test
-    @DisplayName("save - persiste et retourne l'entité")
-    void save_persistsEntity() {
-        Abonnement input = new Abonnement();
-        Abonnement saved = new Abonnement();
-        when(abonnementRepository.save(input)).thenReturn(saved);
-
-        Abonnement actual = abonnementService.save(input);
-
-        assertSame(saved, actual);
-        verify(abonnementRepository).save(input);
-        verifyNoMoreInteractions(abonnementRepository, sessionService);
-    }
-
-    // ... existing code ...
-
-    @Test
-    @DisplayName("createSubscription - crée un abonnement avec paramètres")
-    void createSubscription_createsWithParams() {
-        Integer bouticId = 42;
-        String typePlan = "PREMIUM";
-        int dureeMonths = 12;
-
-        // Stub du repository pour la sauvegarde de l'abonnement créé
-        ArgumentCaptor<Abonnement> captor = ArgumentCaptor.forClass(Abonnement.class);
-        when(abonnementRepository.save(any(Abonnement.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        Abonnement created = abonnementService.createSubscription(bouticId, typePlan, dureeMonths);
-
-        assertNotNull(created);
-        // Ajustez selon vos champs: ex. created.getBouticId(), getTypePlan(), getDuree()
-        // assertEquals(bouticId, created.getBouticId());
-        // assertEquals(typePlan, created.getTypePlan());
-        // assertEquals(dureeMonths, created.getDuree());
-
-        verify(abonnementRepository).save(captor.capture());
-        Abonnement persisted = captor.getValue();
-        assertNotNull(persisted);
-        verifyNoMoreInteractions(abonnementRepository, sessionService);
-    }
-
-    // ... existing code ...
-
-    @Test
-    @DisplayName("getStripeCustomerId - retourne null si non implémenté / non trouvé")
-    void getStripeCustomerId_returnsNull_whenNotImplementedOrMissing() {
-        Integer bouticId = 77;
-
-        String result = abonnementService.getStripeCustomerId(bouticId);
-
-        assertNull(result);
-        verifyNoInteractions(abonnementRepository, sessionService);
-    }
-
-    // ... existing code ...
-
-    @Nested
-    @DisplayName("createAndSaveAbonnement")
-    class CreateAndSaveAbonnementTests {
-
-        @Test
-        void returnsSavedAbonnement_happyPath() {
-            // Arrange
-            AbonnementRepository mockRepo = mock(AbonnementRepository.class);
-            SessionService mockSession = mock(SessionService.class);
-            AbonnementService abonnementService = new AbonnementService();
-            abonnementService.abonnementRepository = mockRepo;
-            abonnementService.sessionService = mockSession;
-
-            Client client = new Client();
-            client.setCltId(1);
-
-            Customer customer = new Customer();
-            customer.setCustomId(10);
-
-            Abonnement fakeAbonnement = new Abonnement();
-            when(mockRepo.save(any())).thenReturn(fakeAbonnement);
-
-            // Mock du JwtPayload
-            JwtPayload mockPayload = mock(JwtPayload.class);
-            when(mockPayload.getClaims()).thenReturn(Map.of(
-                    "creationabonnement_stripe_subscription_id", "sub_123"
-            ));
-
-            // Mock statique du JwtService
-            try (MockedStatic<JwtService> mockedJwt = mockStatic(JwtService.class)) {
-                mockedJwt.when(() -> JwtService.parseToken(anyString()))
-                        .thenReturn(mockPayload);
-
-                // Act
-                Abonnement result = abonnementService.createAndSaveAbonnement(client, customer, "fake-token");
-
-                // Assert
-                assertNotNull(result);
-                verify(mockRepo, times(1)).save(any(Abonnement.class));
-            }
-        }
-
-        @Test
-        @DisplayName("propage DataAccessException")
-        void propagatesDataAccessException() throws DataAccessException {
-            Client client = new Client();
-            Customer customer = new Customer();
-            String token = "tok_bad";
-
-            when(abonnementRepository.save(any(Abonnement.class))).thenThrow(mock(DataAccessException.class));
-
-            assertThrows(DataAccessException.class, () ->
-                    abonnementService.createAndSaveAbonnement(client, customer, token)
-            );
-            verify(abonnementRepository).save(any(Abonnement.class));
-            verifyNoMoreInteractions(abonnementRepository, sessionService);
-        }
-    }
-
-    // ... existing code ...
-
-    @Test
-    @DisplayName("Aucune interaction inattendue à la fin de chaque test")
-    void noUnexpectedInteractions() {
-        // Ce test sert seulement d’exemple de structure; il peut être supprimé si inutile.
-        // La règle verifyNoMoreInteractions est déjà utilisée dans chaque test.
-        assertTrue(true);
-    }
-
-    @Test
+    @DisplayName("createAndSaveAbonnement - happy path")
     void createAndSaveAbonnement_happyPath() {
         String token = "jwt-token";
 
-        // Mock du JwtPayload
+        // 🔹 Crée et sauvegarde le client
+        Client client = new Client();
+        client.setNom("Client Test");
+        client.setEmail("client@test.com");
+        client.setActif(1);
+        client = clientRepository.save(client);
+
+        // 🔹 Crée et sauvegarde le customer
+        Customer customer = new Customer();
+        customer.setNom("Boutique Test");
+        customer.setCourriel("contact@test.com");
+        customer.setCustomer("boutique-test");
+        customer.setActif(1);
+        customer = customerRepository.save(customer);
+
+        // 🔹 Mock du JwtPayload
         JwtPayload mockPayload = mock(JwtPayload.class);
         when(mockPayload.getClaims()).thenReturn(Map.of(
                 "creationabonnement_stripe_subscription_id", "sub_123"
         ));
 
-        // Mock statique de JwtService
-        try (MockedStatic<JwtService> mockedJwtService = mockStatic(JwtService.class)) {
-            mockedJwtService.when(() -> JwtService.parseToken(token)).thenReturn(mockPayload);
+        // 🔹 Mock statique de JwtService
+        try (MockedStatic<JwtService> mockedJwt = mockStatic(JwtService.class)) {
+            mockedJwt.when(() -> JwtService.parseToken(token)).thenReturn(mockPayload);
 
-            // Appel de la méthode
+            // 🔹 Appel de la méthode
             Abonnement result = abonnementService.createAndSaveAbonnement(client, customer, token);
 
-            assertNotNull(result);
-            // Ajouter d'autres assertions selon la logique de création
-            // par ex. vérifier que certaines propriétés sont définies
+            // 🔹 Assertions
+            assertNotNull(result, "L'abonnement ne doit pas être null");
+            assertNotNull(result.getAboId(), "L'ID de l'abonnement doit être généré");
+            assertEquals(client.getCltId(), result.getCltId(), "L'abonnement doit être lié au bon client");
+            assertEquals(customer.getCustomId(), result.getBouticId(), "L'abonnement doit être lié à la bonne boutique");
+            assertEquals("sub_123", result.getStripeSubscriptionId(), "Le Stripe Subscription ID doit être correct");
+            assertEquals(1, result.getActif(), "L'abonnement doit être actif");
         }
     }
+
+    @Test
+    @DisplayName("findById - retourne l'abonnement quand existe")
+    void findById_returnsAbonnement_whenExists() {
+
+        // 🔹 Crée et sauvegarde le client
+        Client client = new Client();
+        client.setNom("Client Test 1");
+        client.setEmail("client@test.com");
+        client.setActif(1);
+        client = clientRepository.save(client);
+
+        // 🔹 Crée et sauvegarde le customer
+        Customer customer = new Customer();
+        customer.setNom("Boutique Test 1");
+        customer.setCltid(client.getCltId());
+        customer = customerRepository.save(customer);
+
+        // 🔹 Crée l'abonnement en liant correctement le client et le customer
+        Abonnement abo = new Abonnement();
+        abo.setActif(1);
+        abo.setCltId(client.getCltId());
+        abo.setBouticId(customer.getCustomId());  // ✅ utiliser l'ID réel du customer
+        abo.setCreationBoutic(false);
+        abo.setStripeSubscriptionId("sub_123");
+        abo = abonnementRepository.save(abo);
+
+        // 🔹 Test
+        Abonnement result = abonnementService.findById(abo.getAboId());
+        assertNotNull(result);
+        assertEquals(abo.getAboId(), result.getAboId());
+    }
+
+
+    @Test
+    @DisplayName("findById - retourne null quand absent")
+    void findById_returnsNull_whenNotFound() {
+        Abonnement result = abonnementService.findById(-1);
+        assertNull(result);
+    }
+
+    @Test
+    @DisplayName("save - persiste et retourne l'entité")
+    void save_persistsEntity() {
+        // 🔹 Crée et sauvegarde le client
+        Client client = new Client();
+        client.setNom("Client Test 1");
+        client.setEmail("client@test.com");
+        client.setActif(1);
+        client = clientRepository.save(client);
+
+        Customer customer = new Customer();
+        customer.setNom("Boutique Test 1");
+        customer.setCltid(client.getCltId());
+        customer = customerRepository.save(customer);
+
+
+        Abonnement abo = new Abonnement();
+        abo.setActif(1);
+        abo.setBouticId(customer.getCustomId());
+        abo.setCltId(client.getCltId());
+        abo.setCreationBoutic(false);
+        abo.setStripeSubscriptionId("sub_123");
+
+
+        Abonnement saved = abonnementService.save(abo);
+        assertNotNull(saved.getAboId());
+        assertEquals(1, saved.getActif());
+    }
+
 }

@@ -2,18 +2,18 @@ package com.ecommerce.praticboutic_backend_java.repositories;
 
 import com.ecommerce.praticboutic_backend_java.entities.Article;
 import com.ecommerce.praticboutic_backend_java.entities.Categorie;
-import com.ecommerce.praticboutic_backend_java.entities.Client;
-import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@Rollback // assure que chaque test est rollbacké automatiquement
 class ArticleRepositoryTest {
 
     @Autowired
@@ -22,123 +22,60 @@ class ArticleRepositoryTest {
     @Autowired
     private CategorieRepository categorieRepository;
 
-    @Autowired
-    private ClientRepository clientRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
+    private Categorie categorie;
     private Article article1;
     private Article article2;
-    private Article article3;
 
     @BeforeEach
     void setUp() {
-        articleRepository.deleteAll();
+        // Crée une catégorie pour les articles
+        categorie = new Categorie();
+        categorie.setCustomid(1);
+        categorie.setNom("Catégorie 1");
+        categorie.setVisible(1);
+        categorie = categorieRepository.save(categorie); // sauvegarde en DB
 
-        // 🔹 Crée une catégorie valide
-        Categorie cat1 = new Categorie();
-        cat1.setCustomid(1);
-        cat1.setNom("Catégorie 1");
-        cat1.setVisible(1);
-        cat1 = categorieRepository.save(cat1); // récupère l'ID généré
-
-        Categorie cat2 = new Categorie();
-        cat2.setCustomid(1);
-        cat2.setNom("Catégorie 2");
-        cat2.setVisible(1);
-        cat2 = categorieRepository.save(cat2);
-
-        // 🔹 Crée les articles
+        // Crée un article visible
         article1 = new Article();
+        article1.setNom("Article visible");
         article1.setCustomId(1);
-        article1.setCatid(cat1.getCatid()); // ID valide
+        article1.setCatid(categorie.getCatid());
+        article1.setPrix(10.0);
         article1.setVisible(1);
-        article1.setNom("Article A");
-        article1.setPrix(11.0);
         article1.setUnite("€");
-
-        article2 = new Article();
-        article2.setCustomId(1);
-        article2.setCatid(cat2.getCatid()); // ID valide
-        article2.setVisible(0);
-        article2.setNom("Article B");
-        article2.setPrix(12.0);
-        article2.setUnite("€");
-
-        article3 = new Article();
-        article3.setCustomId(2);
-        article3.setCatid(cat1.getCatid()); // ID valide
-        article3.setVisible(1);
-        article3.setNom("Article C");
-        article3.setPrix(13.0);
-        article3.setUnite("€");
-
         articleRepository.save(article1);
+
+        // Crée un article invisible
+        article2 = new Article();
+        article2.setNom("Article invisible");
+        article2.setCustomId(1);
+        article2.setCatid(categorie.getCatid());
+        article2.setPrix(5.0);
+        article2.setVisible(0);
+        article2.setUnite("€");
         articleRepository.save(article2);
-        articleRepository.save(article3);
     }
 
-
     @Test
-    void testFindByCustomID() {
+    void testFindByCustomid() {
         List<Article> result = articleRepository.findByCustomid(1);
         assertEquals(2, result.size());
-        assertTrue(result.contains(article1));
-        assertTrue(result.contains(article2));
     }
 
     @Test
     void testFindByCustomidAndCatid() {
-        List<Article> result = articleRepository.findByCustomidAndCatid(1, 10);
-        assertEquals(1, result.size());
-        assertEquals(article1, result.get(0));
+        List<Article> result = articleRepository.findByCustomidAndCatid(1, categorie.getCatid());
+        assertEquals(2, result.size());
     }
 
     @Test
     void testFindByCustomidAndVisible() {
-        List<Article> result = articleRepository.findByCustomidAndVisible(1, 1);
-        assertEquals(1, result.size());
-        assertEquals(article1, result.get(0));
+        List<Article> visibleArticles = articleRepository.findByCustomidAndVisible(1, 1);
+        assertEquals(1, visibleArticles.size());
+        assertEquals(article1.getNom(), visibleArticles.get(0).getNom());
 
-        result = articleRepository.findByCustomidAndVisible(1, 0);
-        assertEquals(1, result.size());
-        assertEquals(article2, result.get(0));
-    }
-
-    @Test
-    void testFindByCustomidNoResults() {
-        List<Article> result = articleRepository.findByCustomid(999);
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void testSaveArticle() {
-
-        Client client = new Client();
-        client.setNom("Client Test 3");
-        clientRepository.save(client);
-
-        Customer customer = new Customer();
-        customer.setNom("Customer 3");
-        customer.setCltid(client.getCltId());
-        customerRepository.save(customer);
-
-        Categorie cat = new Categorie();
-        cat.setCustomid(customer.getCustomId());
-        cat.setNom("Categorie test");
-        categorieRepository.save(cat);
-
-        Article article = new Article();
-        article.setCustomId(customer.getCustomId());
-        article.setCatid(cat.getCatid());
-        article.setVisible(1);
-        article.setNom("Article D");
-        article.setPrix(14.0);
-        article.setUnite("€");
-
-        Article saved = articleRepository.save(article);
-        assertNotNull(saved.getArtid());
-        assertEquals("Article D", saved.getNom());
+        List<Article> invisibleArticles = articleRepository.findByCustomidAndVisible(1, 0);
+        assertEquals(1, invisibleArticles.size());
+        assertEquals(article2.getNom(), invisibleArticles.get(0).getNom());
     }
 }

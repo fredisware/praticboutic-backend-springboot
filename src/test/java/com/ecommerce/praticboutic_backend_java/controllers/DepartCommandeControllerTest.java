@@ -4,6 +4,7 @@ import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import com.ecommerce.praticboutic_backend_java.repositories.ClientRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
+import com.ecommerce.praticboutic_backend_java.requests.DepartCommandeRequest;
 import com.ecommerce.praticboutic_backend_java.services.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -90,6 +91,10 @@ class DepartCommandeControllerTest {
         Client client = new Client();
         client.setDevice_id("dev-1");
 
+        when(customerRepository.findByCustomer("cust-alias")).thenReturn(customer);
+        when(clientRepository.findClientById(100)).thenReturn(Optional.of(client));
+
+
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
             jwtStatic.when(() -> JwtService.parseToken("tok123"))
                     .thenReturn(new com.ecommerce.praticboutic_backend_java.models.JwtPayload(null, null, claims));
@@ -109,7 +114,10 @@ class DepartCommandeControllerTest {
             when(smsService.sendOrderSms(eq("oui"), eq(555), eq(42), eq("0600000000"))).thenReturn(true);
 
 
+
             ResponseEntity<?> resp = controller.creerDepartCommande(input, authHeader);
+            Integer cmdId = departCommandeService.enregistreCommande("42", input, new Double[]{101.2}, JwtService.generateToken(anyMap(), anyString()));
+
 
             assertEquals(HttpStatus.OK, resp.getStatusCode());
             assertTrue(((Map<?, ?>) resp.getBody()).containsKey("token"));

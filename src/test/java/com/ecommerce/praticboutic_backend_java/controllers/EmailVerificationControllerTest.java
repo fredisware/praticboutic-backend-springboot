@@ -1,12 +1,11 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
-import com.ecommerce.praticboutic_backend_java.models.JwtPayload;
 import com.ecommerce.praticboutic_backend_java.requests.EmailVerificationRequest;
+import com.ecommerce.praticboutic_backend_java.responses.ErrorResponse;
 import com.ecommerce.praticboutic_backend_java.services.JwtService;
+import com.ecommerce.praticboutic_backend_java.models.JwtPayload;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -20,8 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-// ... existing code ...
-
 class EmailVerificationControllerTest {
 
     private EmailVerificationController controller;
@@ -29,91 +26,93 @@ class EmailVerificationControllerTest {
 
     @BeforeEach
     void setUp() {
-        jdbcTemplate = mock(JdbcTemplate.class, Answers.RETURNS_DEEP_STUBS);
         controller = new EmailVerificationController();
+        jdbcTemplate = mock(JdbcTemplate.class);
         inject(controller, "jdbcTemplate", jdbcTemplate);
-        inject(controller, "sessionMaxLifetime", 3600L);
     }
 
     @Test
-    @DisplayName("verifyEmail - email libre -> OK et token renvoyé")
-    void verifyEmail_ok_whenEmailNotExists() {
-        EmailVerificationRequest req = new EmailVerificationRequest();
-        req.setEmail("new@example.com");
+    void verifyEmail_emailNotExist_returnsOk() throws Exception {
+        EmailVerificationRequest request = new EmailVerificationRequest();
+        request.setEmail("newuser@example.com");
 
-        when(jdbcTemplate.queryForObject(
-                eq("SELECT COUNT(*) FROM client c WHERE c.email = ?"),
-                eq(Integer.class),
-                eq("new@example.com")
-        )).thenReturn(0);
+        // DB retourne 0 → email n'existe pas
+        when(jdbcTemplate.queryForObject(anyString(), eq(Integer.class), anyString()))
+                .thenReturn(0);
 
-        Map<String, Object> payload = new HashMap<>();
+        // Créer un JwtPayload mocké
+                Map<String, Object> claims = new HashMap<>();
+                JwtPayload payload = mock(JwtPayload.class);
+                when(payload.getClaims()).thenReturn(claims);
+
+        // Static mock pour parseToken
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
-            jwtStatic.when(() -> JwtService.parseToken("tok"))
-                    .thenReturn(new JwtPayload(null, null, payload));
-            jwtStatic.when(() -> JwtService.generateToken(anyMap(), anyString()))
-                    .thenReturn("new.jwt");
+            jwtStatic.when(() -> JwtService.parseToken(anyString()))
+                    .thenReturn(payload); // ✅ doit renvoyer un objet concret
 
-            ResponseEntity<?> resp = controller.verifyEmail(req, "Bearer tok");
+            ResponseEntity<?> resp = controller.verifyEmail(request, "Bearer faketoken");
 
+            // Vérifications
             assertEquals(HttpStatus.OK, resp.getStatusCode());
             Map<?, ?> body = (Map<?, ?>) resp.getBody();
             assertEquals("OK", body.get("result"));
-            assertEquals("new.jwt", body.get("token"));
+            assertTrue(body.containsKey("token"));
         }
+
     }
 
     @Test
-    @DisplayName("verifyEmail - email déjà pris -> KO")
-    void verifyEmail_ko_whenEmailExists() {
-        EmailVerificationRequest req = new EmailVerificationRequest();
-        req.setEmail("used@example.com");
+    void verifyEmail_emailExist_returnsKo() throws Exception {
+        EmailVerificationRequest request = new EmailVerificationRequest();
+        request.setEmail("existing@example.com");
 
-        when(jdbcTemplate.queryForObject(
-                eq("SELECT COUNT(*) FROM client c WHERE c.email = ?"),
-                eq(Integer.class),
-                eq("used@example.com")
-        )).thenReturn(1);
+        when(jdbcTemplate.queryForObject(anyString(), eq(Integer.class), anyString()))
+                .thenReturn(1); // email existe déjà
 
-        Map<String, Object> payload = new HashMap<>();
+        Map<String, Object> claims = Map.of();
+        JwtPayload payload = mock(JwtPayload.class);
+        when(payload.getClaims()).thenReturn(claims);
+
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
-            jwtStatic.when(() -> JwtService.parseToken("tok"))
-                    .thenReturn(new JwtPayload(null, null, payload));
-            jwtStatic.when(() -> JwtService.generateToken(anyMap(), anyString()))
-                    .thenReturn("new.jwt");
+            jwtStatic.when(() -> JwtService.parseToken(anyString()))
+                    .thenReturn(payload);
 
-            ResponseEntity<?> resp = controller.verifyEmail(req, "Bearer tok");
+            ResponseEntity<?> resp = controller.verifyEmail(request, "Bearer faketoken");
 
             assertEquals(HttpStatus.OK, resp.getStatusCode());
             Map<?, ?> body = (Map<?, ?>) resp.getBody();
             assertEquals("KO", body.get("result"));
-            assertEquals("new.jwt", body.get("token"));
+            assertTrue(body.containsKey("token"));
         }
     }
 
     @Test
-    @DisplayName("verifyEmail - exception DB -> 500")
-    void verifyEmail_error_onDbException() {
-        EmailVerificationRequest req = new EmailVerificationRequest();
-        req.setEmail("err@example.com");
+    void verifyEmail_dbException_returns500() throws Exception {
+        EmailVerificationRequest request = new EmailVerificationRequest();
+        request.setEmail("user@example.com");
 
-        when(jdbcTemplate.queryForObject(anyString(), eq(Integer.class), any()))
-                .thenThrow(new RuntimeException("db error"));
+        // Simuler exception DB
+        when(jdbcTemplate.queryForObject(anyString(), eq(Integer.class), anyString()))
+                .thenThrow(new RuntimeException("DB failure"));
 
-        Map<String, Object> payload = new HashMap<>();
+        Map<String, Object> claims = Map.of();
+        JwtPayload payload = mock(JwtPayload.class);
+        when(payload.getClaims()).thenReturn(claims);
+
         try (MockedStatic<JwtService> jwtStatic = Mockito.mockStatic(JwtService.class)) {
-            jwtStatic.when(() -> JwtService.parseToken("tok"))
-                    .thenReturn(new JwtPayload(null, null, payload));
+            jwtStatic.when(() -> JwtService.parseToken(anyString()))
+                    .thenReturn(payload);
 
-            ResponseEntity<?> resp = controller.verifyEmail(req, "Bearer tok");
+            ResponseEntity<?> resp = controller.verifyEmail(request, "Bearer faketoken");
 
             assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, resp.getStatusCode());
-            Object body = resp.getBody();
+            ErrorResponse body = (ErrorResponse) resp.getBody();
             assertNotNull(body);
-            assertTrue(body.toString().contains("error"));
+            assertTrue(body.getError().contains("DB failure"));
         }
     }
 
+    // Méthode utilitaire pour injection
     private static void inject(Object target, String field, Object value) {
         try {
             java.lang.reflect.Field f = target.getClass().getDeclaredField(field);

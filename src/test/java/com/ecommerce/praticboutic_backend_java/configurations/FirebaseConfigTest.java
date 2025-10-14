@@ -1,13 +1,14 @@
 package com.ecommerce.praticboutic_backend_java.configurations;
 
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -27,48 +28,47 @@ class FirebaseConfigTest {
         }
     }
 
-    @DisplayName("firebaseApp - initialise avec un mock FirebaseApp")
+    @Test
+    @DisplayName("firebaseApp - retourne un mock FirebaseApp")
     void firebaseApp_initializesWithMock() throws Exception {
-        // Mock de FirebaseApp et FirebaseOptions
-        FirebaseOptions mockOptions = mock(FirebaseOptions.class);
+        // Création du mock FirebaseApp et FirebaseOptions
         FirebaseApp mockApp = mock(FirebaseApp.class);
+        FirebaseOptions mockOptions = mock(FirebaseOptions.class);
         when(mockApp.getOptions()).thenReturn(mockOptions);
 
-        // Injection via le hook spécifique FirebaseAppSupplier (à créer dans FirebaseConfig)
-        config.setFirebaseAppSupplier(() -> mockApp);
+        // Spy de la config pour remplacer firebaseApp() par notre mock
+        FirebaseConfig spyConfig = spy(config);
+        doReturn(mockApp).when(spyConfig).firebaseApp();
 
-        FirebaseApp app = config.firebaseApp();
+        FirebaseApp app = spyConfig.firebaseApp();
 
         assertNotNull(app);
         assertSame(mockApp, app);
         assertSame(mockOptions, app.getOptions());
     }
 
+    @Test
+    @DisplayName("firebaseMessaging - retourne une instance mockée")
+    void firebaseMessaging_returnsInstance() throws Exception {
+        FirebaseApp mockApp = mock(FirebaseApp.class);
+        FirebaseMessaging mockMessaging = mock(FirebaseMessaging.class);
+
+        try (MockedStatic<FirebaseMessaging> mocked = mockStatic(FirebaseMessaging.class)) {
+            mocked.when(() -> FirebaseMessaging.getInstance(mockApp)).thenReturn(mockMessaging);
+
+            FirebaseMessaging messaging = config.firebaseMessaging(mockApp);
+
+            assertNotNull(messaging);
+            assertSame(mockMessaging, messaging);
+        }
+    }
 
     @Test
-    @DisplayName("firebaseApp - lève Exception si le flux est null")
+    @DisplayName("firebaseApp - lève IOException si le flux est null")
     void firebaseApp_throwsWhenStreamNull() {
         config.setServiceAccountSupplier(() -> null);
 
         Exception ex = assertThrows(Exception.class, config::firebaseApp);
-        String message = ex.getMessage();
-        assertNotNull(message);
-        assertTrue(message.contains("Firebase Service Account key not found."));
-    }
-
-    @Test
-    @DisplayName("firebaseMessaging - retourne l'instance liée à FirebaseApp fournie")
-    void firebaseMessaging_returnsInstance() throws Exception {
-        // Mock FirebaseApp
-        FirebaseApp mockApp = mock(FirebaseApp.class);
-        FirebaseMessaging mockMessaging = mock(FirebaseMessaging.class);
-
-        // Mockito spy pour FirebaseMessaging (facultatif)
-        config.setFirebaseAppSupplier(() -> mockApp);
-
-        FirebaseMessaging messaging = config.firebaseMessaging(mockApp);
-
-        assertNotNull(messaging);
-        assertSame(mockMessaging, messaging);
+        assertTrue(ex.getMessage().contains("Firebase Service Account key not found."));
     }
 }

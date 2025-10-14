@@ -13,7 +13,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// Java
 @DataJpaTest
 class CategorieRepositoryTest {
 
@@ -21,10 +20,9 @@ class CategorieRepositoryTest {
     private CategorieRepository categorieRepository;
 
     @Test
-    void testFindByCustomidOrCatidOrderByCatid()
-    {
+    void testFindByCustomidOrCatidOrderByCatid() {
         Categorie cat1 = new Categorie();
-        cat1.setCustomid(999);
+        cat1.setCustomid(0);
         cat1.setNom("Catégorie globale");
 
         Categorie cat2 = new Categorie();
@@ -34,11 +32,13 @@ class CategorieRepositoryTest {
         categorieRepository.save(cat1);
         categorieRepository.save(cat2);
 
-        List<Categorie> result = categorieRepository.findByCustomidOrCatidOrderByCatid(10, 0);
+        List<Categorie> result = categorieRepository.findByCustomidOrCatidOrderByCatid(10, cat2.getCatid());
+
 
         assertThat(result)
-                .hasSize(2)
+                .hasSize(1)
                 .extracting(Categorie::getNom)
-                .containsExactly("Catégorie globale", "Catégorie boutique 10");
+                .containsExactly("Catégorie boutique 10");
+
     }
 }

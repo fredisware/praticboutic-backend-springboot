@@ -26,7 +26,7 @@ public class Option implements Serializable {
     private String nom;
 
     @Column(name = "surcout", nullable = false)
-    private Double surcout = 0.0;
+    private Double surcout;
 
     @Column(name = "grpoptid", nullable = false)
     private Integer grpoptid;
@@ -122,9 +122,10 @@ public class Option implements Serializable {
         row.add(getNom());
         row.add(getSurcout());
         row.add(groupeOption != null ? groupeOption.getNom() : null);
-        row.add(isVisible() ? "1" : "0");
+        row.add(isVisible()); // <- chaîne "1" ou "0"
         return row;
     }
+
 
     @Override
     public String toString() {
