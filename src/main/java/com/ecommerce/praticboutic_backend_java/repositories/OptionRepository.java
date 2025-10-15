@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface OptionRepository extends JpaRepository<Option, Integer> {
 
-    @Query(value = "SELECT o.optid, o.nom, o.surcout FROM `OPTION_` o " +
+    @Query(value = "SELECT o.optid, o.nom, o.surcout FROM `OPTION` o " +
             "WHERE o.grpoptid = :grpoptid AND o.visible = 1 ORDER BY o.optid",
             nativeQuery = true)
     List<?> findByGrpoptid(@Param("grpoptid") Integer grpOptId);

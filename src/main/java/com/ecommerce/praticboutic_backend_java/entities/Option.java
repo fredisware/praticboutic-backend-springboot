@@ -11,7 +11,7 @@ import java.util.List;
  * Entité représentant une option dans l'application
  */
 @Entity
-@Table(name = "OPTION_") // Le mot "option" étant réservé, on ajoute le "_"
+@Table(name = "OPTION") // Le mot "option" étant réservé, on ajoute le "_"
 public class Option implements Serializable {
 
     @Id
