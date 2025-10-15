@@ -53,7 +53,7 @@ jobs:
 
           cd /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/
           # Stop l'app, nettoie, build avec le profil dev
-          sudo -u qruser mvn clean install -Dmaven.test.skip=true -Dspring-boot.run.profiles=dev
+          sudo -u qruser mvn clean install -Dspring-boot.run.profiles=dev
 
           # Trouve le fichier JAR
           JAR_FILE=$(find /var/www/vhosts/praticboutic.fr/backdev.praticboutic.fr/springboot/target -name 'praticboutic-backend-springboot-*.jar' ! -name '*.original' | head -n 1)
