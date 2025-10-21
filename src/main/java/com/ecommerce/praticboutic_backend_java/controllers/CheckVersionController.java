@@ -32,7 +32,7 @@ public class CheckVersionController {
         this.objectMapper = objectMapper;
     }
 
-    @PostMapping("/checkVersion")
+    @PostMapping("/check-version")
     public ResponseEntity<?> checkVersion(@RequestBody SessionRequest request) {
         try {
             Resource resource = resourceLoader.getResource("classpath:" + authorizationFilePath);
@@ -51,7 +51,7 @@ public class CheckVersionController {
         }
     }
 
-    @PostMapping("/checkVersionAlt")
+    @PostMapping("/check-version-alt")
     public ResponseEntity<?> checkVersionAlt(@RequestBody SessionRequest request) {
         try {
             Resource resource = resourceLoader.getResource("classpath:" + authorizationFilePath);
