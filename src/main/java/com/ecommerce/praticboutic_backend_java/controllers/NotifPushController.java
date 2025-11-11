@@ -26,13 +26,11 @@ public class NotifPushController {
     private static final Logger logger = LoggerFactory.getLogger(NotifPushController.class);
 
     @PostMapping("/send-push-notif")
-    public ResponseEntity<?> creerDepartCommande(@RequestBody Map<String, Object> input, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> creerDepartCommande(@RequestBody Map<String, Object> input) {
         Customer customerInfo;
         try {
             logger.info("==== Début de traitement /send-push-notif ====");
             logger.info("Données reçues : {}", input);
-            String token = authHeader.replace("Bearer ", "");
-            Map <java.lang.String, java.lang.Object> payload = JwtService.parseToken(token).getClaims();
 
             String device_id = input.get("deviceid").toString();
             String subject = input.get("subject").toString();
@@ -42,14 +40,11 @@ public class NotifPushController {
             notificationService.sendPushNotification(device_id, subject, msg);
 
             logger.info("==== Fin de traitement /send-push-notif ====");
-            String jwt = JwtService.generateToken(payload, "" );
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", jwt);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok().build();
 
 
         } catch (Exception e) {
-            logger.error("Erreur lors de la création de la commande : {}", e.getMessage(), e);
+            logger.error("Erreur lors de l'envoi de la notification : {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
         }
 
