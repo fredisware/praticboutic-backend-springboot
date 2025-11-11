@@ -60,58 +60,42 @@ public class NotificationService {
      * @return L'ID du message envoyé ou null en cas d'échec
      */
     public String sendPushNotification(String deviceId, String title, String body) {
-        if (deviceId == null || deviceId.isEmpty()) {
-            logger.error("Impossible d'envoyer la notification: deviceId est null ou vide");
-            return null;
-        }
-
         try {
-            // Construction de la notification FCM
-            Notification.Builder notificationBuilder = Notification.builder()
+            if (deviceId == null || deviceId.isEmpty()) {
+                logger.error("Impossible d'envoyer la notification: deviceId est null ou vide");
+                return null;
+            }
+
+            // Pour FCM, le deviceId est directement utilisé comme token
+            String token = deviceId;
+
+            // Créer l'objet Notification avec titre et corps
+            Notification notification = Notification.builder()
                     .setTitle(title)
-                    .setBody(body);
-
-            // Message principal
-            Message.Builder messageBuilder = Message.builder()
-                    .setToken(deviceId)
-                    .setNotification(notificationBuilder.build());
-
-            // Configuration iOS / APNs
-            ApnsConfig apnsConfig = ApnsConfig.builder()
-                    .setAps(Aps.builder()
-                            .setAlert(ApsAlert.builder()
-                                    .setTitle(title)
-                                    .setBody(body)
-                                    .build())
-                            .setSound("default")
-                            .build())
+                    .setBody(body)
                     .build();
-            messageBuilder.setApnsConfig(apnsConfig);
 
-            // Optionnel : configuration Android
-            AndroidConfig androidConfig = AndroidConfig.builder()
-                    .setPriority(AndroidConfig.Priority.HIGH)
-                    .setNotification(AndroidNotification.builder()
-                            .setTitle(title)
-                            .setBody(body)
-                            .setSound("default")
-                            .build())
+            // Construire le message avec les données et la notification
+            Message message = Message.builder()
+                    .setToken(token)
+                    .setNotification(notification)
                     .build();
-            messageBuilder.setAndroidConfig(androidConfig);
 
-            // Envoi du message
-            String messageId = FirebaseMessaging.getInstance().send(messageBuilder.build());
+            // Envoyer le message et récupérer l'ID du message
+            String messageId = FirebaseMessaging.getInstance().send(message);
             logger.info("Notification envoyée avec succès à deviceId: {}, messageId: {}", deviceId, messageId);
-
             return messageId;
 
         } catch (FirebaseMessagingException e) {
             logger.error("Erreur lors de l'envoi de notification à deviceId: {}", deviceId, e);
-            // Gestion des tokens invalides
-            if (e.getMessagingErrorCode() == MessagingErrorCode.UNREGISTERED ||
-                    e.getMessagingErrorCode() == MessagingErrorCode.INVALID_ARGUMENT) {
-                removeInvalidToken(deviceId);
+
+            // Gérer les erreurs spécifiques comme token invalide, quota dépassé, etc.
+            if (e.getMessagingErrorCode() == MessagingErrorCode.INVALID_ARGUMENT ||
+                    e.getMessagingErrorCode() == MessagingErrorCode.UNREGISTERED) {
+                // Token invalide ou appareil désinscrit
+                logger.warn("Token FCM invalide détecté pour deviceId: {}", deviceId);
             }
+
             return null;
         } catch (Exception e) {
             logger.error("Exception inattendue lors de l'envoi de notification à deviceId: {}", deviceId, e);

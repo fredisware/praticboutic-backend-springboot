@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_checkversion_part004">
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_checkversion_part005">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/NotificationService.java" afterDir="false" />
     </list>
@@ -195,14 +195,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00111" summary="initialcommit_part096">
-      <option name="closed" value="true" />
-      <created>1748783201971</created>
-      <option name="number" value="00111" />
-      <option name="presentableId" value="LOCAL-00111" />
-      <option name="project" value="LOCAL" />
-      <updated>1748783201971</updated>
     </task>
     <task id="LOCAL-00112" summary="initialcommit_part097">
       <option name="closed" value="true" />
@@ -588,7 +580,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762874906962</updated>
     </task>
-    <option name="localTasksCounter" value="160" />
+    <task id="LOCAL-00160" summary="bugfix_checkversion_part005">
+      <option name="closed" value="true" />
+      <created>1762877653870</created>
+      <option name="number" value="00160" />
+      <option name="presentableId" value="LOCAL-00160" />
+      <option name="project" value="LOCAL" />
+      <updated>1762877653871</updated>
+    </task>
+    <option name="localTasksCounter" value="161" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -618,7 +618,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="evo_redirect_part004" />
     <MESSAGE value="evo_redirect_part005" />
     <MESSAGE value="evo_redirect_part007" />
     <MESSAGE value="evo_redirect_part008" />
@@ -643,7 +642,8 @@
     <MESSAGE value="bugfix_checkversion_part002" />
     <MESSAGE value="bugfix_checkversion_part003" />
     <MESSAGE value="bugfix_checkversion_part004" />
-    <option name="LAST_COMMIT_MESSAGE" value="bugfix_checkversion_part004" />
+    <MESSAGE value="bugfix_checkversion_part005" />
+    <option name="LAST_COMMIT_MESSAGE" value="bugfix_checkversion_part005" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
