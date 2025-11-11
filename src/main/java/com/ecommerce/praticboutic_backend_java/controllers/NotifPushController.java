@@ -1,24 +1,19 @@
 package com.ecommerce.praticboutic_backend_java.controllers;
 
-import com.ecommerce.praticboutic_backend_java.entities.Client;
-import com.ecommerce.praticboutic_backend_java.entities.Customer;
-import com.ecommerce.praticboutic_backend_java.services.JwtService;
 import com.ecommerce.praticboutic_backend_java.services.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-import static java.lang.Integer.parseInt;
 @RestController
 @RequestMapping("/api")
 public class NotifPushController {
 
+    @Autowired
     private NotificationService notificationService;
 
     // Déclarez le logger en tant que champ statique en haut de votre classe
@@ -26,7 +21,7 @@ public class NotifPushController {
 
     @PostMapping("/send-push-notif")
     public ResponseEntity<?> creerDepartCommande(@RequestBody Map<String, Object> input) {
-        Customer customerInfo;
+
         try {
             logger.info("==== Début de traitement /send-push-notif ====");
             logger.info("Données reçues : {}", input);
