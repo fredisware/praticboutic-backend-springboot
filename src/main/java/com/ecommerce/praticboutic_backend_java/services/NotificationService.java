@@ -60,48 +60,65 @@ public class NotificationService {
      * @return L'ID du message envoyé ou null en cas d'échec
      */
     public String sendPushNotification(String deviceId, String title, String body) {
+        if (deviceId == null || deviceId.isEmpty()) {
+            logger.error("Impossible d'envoyer la notification: deviceId est null ou vide");
+            return null;
+        }
+
         try {
-            if (deviceId == null || deviceId.isEmpty()) {
-                logger.error("Impossible d'envoyer la notification: deviceId est null ou vide");
-                return null;
-            }
-
-            // Pour FCM, le deviceId est directement utilisé comme token
-            String token = deviceId;
-
-            // Créer l'objet Notification avec titre et corps
-            Notification notification = Notification.builder()
+            // Construction de la notification FCM
+            Notification.Builder notificationBuilder = Notification.builder()
                     .setTitle(title)
-                    .setBody(body)
-                    .build();
+                    .setBody(body);
 
-            // Construire le message avec les données et la notification
-            Message message = Message.builder()
-                    .setToken(token)
-                    .setNotification(notification)
-                    .build();
+            // Message principal
+            Message.Builder messageBuilder = Message.builder()
+                    .setToken(deviceId)
+                    .setNotification(notificationBuilder.build());
 
-            // Envoyer le message et récupérer l'ID du message
-            String messageId = FirebaseMessaging.getInstance().send(message);
+            // Configuration iOS / APNs
+            ApnsConfig apnsConfig = ApnsConfig.builder()
+                    .setAps(Aps.builder()
+                            .setAlert(ApsAlert.builder()
+                                    .setTitle(title)
+                                    .setBody(body)
+                                    .build())
+                            .setSound("default")
+                            .build())
+                    .build();
+            messageBuilder.setApnsConfig(apnsConfig);
+
+            // Optionnel : configuration Android
+            AndroidConfig androidConfig = AndroidConfig.builder()
+                    .setPriority(AndroidConfig.Priority.HIGH)
+                    .setNotification(AndroidNotification.builder()
+                            .setTitle(title)
+                            .setBody(body)
+                            .setSound("default")
+                            .build())
+                    .build();
+            messageBuilder.setAndroidConfig(androidConfig);
+
+            // Envoi du message
+            String messageId = FirebaseMessaging.getInstance().send(messageBuilder.build());
             logger.info("Notification envoyée avec succès à deviceId: {}, messageId: {}", deviceId, messageId);
+
             return messageId;
 
         } catch (FirebaseMessagingException e) {
             logger.error("Erreur lors de l'envoi de notification à deviceId: {}", deviceId, e);
-
-            // Gérer les erreurs spécifiques comme token invalide, quota dépassé, etc.
-            if (e.getMessagingErrorCode() == MessagingErrorCode.INVALID_ARGUMENT ||
-                    e.getMessagingErrorCode() == MessagingErrorCode.UNREGISTERED) {
-                // Token invalide ou appareil désinscrit
-                logger.warn("Token FCM invalide détecté pour deviceId: {}", deviceId);
+            // Gestion des tokens invalides
+            if (e.getMessagingErrorCode() == MessagingErrorCode.UNREGISTERED ||
+                    e.getMessagingErrorCode() == MessagingErrorCode.INVALID_ARGUMENT) {
+                removeInvalidToken(deviceId);
             }
-
             return null;
         } catch (Exception e) {
             logger.error("Exception inattendue lors de l'envoi de notification à deviceId: {}", deviceId, e);
             return null;
         }
     }
+
 
     /**
      * Récupère le token FCM associé à un deviceId particulier

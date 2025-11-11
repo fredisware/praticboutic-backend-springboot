@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_checkversion_part003">
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/controllers/NotifPushControllerTest.java" afterDir="false" />
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_checkversion_part004">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/NotifPushController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/controllers/NotifPushController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/services/NotificationService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,37 +80,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.PraticbouticBackendJavaApplication.executor": "Debug",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "JUnit.All in praticboutic_backend_java.executor": "Debug",
-    "JUnit.PraticbouticBackendJavaApplicationTests.contextLoads.executor": "Debug",
-    "JUnit.com.ecommerce.praticboutic_backend_java in praticboutic_backend_java.executor": "Debug",
-    "Notification.DisplayName-DoNotAsk-vcs.commit.checks.failed": "Commit and push checks failed",
-    "Notification.DoNotAsk-vcs.commit.checks.failed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.PraticbouticBackendJavaApplication.executor": "Debug",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "/home/redisdead/dev/praticboutic_backend_java/src/main/java/com/ecommerce/praticboutic_backend_java",
-    "last_opened_file_path": "/var/www/praticboutic-backend/springboot/pom.xml",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "settings.sync",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.PraticbouticBackendJavaApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JUnit.All in praticboutic_backend_java.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.PraticbouticBackendJavaApplicationTests.contextLoads.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.com.ecommerce.praticboutic_backend_java in praticboutic_backend_java.executor&quot;: &quot;Debug&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-vcs.commit.checks.failed&quot;: &quot;Commit and push checks failed&quot;,
+    &quot;Notification.DoNotAsk-vcs.commit.checks.failed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.PraticbouticBackendJavaApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;/home/redisdead/dev/praticboutic_backend_java/src/main/java/com/ecommerce/praticboutic_backend_java&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/var/www/praticboutic-backend/springboot/pom.xml&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.ecommerce.praticboutic_backend_java.requests" />
@@ -197,14 +195,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00110" summary="initialcommit_part095">
-      <option name="closed" value="true" />
-      <created>1748715740835</created>
-      <option name="number" value="00110" />
-      <option name="presentableId" value="LOCAL-00110" />
-      <option name="project" value="LOCAL" />
-      <updated>1748715740835</updated>
     </task>
     <task id="LOCAL-00111" summary="initialcommit_part096">
       <option name="closed" value="true" />
@@ -590,7 +580,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762874085311</updated>
     </task>
-    <option name="localTasksCounter" value="159" />
+    <task id="LOCAL-00159" summary="bugfix_checkversion_part004">
+      <option name="closed" value="true" />
+      <created>1762874906961</created>
+      <option name="number" value="00159" />
+      <option name="presentableId" value="LOCAL-00159" />
+      <option name="project" value="LOCAL" />
+      <updated>1762874906962</updated>
+    </task>
+    <option name="localTasksCounter" value="160" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -620,7 +618,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="evo_redirect_part003" />
     <MESSAGE value="evo_redirect_part004" />
     <MESSAGE value="evo_redirect_part005" />
     <MESSAGE value="evo_redirect_part007" />
@@ -645,7 +642,8 @@
     <MESSAGE value="bugfix_checkversion_part001" />
     <MESSAGE value="bugfix_checkversion_part002" />
     <MESSAGE value="bugfix_checkversion_part003" />
-    <option name="LAST_COMMIT_MESSAGE" value="bugfix_checkversion_part003" />
+    <MESSAGE value="bugfix_checkversion_part004" />
+    <option name="LAST_COMMIT_MESSAGE" value="bugfix_checkversion_part004" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
