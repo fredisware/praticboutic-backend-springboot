@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 class FirebaseConfigTest {
 
-    private FirebaseConfig config = new FirebaseConfig();
+    private final FirebaseConfig config = new FirebaseConfig();
 
     @AfterEach
     void tearDown() {

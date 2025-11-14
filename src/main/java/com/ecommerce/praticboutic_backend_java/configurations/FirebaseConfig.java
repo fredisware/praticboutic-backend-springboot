@@ -4,7 +4,6 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-// ... existing code ...
-import java.io.InputStream;
 import java.util.function.Supplier;
-
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Configuration
@@ -61,6 +57,23 @@ public class FirebaseConfig {
         return FirebaseMessaging.getInstance(firebaseApp);
     }
 
+
+    private FirebaseProperties firebaseProperties = new FirebaseProperties();
+
+
+    @Bean
+    GoogleCredentials googleCredentials() throws IOException {
+        if (FirebaseProperties.getServiceAccount() != null) {
+            try (InputStream is = FirebaseProperties.getServiceAccount().getInputStream()) {
+                return GoogleCredentials.fromStream(is);
+            }
+        } else {
+            return GoogleCredentials.getApplicationDefault();
+        }
+    }
+
+
+
     // ... existing code ...
 // Utilitaire d’injection reflexive d’un champ privé
     private static void setField(Object target, String name, Object value) {
@@ -89,5 +102,13 @@ public class FirebaseConfig {
 
     void setFirebaseAppSupplier(Supplier<FirebaseApp> supplier) {
         this.firebaseAppSupplier = supplier;
+    }
+
+    public FirebaseProperties getFirebaseProperties() {
+        return firebaseProperties;
+    }
+
+    public void setFirebaseProperties(FirebaseProperties firebaseProperties) {
+        this.firebaseProperties = firebaseProperties;
     }
 }

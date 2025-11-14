@@ -49,6 +49,7 @@ public class NotificationService {
     @Value("${app.root.url.front}")
     private String rootUrlFront;
 
+    @Autowired
     FirebaseMessaging messaging;
 
     /**
@@ -66,19 +67,49 @@ public class NotificationService {
                 return null;
             }
 
-            // Pour FCM, le deviceId est directement utilisé comme token
-            String token = deviceId;
-
             // Créer l'objet Notification avec titre et corps
             Notification notification = Notification.builder()
                     .setTitle(title)
                     .setBody(body)
                     .build();
 
-            // Construire le message avec les données et la notification
+            // Config spécifique pour Android
+            AndroidConfig androidConfig = AndroidConfig.builder()
+                    .setNotification(AndroidNotification.builder()
+                            .setTitle(title)
+                            .setBody(body)
+                            .setSound("default")
+                            .setChannelId("default_channel") // Important pour Android 8+
+                            .build())
+                    .build();
+
+            // Config spécifique pour iOS (APNs)
+            ApnsConfig apnsConfig = ApnsConfig.builder()
+                    .setAps(Aps.builder()
+                            .setAlert(ApsAlert.builder()
+                                    .setTitle(title)
+                                    .setBody(body)
+                                    .build())
+                            .setBadge(1)             // Badge sur l'icône de l'app
+                            .setSound("default")     // Son par défaut
+                            .build())
+                    .build();
+
+            // Config spécifique pour Web
+            WebpushConfig webpushConfig = WebpushConfig.builder()
+                    .setNotification(WebpushNotification.builder()
+                            .setTitle(title)
+                            .setBody(body)
+                            .setIcon(rootUrlBack + "img/logo-pratic-boutic.png")
+                            .build())
+                    .build();
+
             Message message = Message.builder()
-                    .setToken(token)
+                    .setToken(deviceId)
                     .setNotification(notification)
+                    .setApnsConfig(apnsConfig)        // Pour iOS
+                    .setAndroidConfig(androidConfig)  // ✅ Pour Android
+                    .setWebpushConfig(webpushConfig)  // ✅ Pour Web
                     .build();
 
             // Envoyer le message et récupérer l'ID du message
