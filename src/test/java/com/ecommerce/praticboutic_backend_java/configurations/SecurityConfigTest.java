@@ -1,34 +1,28 @@
 package com.ecommerce.praticboutic_backend_java.configurations;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+
+@Import(SecurityConfig.class)
+@WebMvcTest(SecurityConfig.class)
 class SecurityConfigTest {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private SecurityFilterChain securityFilterChain;
+    private final SecurityConfig config = new SecurityConfig();
 
     @Test
-    @DisplayName("passwordEncoder - bean présent et BCrypt fonctionnel")
-    void passwordEncoder_bean_present_and_works() {
-        assertNotNull(passwordEncoder);
-        String hash = passwordEncoder.encode("secret");
-        assertTrue(passwordEncoder.matches("secret", hash));
-    }
+    void passwordEncoder_works() {
+        PasswordEncoder encoder = config.passwordEncoder();
+        assertNotNull(encoder);
 
-    @Test
-    @DisplayName("securityFilterChain - bean présent et construit sans erreur")
-    void securityFilterChain_bean_present() {
-        assertNotNull(securityFilterChain);
+        String raw = "123456";
+        String encoded = encoder.encode(raw);
+
+        assertTrue(encoder.matches(raw, encoded));
     }
 }

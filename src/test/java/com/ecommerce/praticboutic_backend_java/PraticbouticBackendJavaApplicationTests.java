@@ -6,18 +6,19 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.TestPropertySource;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = {PraticbouticBackendJavaApplicationTests.MinimalConfig.class})
+@SpringBootTest(classes = PraticbouticBackendJavaApplicationTests.TestConfig.class)
 @TestPropertySource(properties = {
         "stripe.secret.key=dummy",
         "stripe.public.key=dummy",
@@ -37,26 +38,35 @@ class PraticbouticBackendJavaApplicationTests {
 
     @Test
     void contextLoads() {
-        // Vérifie que les beans mockés sont injectés
-        assertNotNull(firebaseConfig);
-        assertNotNull(stripeService);
+        assertNotNull(firebaseConfig, "FirebaseConfig should be loaded");
+        assertNotNull(stripeService, "StripeService should be loaded");
     }
 
     @TestConfiguration
-    static class MinimalConfig {
+    static class TestConfig {
 
         @Bean
-        public FirebaseConfig firebaseConfig() throws Exception {
-            FirebaseConfig config = mock(FirebaseConfig.class);
+        @Primary
+        public com.google.firebase.messaging.FirebaseMessaging firebaseMessagingMock() {
+            return mock(com.google.firebase.messaging.FirebaseMessaging.class);
+        }
+
+
+        @Bean
+        @Primary
+        public FirebaseConfig firebaseConfig() throws IOException {
+            FirebaseConfig mockConfig = mock(FirebaseConfig.class);
             FirebaseApp mockApp = mock(FirebaseApp.class);
             when(mockApp.getOptions()).thenReturn(mock(FirebaseOptions.class));
-            when(config.firebaseApp()).thenReturn(mockApp);
-            return config;
+            when(mockConfig.firebaseApp()).thenReturn(mockApp);
+            return mockConfig;
         }
 
         @Bean
+        @Primary
         public StripeService stripeService() {
             return mock(StripeService.class);
         }
     }
+
 }
