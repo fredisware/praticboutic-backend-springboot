@@ -61,19 +61,6 @@ public class FirebaseConfig {
     private FirebaseProperties firebaseProperties = new FirebaseProperties();
 
 
-    @Bean
-    GoogleCredentials googleCredentials() throws IOException {
-        if (FirebaseProperties.getServiceAccount() != null) {
-            try (InputStream is = FirebaseProperties.getServiceAccount().getInputStream()) {
-                return GoogleCredentials.fromStream(is);
-            }
-        } else {
-            return GoogleCredentials.getApplicationDefault();
-        }
-    }
-
-
-
     // ... existing code ...
 // Utilitaire d’injection reflexive d’un champ privé
     private static void setField(Object target, String name, Object value) {

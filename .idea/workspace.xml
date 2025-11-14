@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="bugfix_notifications_part001">
+    <list default="true" id="6e6894e1-5a5e-4449-b991-69d95c2ec2f2" name="Changes" comment="evo_tests_unitaires_part007">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/PraticbouticBackendJavaApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/SecurityConfigTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/configurations/SecurityConfigTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/AbonnementServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ecommerce/praticboutic_backend_java/services/AbonnementServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/FirebaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ecommerce/praticboutic_backend_java/configurations/FirebaseConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,14 +195,6 @@
       <workItem from="1742933254796" duration="136000" />
       <workItem from="1742933440393" duration="9000" />
       <workItem from="1742934972504" duration="205000" />
-    </task>
-    <task id="LOCAL-00114" summary="initialcommit_part099">
-      <option name="closed" value="true" />
-      <created>1749621477627</created>
-      <option name="number" value="00114" />
-      <option name="presentableId" value="LOCAL-00114" />
-      <option name="project" value="LOCAL" />
-      <updated>1749621477628</updated>
     </task>
     <task id="LOCAL-00115" summary="initialcommit_part100">
       <option name="closed" value="true" />
@@ -590,7 +580,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763114809854</updated>
     </task>
-    <option name="localTasksCounter" value="163" />
+    <task id="LOCAL-00163" summary="evo_tests_unitaires_part007">
+      <option name="closed" value="true" />
+      <created>1763117797746</created>
+      <option name="number" value="00163" />
+      <option name="presentableId" value="LOCAL-00163" />
+      <option name="project" value="LOCAL" />
+      <updated>1763117797747</updated>
+    </task>
+    <option name="localTasksCounter" value="164" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -620,7 +618,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="evo_redirect_part008" />
     <MESSAGE value="bugfix_null_part001" />
     <MESSAGE value="evo_redirect_part009" />
     <MESSAGE value="evo_redirect_part010" />
@@ -645,7 +642,8 @@
     <MESSAGE value="bugfix_checkversion_part005" />
     <MESSAGE value="bugfix_checkversion_part006" />
     <MESSAGE value="bugfix_notifications_part001" />
-    <option name="LAST_COMMIT_MESSAGE" value="bugfix_notifications_part001" />
+    <MESSAGE value="evo_tests_unitaires_part007" />
+    <option name="LAST_COMMIT_MESSAGE" value="evo_tests_unitaires_part007" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
