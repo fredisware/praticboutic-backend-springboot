@@ -3,17 +3,24 @@ package com.ecommerce.praticboutic_backend_java.entities;
 import com.ecommerce.praticboutic_backend_java.repositories.CustomerRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.OptionRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.GroupeOptionRepository;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.json.JsonTest.*;
+import org.springframework.boot.test.autoconfigure.jdbc.*;
+import org.springframework.boot.test.autoconfigure.json.*;
+
+import org.springframework.boot.test.context.SpringBootTest;
+
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
+@Transactional
 class OptionTest {
 
     @Autowired
@@ -30,18 +37,16 @@ class OptionTest {
 
     @BeforeEach
     void setUp() {
-        // Création du client pour respecter les FK
+        // Création du client sans repository
         customer = new Customer();
         customer.setNom("Customer Test");
         customer.setCourriel("test@example.com");
         customer.setActif(1);
-        customerRepository.save(customer);
 
-        // Création du groupe d'options
+        // Création du groupe d’options sans repository
         groupeOpt = new GroupeOpt();
         groupeOpt.setNom("Tailles");
-        groupeOpt.setCustomId(customer.getCustomId());
-        groupeOptRepository.save(groupeOpt);
+        groupeOpt.setCustomId(Integer.valueOf("123")); // ou ce que tu veux
     }
 
     @Test
@@ -75,16 +80,24 @@ class OptionTest {
     @Test
     @DisplayName("Persistance en base")
     void saveOption() {
+        // Préparation de l'entité Option
         Option o = new Option();
         o.setCustomId(customer.getCustomId());
-        o.setGroupeOption(groupeOpt);
+        o.setGroupeOption(groupeOpt);   // FK déjà persistée dans @BeforeEach
         o.setNom("Extra sauce");
         o.setSurcout(0.5);
 
+        // Action
         Option saved = optionRepository.save(o);
-        assertNotNull(saved.getOptId());
+
+        // Vérifications
+        assertNotNull(saved.getOptId(), "L'ID doit être généré après persistance");
         assertEquals("Extra sauce", saved.getNom());
+        assertEquals(0.5, saved.getSurcout());
+        assertEquals(customer.getCustomId(), saved.getCustomId());
+        assertEquals(groupeOpt.getGrpoptid(), saved.getGroupeOption().getGrpoptid());
     }
+
 
     @Test
     @DisplayName("getDisplayData() - retourne des données cohérentes")

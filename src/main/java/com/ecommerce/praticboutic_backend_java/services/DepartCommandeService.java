@@ -9,7 +9,7 @@ import com.ecommerce.praticboutic_backend_java.repositories.LigneCmdRepository;
 import com.ecommerce.praticboutic_backend_java.repositories.StatutCmdRepository;
 import com.ecommerce.praticboutic_backend_java.requests.Item;
 import com.ecommerce.praticboutic_backend_java.utils.Utils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;

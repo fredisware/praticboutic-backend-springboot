@@ -4,18 +4,25 @@ import com.ecommerce.praticboutic_backend_java.entities.Client;
 import com.ecommerce.praticboutic_backend_java.entities.Customer;
 import com.ecommerce.praticboutic_backend_java.entities.GroupeOpt;
 import com.ecommerce.praticboutic_backend_java.entities.Option;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@EnableJpaRepositories(basePackages = "com.ecommerce.praticboutic_backend_java.repositories")
+@EntityScan(basePackages = "com.ecommerce.praticboutic_backend_java.entities")
 @TestPropertySource(locations = "classpath:application.properties")
-@DataJpaTest
+@Transactional
 class OptionRepositoryTest {
 
     @Autowired

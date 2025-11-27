@@ -4,16 +4,20 @@ import com.ecommerce.praticboutic_backend_java.entities.Article;
 import com.ecommerce.praticboutic_backend_java.entities.Categorie;
 import com.ecommerce.praticboutic_backend_java.entities.GroupeOpt;
 import com.ecommerce.praticboutic_backend_java.entities.RelGrpOptArt;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+
+@SpringBootTest
+@Transactional
 class RelGrpOptArtRepositoryTest {
 
     @Autowired

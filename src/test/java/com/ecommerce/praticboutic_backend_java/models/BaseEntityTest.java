@@ -2,15 +2,17 @@ package com.ecommerce.praticboutic_backend_java.models;
 
 import com.ecommerce.praticboutic_backend_java.entities.Abonnement;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+
+@Transactional
 @EntityScan("com.ecommerce.praticboutic_backend_java.entities")
 class BaseEntityTest {
 

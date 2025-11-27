@@ -2,6 +2,7 @@ package com.ecommerce.praticboutic_backend_java.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 public class BuildBouticRequest {
 
     @JsonProperty("device_id")

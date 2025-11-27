@@ -1,9 +1,12 @@
 package com.ecommerce.praticboutic_backend_java.services;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.json.JsonWriteFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -127,8 +130,8 @@ public class SmsService {
      */
     public boolean sendSmsViaApi(String messageText, String phoneNumber) throws Exception {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.getFactory().configure(JsonWriteFeature.ESCAPE_NON_ASCII.mappedFeature(), true);
+            JsonMapper mapper = JsonMapper.builder().build();
+
 
             // Construction du message
             ObjectNode messageNode = mapper.createObjectNode();

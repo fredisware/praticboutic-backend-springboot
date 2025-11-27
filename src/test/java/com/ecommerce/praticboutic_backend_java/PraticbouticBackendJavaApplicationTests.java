@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
@@ -18,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = PraticbouticBackendJavaApplicationTests.TestConfig.class)
 @TestPropertySource(properties = {
         "stripe.secret.key=dummy",
         "stripe.public.key=dummy",
@@ -28,6 +28,8 @@ import static org.mockito.Mockito.when;
         "spring.datasource.password=",
         "spring.jpa.hibernate.ddl-auto=create-drop"
 })
+@SpringBootTest
+@ActiveProfiles("test")
 class PraticbouticBackendJavaApplicationTests {
 
     @Autowired

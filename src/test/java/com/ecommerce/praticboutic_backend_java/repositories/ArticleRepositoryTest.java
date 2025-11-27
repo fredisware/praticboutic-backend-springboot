@@ -2,17 +2,20 @@ package com.ecommerce.praticboutic_backend_java.repositories;
 
 import com.ecommerce.praticboutic_backend_java.entities.Article;
 import com.ecommerce.praticboutic_backend_java.entities.Categorie;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
+@Transactional
 @Rollback // assure que chaque test est rollbacké automatiquement
 class ArticleRepositoryTest {
 
